@@ -35,7 +35,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/maranafa-logo-RuxIUbQBUNBB1qR9RltUpyjWw2Cjz1.webp"
+                src="/images/maranafa-logo.webp"
                 alt="Маранафа"
                 width={200}
                 height={50}
@@ -77,7 +77,7 @@ export default function Navbar() {
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/maranafa-logo-RuxIUbQBUNBB1qR9RltUpyjWw2Cjz1.webp"
+              src="/images/maranafa-logo.webp"
               alt="Маранафа"
               width={200}
               height={50}

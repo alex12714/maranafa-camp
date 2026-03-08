@@ -26,7 +26,7 @@ export default function Footer() {
             <div className="mt-4">
               <Link href="/">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/maranafa-logo-RuxIUbQBUNBB1qR9RltUpyjWw2Cjz1.webp"
+                  src="/images/maranafa-logo.webp"
                   alt="Маранафа"
                   width={150}
                   height={40}

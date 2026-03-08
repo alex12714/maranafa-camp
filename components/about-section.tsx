@@ -37,7 +37,7 @@ export default function AboutSection() {
           <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow overflow-hidden">
             <div className="h-48 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tasty-food-UWoBIgWI9oOSkQXqmTI37psz4uvdlq.webp"
+                src="/images/features/tasty-food.webp"
                 alt="Tasty Food"
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
@@ -70,7 +70,7 @@ export default function AboutSection() {
           <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow overflow-hidden">
             <div className="h-48 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/nature-jwgo86M1dBZMYBHXYXvr6bKvHA3ECa.webp"
+                src="/images/features/nature.webp"
                 alt="Nature"
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
@@ -103,7 +103,7 @@ export default function AboutSection() {
           <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow overflow-hidden">
             <div className="h-48 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/program-YKgxHFG8Z75tJxAPehTl5XKD7usjjd.webp"
+                src="/images/features/program.webp"
                 alt="Program"
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />

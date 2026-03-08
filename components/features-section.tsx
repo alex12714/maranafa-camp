@@ -19,7 +19,7 @@ export default function FeaturesSection() {
           <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
             <div className="h-64 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tasty-food-UWoBIgWI9oOSkQXqmTI37psz4uvdlq.webp"
+                src="/images/features/tasty-food.webp"
                 alt="Tasty Food"
                 className="w-full h-full object-cover"
               />
@@ -38,7 +38,7 @@ export default function FeaturesSection() {
           <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
             <div className="h-64 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/nature-jwgo86M1dBZMYBHXYXvr6bKvHA3ECa.webp"
+                src="/images/features/nature.webp"
                 alt="Nature"
                 className="w-full h-full object-cover"
               />
@@ -57,7 +57,7 @@ export default function FeaturesSection() {
           <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
             <div className="h-64 overflow-hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/program-YKgxHFG8Z75tJxAPehTl5XKD7usjjd.webp"
+                src="/images/features/program.webp"
                 alt="Program"
                 className="w-full h-full object-cover"
               />

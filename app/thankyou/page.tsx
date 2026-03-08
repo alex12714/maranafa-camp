@@ -11,7 +11,7 @@ export default function ThankYouPage() {
       <div className="relative">
         <div className="absolute inset-0 overflow-hidden">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/top_background-K6FRFr6idzV7UAiF4VJuWziFOUixuZ.webp"
+            src="/images/features/top_background.webp"
             alt="Background"
             fill
             className="object-cover"

@@ -7,7 +7,7 @@ export default function Hero() {
     <div className="relative bg-white">
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/top_background-K6FRFr6idzV7UAiF4VJuWziFOUixuZ.webp"
+          src="/images/features/top_background.webp"
           alt="Маранафа Христианский лагерь"
           fill
           className="object-cover brightness-75"

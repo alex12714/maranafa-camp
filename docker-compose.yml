@@ -1,0 +1,30 @@
+name: maranafa-camp
+
+networks:
+  coolify:
+    external: true
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: maranafa-camp
+    restart: unless-stopped
+    networks:
+      - coolify
+    labels:
+      - traefik.enable=true
+      # HTTP router
+      - traefik.http.routers.maranafa-camp-http.rule=Host(`maranafa.camp`)
+      - traefik.http.routers.maranafa-camp-http.entrypoints=http
+      - traefik.http.routers.maranafa-camp-http.service=maranafa-camp
+      # HTTPS router
+      - traefik.http.routers.maranafa-camp-https.rule=Host(`maranafa.camp`)
+      - traefik.http.routers.maranafa-camp-https.entrypoints=https
+      - traefik.http.routers.maranafa-camp-https.tls=true
+      - traefik.http.routers.maranafa-camp-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.maranafa-camp-https.service=maranafa-camp
+      # Service definition
+      - traefik.http.services.maranafa-camp.loadbalancer.server.port=3000
+      - traefik.docker.network=coolify

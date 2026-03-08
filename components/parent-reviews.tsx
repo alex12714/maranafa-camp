@@ -88,7 +88,7 @@ export default function ParentReviews() {
           <div className="flex flex-col gap-6 max-w-6xl mx-auto items-center">
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-4/5">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tmpx1mfz4ul-QRyiMvMeQYn8Vg4yE6xzTqMMMsi35I.webp"
+                src="/images/reviews/review-1.webp"
                 alt="Отзывы родителей в социальных сетях - часть 1"
                 width={800}
                 height={600}
@@ -97,7 +97,7 @@ export default function ParentReviews() {
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-4/5">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tmpi_87gjl4-QS92qBm1DSKHFxLgHXPRM9FJ8L7Ck1.webp"
+                src="/images/reviews/review-2.webp"
                 alt="Отзывы родителей в социальных сетях - часть 2"
                 width={800}
                 height={600}
@@ -106,7 +106,7 @@ export default function ParentReviews() {
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-4/5">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tmpim5cgk2c-ZiYodVAnFYSaA1iNbXdsyZHUzaOluj.webp"
+                src="/images/reviews/review-3.webp"
                 alt="Отзывы родителей в социальных сетях - часть 3"
                 width={800}
                 height={600}
@@ -115,7 +115,7 @@ export default function ParentReviews() {
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-4/5">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tmpelx49vyn-OU68vrWyQU9l1nO1GDMVKudvIYVFLW.webp"
+                src="/images/reviews/review-4.webp"
                 alt="Отзывы родителей в социальных сетях - часть 4"
                 width={800}
                 height={600}
