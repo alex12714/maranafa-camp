@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useLanguage } from "@/contexts/language-context"
 
 const staffRoles = [
   {
@@ -156,32 +157,34 @@ const staffMembers = [
 ]
 
 export default function StaffPage() {
+  const { translations } = useLanguage()
+  const t = (key: string) => translations[key] || key
+
   return (
     <div className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-gray-900">Сотрудникам</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("Сотрудникам")}</h1>
           <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
-          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Информация для сотрудников лагеря Маранафа</p>
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">{t("Информация для сотрудников лагеря Маранафа")}</p>
         </div>
 
         <div className="max-w-4xl mx-auto mb-16">
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl text-[#B22234]">Стать сотрудником лагеря</CardTitle>
+              <CardTitle className="text-xl text-[#B22234]">{t("Стать сотрудником лагеря")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-700 mb-4">
-                Если вы хотите стать частью команды лагеря Маранафа, заполните анкету и отправьте ее нам. Мы свяжемся с
-                вами для дальнейшего обсуждения.
+                {t("Если вы хотите стать частью команды лагеря Маранафа, заполните анкету и отправьте ее нам. Мы свяжемся с вами для дальнейшего обсуждения.")}
               </p>
-              <p className="text-gray-700">Требования к сотрудникам:</p>
+              <p className="text-gray-700">{t("Требования к сотрудникам:")}</p>
               <ul className="list-disc pl-5 text-gray-700 space-y-1 mt-2">
-                <li>Возраст от 18 лет</li>
-                <li>Христианское мировоззрение</li>
-                <li>Любовь к детям</li>
-                <li>Ответственность и пунктуальность</li>
-                <li>Готовность работать в команде</li>
+                <li>{t("Возраст от 18 лет")}</li>
+                <li>{t("Христианское мировоззрение")}</li>
+                <li>{t("Любовь к детям")}</li>
+                <li>{t("Ответственность и пунктуальность")}</li>
+                <li>{t("Готовность работать в команде")}</li>
               </ul>
             </CardContent>
             <CardFooter>
@@ -189,7 +192,7 @@ export default function StaffPage() {
                 className="bg-[#B22234] hover:bg-[#8e1c29] text-white"
                 onClick={() => window.open("https://airtable.com/appARC2ZsIecCWY2s/shrUJpVYXF8P89c8T", "_blank")}
               >
-                Заполнить анкету
+                {t("Заполнить анкету")}
               </Button>
             </CardFooter>
           </Card>
@@ -199,22 +202,22 @@ export default function StaffPage() {
           <div className="flex justify-center mb-8">
             <TabsList className="bg-gray-100">
               <TabsTrigger value="roles" className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white">
-                Роли в лагере
+                {t("Роли в лагере")}
               </TabsTrigger>
               <TabsTrigger
                 value="personnel"
                 className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white"
               >
-                Наш персонал
+                {t("Наш персонал")}
               </TabsTrigger>
               <TabsTrigger
                 value="documents"
                 className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white"
               >
-                Документы
+                {t("Документы")}
               </TabsTrigger>
               <TabsTrigger value="training" className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white">
-                Обучение
+                {t("Обучение")}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -224,15 +227,15 @@ export default function StaffPage() {
               {staffRoles.map((role, index) => (
                 <Card key={index} className="hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-lg text-[#B22234]">{role.title}</CardTitle>
+                    <CardTitle className="text-lg text-[#B22234]">{t(role.title)}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 text-sm">{role.description}</p>
+                    <p className="text-gray-700 text-sm">{t(role.description)}</p>
                   </CardContent>
                   <CardFooter>
                     <Link href={role.link}>
                       <Button variant="ghost" className="text-[#B22234] hover:text-[#8e1c29] hover:bg-[#B22234]/10 p-0">
-                        Узнать больше
+                        {t("Узнать больше")}
                       </Button>
                     </Link>
                   </CardFooter>
@@ -246,7 +249,7 @@ export default function StaffPage() {
               {staffMembers.map((member, index) => (
                 <div key={index} className="bg-gray-50 p-4 rounded-lg text-center">
                   <p className="font-bold text-[#B22234]">{member.name}</p>
-                  <p className="text-gray-600 text-sm">{member.role}</p>
+                  <p className="text-gray-600 text-sm">{t(member.role)}</p>
                 </div>
               ))}
             </div>
@@ -256,77 +259,77 @@ export default function StaffPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg text-[#B22234]">Документы для сотрудников</CardTitle>
+                  <CardTitle className="text-lg text-[#B22234]">{t("Документы для сотрудников")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Инструкция для наставников</span>
+                      <span className="text-gray-700">{t("Инструкция для наставников")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Расписание лагеря</span>
+                      <span className="text-gray-700">{t("Расписание лагеря")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Правила безопасности</span>
+                      <span className="text-gray-700">{t("Правила безопасности")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Контактная информация</span>
+                      <span className="text-gray-700">{t("Контактная информация")}</span>
                     </li>
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white">Скачать документы</Button>
+                  <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white">{t("Скачать документы")}</Button>
                 </CardFooter>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg text-[#B22234]">Обучающие материалы</CardTitle>
+                  <CardTitle className="text-lg text-[#B22234]">{t("Обучающие материалы")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Как работать с детьми разного возраста</span>
+                      <span className="text-gray-700">{t("Как работать с детьми разного возраста")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Разрешение конфликтов</span>
+                      <span className="text-gray-700">{t("Разрешение конфликтов")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Организация групповых активностей</span>
+                      <span className="text-gray-700">{t("Организация групповых активностей")}</span>
                     </li>
                     <li className="flex items-center">
                       <span className="text-[#FFD700] mr-2">•</span>
-                      <span className="text-gray-700">Духовное наставничество</span>
+                      <span className="text-gray-700">{t("Духовное наставничество")}</span>
                     </li>
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white">Смотреть материалы</Button>
+                  <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white">{t("Смотреть материалы")}</Button>
                 </CardFooter>
               </Card>
             </div>
           </TabsContent>
           <TabsContent value="training" className="mt-0">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold text-[#B22234] mb-6 text-center">Обучающие видео для сотрудников</h2>
+              <h2 className="text-2xl font-bold text-[#B22234] mb-6 text-center">{t("Обучающие видео для сотрудников")}</h2>
 
               <div className="space-y-8">
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div className="p-4">
-                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">Введение в лагерь Маранафа</h3>
-                    <p className="text-gray-700 mb-4">Общая информация о лагере, его миссии и ценностях.</p>
+                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">{t("Введение в лагерь Маранафа")}</h3>
+                    <p className="text-gray-700 mb-4">{t("Общая информация о лагере, его миссии и ценностях.")}</p>
                     <div className="aspect-w-16 aspect-h-9">
                       <iframe
                         className="w-full h-96"
                         src="https://www.youtube.com/embed/Zy-2dDlQ7FM"
-                        title="Введение в лагерь Маранафа"
+                        title={t("Введение в лагерь Маранафа")}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -337,15 +340,15 @@ export default function StaffPage() {
 
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div className="p-4">
-                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">Работа с детьми разных возрастов</h3>
+                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">{t("Работа с детьми разных возрастов")}</h3>
                     <p className="text-gray-700 mb-4">
-                      Особенности работы с детьми разных возрастных групп и как найти подход к каждому ребенку.
+                      {t("Особенности работы с детьми разных возрастных групп и как найти подход к каждому ребенку.")}
                     </p>
                     <div className="aspect-w-16 aspect-h-9">
                       <iframe
                         className="w-full h-96"
                         src="https://www.youtube.com/embed/Zy-2dDlQ7FM"
-                        title="Работа с детьми разных возрастов"
+                        title={t("Работа с детьми разных возрастов")}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -356,13 +359,13 @@ export default function StaffPage() {
 
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div className="p-4">
-                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">Безопасность в лагере</h3>
-                    <p className="text-gray-700 mb-4">Правила безопасности и действия в чрезвычайных ситуациях.</p>
+                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">{t("Безопасность в лагере")}</h3>
+                    <p className="text-gray-700 mb-4">{t("Правила безопасности и действия в чрезвычайных ситуациях.")}</p>
                     <div className="aspect-w-16 aspect-h-9">
                       <iframe
                         className="w-full h-96"
                         src="https://www.youtube.com/embed/Zy-2dDlQ7FM"
-                        title="Безопасность в лагере"
+                        title={t("Безопасность в лагере")}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -373,13 +376,13 @@ export default function StaffPage() {
 
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div className="p-4">
-                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">Духовное наставничество</h3>
-                    <p className="text-gray-700 mb-4">Как быть духовным наставником для детей и подростков в лагере.</p>
+                    <h3 className="text-xl font-semibold text-[#B22234] mb-2">{t("Духовное наставничество")}</h3>
+                    <p className="text-gray-700 mb-4">{t("Как быть духовным наставником для детей и подростков в лагере.")}</p>
                     <div className="aspect-w-16 aspect-h-9">
                       <iframe
                         className="w-full h-96"
                         src="https://www.youtube.com/embed/Zy-2dDlQ7FM"
-                        title="Духовное наставничество"
+                        title={t("Духовное наставничество")}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -390,7 +393,7 @@ export default function StaffPage() {
 
                 <div className="mt-8 text-center">
                   <p className="text-gray-700 mb-4">
-                    Для доступа к полному списку обучающих материалов, пожалуйста, посетите нашу страницу на Notion:
+                    {t("Для доступа к полному списку обучающих материалов, пожалуйста, посетите нашу страницу на Notion:")}
                   </p>
                   <Button
                     className="bg-[#B22234] hover:bg-[#8e1c29] text-white"
@@ -398,7 +401,7 @@ export default function StaffPage() {
                       window.open("https://onfire.notion.site/1619955aa3b78153a0b8d7d365b98d9d?pvs=4", "_blank")
                     }
                   >
-                    Открыть полный список материалов
+                    {t("Открыть полный список материалов")}
                   </Button>
                 </div>
               </div>

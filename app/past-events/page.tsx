@@ -1,7 +1,10 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, Clock, Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/contexts/language-context"
 
 // Event data structured from the markdown
 const events = [
@@ -50,6 +53,9 @@ const sortedYears = Object.keys(eventsByYear)
   .sort((a, b) => b - a)
 
 export default function PastEventsPage() {
+  const { translations } = useLanguage()
+  const t = (key: string) => translations[key] || key
+
   return (
     <div className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,16 +63,16 @@ export default function PastEventsPage() {
           <Link href="/">
             <Button variant="ghost" className="pl-0 flex items-center text-[#B22234]">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Назад на главную
+              {t("Назад на главную")}
             </Button>
           </Link>
         </div>
 
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-gray-900">История мероприятий Маранафа</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("История мероприятий Маранафа")}</h1>
           <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            Хронология всех мероприятий Маранафа с 2017 года до наших дней
+            {t("Хронология всех мероприятий Маранафа с 2017 года до наших дней")}
           </p>
         </div>
 
@@ -92,19 +98,19 @@ export default function PastEventsPage() {
                           {index % 2 === 0 ? (
                             <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow">
                               <CardHeader>
-                                <CardTitle className="text-xl text-[#B22234]">{event.name}</CardTitle>
+                                <CardTitle className="text-xl text-[#B22234]">{t(event.name)}</CardTitle>
                               </CardHeader>
                               <CardContent>
                                 <div className="flex items-center justify-end">
                                   {event.status === "completed" ? (
                                     <div className="flex items-center text-green-600">
                                       <CheckCircle className="h-5 w-5 mr-2" />
-                                      <span>Проведено</span>
+                                      <span>{t("Проведено")}</span>
                                     </div>
                                   ) : (
                                     <div className="flex items-center text-blue-600">
                                       <Clock className="h-5 w-5 mr-2" />
-                                      <span>Запланировано</span>
+                                      <span>{t("Запланировано")}</span>
                                     </div>
                                   )}
                                 </div>
@@ -122,19 +128,19 @@ export default function PastEventsPage() {
                             <div className="md:hidden">
                               <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow">
                                 <CardHeader>
-                                  <CardTitle className="text-xl text-[#B22234]">{event.name}</CardTitle>
+                                  <CardTitle className="text-xl text-[#B22234]">{t(event.name)}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                   <div className="flex items-center">
                                     {event.status === "completed" ? (
                                       <div className="flex items-center text-green-600">
                                         <CheckCircle className="h-5 w-5 mr-2" />
-                                        <span>Проведено</span>
+                                        <span>{t("Проведено")}</span>
                                       </div>
                                     ) : (
                                       <div className="flex items-center text-blue-600">
                                         <Clock className="h-5 w-5 mr-2" />
-                                        <span>Запланировано</span>
+                                        <span>{t("Запланировано")}</span>
                                       </div>
                                     )}
                                   </div>
@@ -146,19 +152,19 @@ export default function PastEventsPage() {
                           {index % 2 !== 0 ? (
                             <Card className="border-t-4 border-t-[#B22234] hover:shadow-lg transition-shadow">
                               <CardHeader>
-                                <CardTitle className="text-xl text-[#B22234]">{event.name}</CardTitle>
+                                <CardTitle className="text-xl text-[#B22234]">{t(event.name)}</CardTitle>
                               </CardHeader>
                               <CardContent>
                                 <div className="flex items-center">
                                   {event.status === "completed" ? (
                                     <div className="flex items-center text-green-600">
                                       <CheckCircle className="h-5 w-5 mr-2" />
-                                      <span>Проведено</span>
+                                      <span>{t("Проведено")}</span>
                                     </div>
                                   ) : (
                                     <div className="flex items-center text-blue-600">
                                       <Clock className="h-5 w-5 mr-2" />
-                                      <span>Запланировано</span>
+                                      <span>{t("Запланировано")}</span>
                                     </div>
                                   )}
                                 </div>
@@ -176,14 +182,12 @@ export default function PastEventsPage() {
         </div>
 
         <div className="text-center mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">О программе Маранафа</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t("О программе Маранафа")}</h2>
           <p className="text-gray-700 max-w-3xl mx-auto mb-8">
-            Маранафа - это серия тематических мероприятий, которые проводятся с 1998 года. Каждое мероприятие исследует
-            различные темы или истории, предоставляя участникам уникальный опыт от библейских повествований до
-            фантастических миров.
+            {t("Маранафа - это серия тематических мероприятий, которые проводятся с 1998 года. Каждое мероприятие исследует различные темы или истории, предоставляя участникам уникальный опыт от библейских повествований до фантастических миров.")}
           </p>
           <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white">
-            <Link href="/">Вернуться на главную</Link>
+            <Link href="/">{t("Вернуться на главную")}</Link>
           </Button>
         </div>
       </div>

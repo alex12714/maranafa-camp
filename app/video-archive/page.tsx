@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Play } from "lucide-react"
 import Image from "next/image"
+import { useLanguage } from "@/contexts/language-context"
 
 // All videos in a single flat list
 const videos = [
@@ -80,6 +81,8 @@ const videos = [
 ]
 
 export default function VideoArchivePage() {
+  const { translations } = useLanguage()
+  const t = (key: string) => translations[key] || key
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
 
   const handleVideoClick = (videoId: string) => {
@@ -94,10 +97,10 @@ export default function VideoArchivePage() {
     <div className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-gray-900">Видео архив</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("Видео архив")}</h1>
           <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            Коллекция видео с предыдущих сезонов лагеря, интервью и особых моментов.
+            {t("Коллекция видео с предыдущих сезонов лагеря, интервью и особых моментов.")}
           </p>
         </div>
 
@@ -114,7 +117,7 @@ export default function VideoArchivePage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Посетить YouTube канал
+              {t("Посетить YouTube канал")}
             </a>
           </Button>
         </div>
@@ -162,6 +165,8 @@ interface VideoProps {
 }
 
 function VideoCard({ video, onVideoClick }: VideoProps) {
+  const { translations } = useLanguage()
+  const t = (key: string) => translations[key] || key
   // Use actual YouTube thumbnails
   const thumbnailUrl = `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`
   // Fallback to medium quality if high quality isn't available
@@ -193,8 +198,8 @@ function VideoCard({ video, onVideoClick }: VideoProps) {
         )}
       </div>
       <CardContent className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{video.title}</h3>
-        <p className="text-gray-700 text-sm line-clamp-3">{video.description}</p>
+        <h3 className="text-lg font-bold text-gray-900 mb-2">{t(video.title)}</h3>
+        <p className="text-gray-700 text-sm line-clamp-3">{t(video.description)}</p>
       </CardContent>
     </Card>
   )
