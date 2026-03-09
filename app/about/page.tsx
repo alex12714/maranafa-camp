@@ -1,7 +1,11 @@
-import { TranslatedText } from "@/components/translated-text"
+"use client"
+
 import Image from "next/image"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AboutPage() {
+  const { translations } = useLanguage()
+  const t = (key: string) => translations[key] || key
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -20,9 +24,9 @@ export default function AboutPage() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              <TranslatedText text="О нас" />
+              {t("О нас")}
             </h1>
-            <p className="mx-auto mt-6 max-w-lg text-xl text-white">Мы не сами по себе</p>
+            <p className="mx-auto mt-6 max-w-lg text-xl text-white">{t("Мы не сами по себе")}</p>
           </div>
         </div>
       </section>
@@ -31,14 +35,14 @@ export default function AboutPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Технологии и компании, которые мы используем</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{t("Технологии и компании, которые мы используем")}</h2>
             <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Camp Process Development */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Проработка процессов лагеря и событий</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Проработка процессов лагеря и событий")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -53,7 +57,7 @@ export default function AboutPage() {
 
             {/* Marketing */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Маркетинг</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Маркетинг")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -80,7 +84,7 @@ export default function AboutPage() {
 
             {/* Camp Preparation */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Подготовка лагеря</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Подготовка лагеря")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -108,15 +112,15 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
-                  <span>Е-майл и СМС рассылка GoHighLevel</span>
+                  <span>{t("Е-майл и СМС рассылка GoHighLevel")}</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
-                  <span>Веб-сайт Vercel</span>
+                  <span>{t("Веб-сайт Vercel")}</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
-                  <span>Автоматизация и AI-боты: Make.com</span>
+                  <span>{t("Автоматизация и AI-боты: Make.com")}</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -127,7 +131,7 @@ export default function AboutPage() {
 
             {/* Camp Registration */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Регистрация лагеря</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Регистрация лагеря")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -135,14 +139,14 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
-                  <span>Подписание договоров: SignRequest</span>
+                  <span>{t("Подписание договоров: SignRequest")}</span>
                 </li>
               </ul>
             </div>
 
             {/* Camp Arrival */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Заезд в лагерь</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Заезд в лагерь")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -157,7 +161,7 @@ export default function AboutPage() {
 
             {/* During Camp */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">В режиме лагеря</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("В режиме лагеря")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#FFD700] mr-2"></div>
@@ -184,7 +188,7 @@ export default function AboutPage() {
 
             {/* Media */}
             <div className="bg-white rounded-lg p-6 shadow-sm border-t-4 border-t-[#FFD700]">
-              <h4 className="text-xl font-bold text-[#B22234] mb-4">Медиа</h4>
+              <h4 className="text-xl font-bold text-[#B22234] mb-4">{t("Медиа")}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#B22234] mr-2"></div>
@@ -204,7 +208,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-[#B22234] mr-2"></div>
-                  <span>Рации Baofeng 888g</span>
+                  <span>{t("Рации Baofeng 888g")}</span>
                 </li>
               </ul>
             </div>
@@ -216,7 +220,7 @@ export default function AboutPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Наши партнёры и организации, которые нас поддерживают</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{t("Наши партнёры и организации, которые нас поддерживают")}</h2>
             <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
           </div>
 
@@ -226,7 +230,7 @@ export default function AboutPage() {
                 <div className="w-16 h-16 bg-[#B22234] rounded-full flex items-center justify-center mb-4">
                   <span className="text-2xl font-bold text-white">{partner.initial}</span>
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-2">{partner.name}</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">{t(partner.name)}</h4>
               </div>
             ))}
           </div>
