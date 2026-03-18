@@ -30,7 +30,7 @@ const events = [
     image: "/images/events/nebo-zovet.webp",
     alt: "Лагерь Небо Зовёт",
     registrationUrl: "https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw",
-    detailsPage: null,
+    detailsPage: "/camp",
   },
   {
     id: "conference",
