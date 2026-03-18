@@ -14,7 +14,7 @@ const events = [
     date: "3 – 5 апреля 2026",
     image: "/images/events/friends.webp",
     alt: "Maranafa Friends",
-    registrationUrl: "https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw",
+    registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSfwnCiib7B3msRUVy_jIlBwa8f9VHzOjPwzgJAdilb_c478Pg/viewform?usp=publish-editor",
   },
   {
     id: "camp",
