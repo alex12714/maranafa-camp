@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
+import { ConferenceRegistrationForm } from "@/components/conference-registration-form"
 
 const speakers = [
   { name: "Олег Боков", days: "11–13 августа" },
@@ -109,17 +110,6 @@ export default function ConferencePage() {
           <p className="text-xl md:text-2xl text-gray-700 italic">
             <TranslatedText text="Воплоти мечту. Найди свой путь. Измени мир." />
           </p>
-          <div className="mt-6">
-            <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white px-10 py-6 text-lg">
-              <a
-                href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <TranslatedText text="Регистрироваться" />
-              </a>
-            </Button>
-          </div>
         </div>
 
         {/* Speakers */}
@@ -211,6 +201,11 @@ export default function ConferencePage() {
           </div>
         </div>
 
+        {/* Registration Form */}
+        <div className="mb-12" id="register">
+          <ConferenceRegistrationForm />
+        </div>
+
         {/* CTA */}
         <div className="text-center bg-[#B22234] rounded-2xl p-10">
           <h2 className="text-2xl font-bold text-white mb-3">
@@ -220,11 +215,7 @@ export default function ConferencePage() {
             <TranslatedText text="11 – 14 августа 2026" />
           </p>
           <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-10 py-6 text-lg">
-            <a
-              href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="#register">
               <TranslatedText text="Регистрироваться" />
             </a>
           </Button>
