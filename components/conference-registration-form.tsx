@@ -54,71 +54,15 @@ export function ConferenceRegistrationForm() {
   const t = (text: string) => translations[text] || text
   const [form, setForm] = useState<FormData>(initialForm)
   const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState("")
 
   const update = (field: keyof FormData, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitting(true)
-    setError("")
-
-    // Build the fields for Airtable
-    let faithValue = form.faith
-    if (form.faith === "член церкви" && form.faithChurchName) {
-      faithValue = `член церкви: ${form.faithChurchName}`
-    } else if (form.faith === "не являюсь членом церкви" && form.faithNoChurchName) {
-      faithValue = `не являюсь членом церкви: ${form.faithNoChurchName}`
-    }
-
-    let allergiesValue = form.allergies
-    if (form.allergies === "есть" && form.allergyDetails) {
-      allergiesValue = `есть: ${form.allergyDetails}`
-    }
-
-    let heardFromValue = form.heardFrom
-    if (form.heardFrom === "свой вариант" && form.heardFromCustom) {
-      heardFromValue = form.heardFromCustom
-    }
-
-    const payload = {
-      records: [
-        {
-          fields: {
-            "Фамилия имя": form.fullName,
-            "Дата рождения": form.birthDate,
-            "Адрес проживания": form.address,
-            "Телефон": form.phone,
-            "Электронная почта": form.email,
-            "Вероисповедание": faithValue,
-            "Тип питания": form.diet,
-            "Аллергии": allergiesValue,
-            "Я приехал": form.arrivedWith,
-            "Как узнал о конференции": heardFromValue,
-            "Ожидания от конференции": form.expectations,
-            "Контактный телефон экстренный": form.emergencyPhone,
-            "Разрешение родителей": form.parentalConsent ? "Да" : "",
-          },
-        },
-      ],
-    }
-
-    try {
-      const res = await fetch("/api/conference-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-      if (!res.ok) throw new Error("Registration failed")
-      setSubmitted(true)
-    } catch {
-      setError(t("Произошла ошибка при отправке. Попробуйте ещё раз."))
-    } finally {
-      setSubmitting(false)
-    }
+    // TODO: connect to backend
+    setSubmitted(true)
   }
 
   if (submitted) {
@@ -238,7 +182,6 @@ export function ConferenceRegistrationForm() {
                 </span>
               </label>
             ))}
-            {/* Church member with text */}
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
@@ -261,7 +204,6 @@ export function ConferenceRegistrationForm() {
                 placeholder={t("Название церкви")}
               />
             )}
-            {/* Not a church member with text */}
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
@@ -474,20 +416,11 @@ export function ConferenceRegistrationForm() {
             </label>
           </div>
 
-          {error && (
-            <p className="text-red-600 text-sm text-center">{error}</p>
-          )}
-
           <Button
             type="submit"
-            disabled={submitting}
             className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white py-6 text-lg"
           >
-            {submitting ? (
-              <TranslatedText text="Отправка..." />
-            ) : (
-              <TranslatedText text="Зарегистрироваться" />
-            )}
+            <TranslatedText text="Зарегистрироваться" />
           </Button>
         </form>
       </CardContent>
