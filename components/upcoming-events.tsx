@@ -40,7 +40,7 @@ const events = [
     eventDate: "2026-08-11",
     image: "/images/events/grani-budushego.webp",
     alt: "Конференция Грани Будущего",
-    registrationUrl: "https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw",
+    registrationUrl: "/conference#register",
     detailsPage: "/conference",
   },
 ]
