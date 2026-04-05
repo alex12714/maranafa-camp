@@ -9,8 +9,10 @@ import { TranslatedText } from "@/components/translated-text"
 import { ConferenceRegistrationForm } from "@/components/conference-registration-form"
 
 const speakers = [
-  { name: "Олег Боков", days: "11–13 августа" },
-  { name: "Юрий Бондаренко", days: "14 августа" },
+  { name: "Олег Боков", days: "11–12 августа", image: "/images/events/bokov.jpg" },
+  { name: "Юрий Бондаренко", days: "13–14 августа", image: "/images/events/bondarenko.jpg" },
+  { name: "Алекс Подбрезский", days: "", image: "/images/events/podbrezsky.jpg" },
+  { name: "Давис Трубецкойс", days: "", image: "/images/events/trubeckojs.jpg" },
 ]
 
 type ScheduleItem = {
@@ -117,15 +119,21 @@ export default function ConferencePage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             <TranslatedText text="Спикеры" />
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-lg mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
             {speakers.map((speaker) => (
               <Card key={speaker.name} className="text-center">
                 <CardContent className="pt-6">
-                  <div className="w-16 h-16 rounded-full bg-[#B22234] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
-                    {speaker.name[0]}
+                  <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-3">
+                    <Image
+                      src={speaker.image}
+                      alt={speaker.name}
+                      width={96}
+                      height={96}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
-                  <h3 className="font-semibold text-lg text-gray-900">{speaker.name}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{speaker.days}</p>
+                  <h3 className="font-semibold text-base text-gray-900">{speaker.name}</h3>
+                  {speaker.days && <p className="text-sm text-gray-500 mt-1">{speaker.days}</p>}
                 </CardContent>
               </Card>
             ))}
