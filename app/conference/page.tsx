@@ -7,12 +7,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { ConferenceRegistrationForm } from "@/components/conference-registration-form"
+import { useLanguage } from "@/contexts/language-context"
 
 const speakers = [
-  { name: "Олег Боков", days: "11–12 августа", image: "/images/events/bokov.jpg" },
-  { name: "Юрий Бондаренко", days: "13–14 августа", image: "/images/events/bondarenko.jpg" },
-  { name: "Алекс Подбрезский", days: "", image: "/images/events/podbrezsky.jpg" },
-  { name: "Давис Трубецкойс", days: "", image: "/images/events/trubeckojs.jpg" },
+  { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg" },
+  { nameKey: "Юрий Бондаренко", daysKey: "13–14 августа", image: "/images/events/bondarenko.jpg" },
+  { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg" },
+  { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg" },
 ]
 
 type ScheduleItem = {
@@ -55,20 +56,27 @@ const highlightColors: Record<string, string> = {
 }
 
 const dayHeaders = [
-  { date: "11.08", day: "Вторник" },
-  { date: "12.08", day: "Среда" },
-  { date: "13.08", day: "Четверг" },
-  { date: "14.08", day: "Пятница" },
+  { date: "11.08", dayKey: "Вторник" },
+  { date: "12.08", dayKey: "Среда" },
+  { date: "13.08", dayKey: "Четверг" },
+  { date: "14.08", dayKey: "Пятница" },
 ]
 
+function T({ text }: { text: string }) {
+  return <TranslatedText text={text} />
+}
+
 export default function ConferencePage() {
+  const { translations = {} } = useLanguage()
+  const t = (key: string) => translations[key] || key
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px]">
         <Image
           src="/images/events/grani-budushego.webp"
-          alt="Конференция Грани Будущего"
+          alt={t("Конференция Грани Будущего")}
           fill
           className="object-cover object-top brightness-75"
           priority
@@ -80,25 +88,25 @@ export default function ConferencePage() {
             className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-black/30 rounded-full px-4 py-2 backdrop-blur-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            <TranslatedText text="На главную" />
+            <T text="На главную" />
           </Link>
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
           <div className="container mx-auto max-w-5xl">
             <p className="text-[#FFD700] font-medium uppercase tracking-wider text-sm mb-2">
-              <TranslatedText text="Христианская молодёжная конференция" />
+              <T text="Христианская молодёжная конференция" />
             </p>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3">
-              <TranslatedText text="Грани Будущего" />
+              <T text="Грани Будущего" />
             </h1>
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <TranslatedText text="11 – 14 августа 2026" />
+                <T text="11 – 14 августа 2026" />
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
-                <TranslatedText text="Молодёжь" />
+                <T text="Молодёжь" />
               </span>
             </div>
           </div>
@@ -110,30 +118,30 @@ export default function ConferencePage() {
         {/* Tagline */}
         <div className="text-center mb-12">
           <p className="text-xl md:text-2xl text-gray-700 italic">
-            <TranslatedText text="Воплоти мечту. Найди свой путь. Измени мир." />
+            <T text="Воплоти мечту. Найди свой путь. Измени мир." />
           </p>
         </div>
 
         {/* Speakers */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            <TranslatedText text="Спикеры" />
+            <T text="Спикеры" />
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
             {speakers.map((speaker) => (
-              <Card key={speaker.name} className="text-center">
+              <Card key={speaker.nameKey} className="text-center">
                 <CardContent className="pt-6">
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-3">
                     <Image
                       src={speaker.image}
-                      alt={speaker.name}
+                      alt={t(speaker.nameKey)}
                       width={96}
                       height={96}
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <h3 className="font-semibold text-base text-gray-900">{speaker.name}</h3>
-                  {speaker.days && <p className="text-sm text-gray-500 mt-1">{speaker.days}</p>}
+                  <h3 className="font-semibold text-base text-gray-900">{t(speaker.nameKey)}</h3>
+                  {speaker.daysKey && <p className="text-sm text-gray-500 mt-1">{t(speaker.daysKey)}</p>}
                 </CardContent>
               </Card>
             ))}
@@ -143,7 +151,7 @@ export default function ConferencePage() {
         {/* Schedule */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            <TranslatedText text="Расписание" />
+            <T text="Расписание" />
           </h2>
 
           {/* Desktop table */}
@@ -152,12 +160,12 @@ export default function ConferencePage() {
               <thead>
                 <tr className="bg-[#B22234] text-white">
                   <th className="px-4 py-3 text-left font-medium w-28">
-                    <TranslatedText text="Время" />
+                    <T text="Время" />
                   </th>
                   {dayHeaders.map((d) => (
                     <th key={d.date} className="px-4 py-3 text-center font-medium">
                       <div>{d.date}</div>
-                      <div className="text-xs text-white/70 font-normal">{d.day}</div>
+                      <div className="text-xs text-white/70 font-normal">{t(d.dayKey)}</div>
                     </th>
                   ))}
                 </tr>
@@ -169,10 +177,10 @@ export default function ConferencePage() {
                     className={"border-b last:border-0 " + (row.highlight ? highlightColors[row.highlight] : i % 2 === 0 ? "bg-white" : "bg-gray-50")}
                   >
                     <td className="px-4 py-2.5 font-medium text-gray-700 whitespace-nowrap">{row.time}</td>
-                    <td className="px-4 py-2.5 text-center text-gray-700">{row.tue || "—"}</td>
-                    <td className="px-4 py-2.5 text-center text-gray-700">{row.wed || "—"}</td>
-                    <td className="px-4 py-2.5 text-center text-gray-700">{row.thu || "—"}</td>
-                    <td className="px-4 py-2.5 text-center text-gray-700">{row.fri || "—"}</td>
+                    <td className="px-4 py-2.5 text-center text-gray-700">{row.tue ? t(row.tue) : "—"}</td>
+                    <td className="px-4 py-2.5 text-center text-gray-700">{row.wed ? t(row.wed) : "—"}</td>
+                    <td className="px-4 py-2.5 text-center text-gray-700">{row.thu ? t(row.thu) : "—"}</td>
+                    <td className="px-4 py-2.5 text-center text-gray-700">{row.fri ? t(row.fri) : "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -189,7 +197,7 @@ export default function ConferencePage() {
                 <Card key={d.date}>
                   <CardHeader className="bg-[#B22234] text-white rounded-t-lg py-3">
                     <div className="text-center">
-                      <div className="font-bold text-lg">{d.date} — {d.day}</div>
+                      <div className="font-bold text-lg">{d.date} — {t(d.dayKey)}</div>
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
@@ -199,7 +207,7 @@ export default function ConferencePage() {
                         className={"flex px-4 py-3 border-b last:border-0 " + (row.highlight ? highlightColors[row.highlight] : "")}
                       >
                         <span className="text-xs font-medium text-gray-500 w-24 flex-shrink-0 pt-0.5">{row.time}</span>
-                        <span className="text-sm text-gray-800">{row[dayKey]}</span>
+                        <span className="text-sm text-gray-800">{t(row[dayKey])}</span>
                       </div>
                     ))}
                   </CardContent>
@@ -217,14 +225,14 @@ export default function ConferencePage() {
         {/* CTA */}
         <div className="text-center bg-[#B22234] rounded-2xl p-10">
           <h2 className="text-2xl font-bold text-white mb-3">
-            <TranslatedText text="Присоединяйся к конференции!" />
+            <T text="Присоединяйся к конференции!" />
           </h2>
           <p className="text-white/80 mb-6">
-            <TranslatedText text="11 – 14 августа 2026" />
+            <T text="11 – 14 августа 2026" />
           </p>
           <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-10 py-6 text-lg">
             <a href="#register">
-              <TranslatedText text="Регистрироваться" />
+              <T text="Регистрироваться" />
             </a>
           </Button>
         </div>
