@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
 const TABLE_ID = "tblPyigvgBHeh1Onv"
-const CAMP_RECORD_ID_2026 = "recIDFcE2mk5kb22N"
+const CAMP_EVENT_ID_2026 = "recgplf2vbi82uDQD"
 const CAMP_SESSION_2026 = "3. - 9. Augusts 2026 (Август)"
 
 const channelMap: Record<string, string> = {
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       "Согласен с обработкой данных": true,
       "Язык": langMap[body.language] || "Русский",
       "Uz kurām nometnes maiņām bērns plāno doties?": [CAMP_SESSION_2026],
-      "Текущий лагерь": [CAMP_RECORD_ID_2026],
+      "Текущий лагерь": [CAMP_EVENT_ID_2026],
       "Участник-Сотрудник": "Участник",
       "Заполнили форму регистрации на этот год": true,
     }
