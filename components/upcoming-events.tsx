@@ -78,7 +78,7 @@ export default function UpcomingEvents() {
           <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1382px] mx-auto">
           {events.map((event) => (
             <Card
               key={event.id}
