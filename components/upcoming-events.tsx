@@ -58,7 +58,7 @@ const events: EventItem[] = [
     details: "Заезд в понедельник, автобус от Базницас 12а. Разъезд 9 августа, 16:00–18:00",
     image: "/images/events/nebo-zovet.webp",
     alt: "Лагерь Небо Зовёт",
-    registrationUrl: "https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw",
+    registrationUrl: "/camp/register",
     detailsPage: "/camp",
   },
   {

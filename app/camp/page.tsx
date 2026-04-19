@@ -133,11 +133,7 @@ export default function CampPage() {
           </div>
           <div className="mt-6 text-center">
             <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white px-10 py-6 text-lg">
-              <a
-                href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="/camp/register">
                 <TranslatedText text="Регистрироваться" />
               </a>
             </Button>
@@ -218,11 +214,7 @@ export default function CampPage() {
             <TranslatedText text="2 – 9 августа 2026" />
           </p>
           <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-10 py-6 text-lg">
-            <a
-              href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="/camp/register">
               <TranslatedText text="Поехали в лагерь" />
             </a>
           </Button>
