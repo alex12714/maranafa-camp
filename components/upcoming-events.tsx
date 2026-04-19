@@ -88,10 +88,10 @@ function EventCard({ event, past = false }: { event: EventItem; past?: boolean }
   const ImageWrapper = ({ children }: { children: React.ReactNode }) =>
     event.detailsPage ? (
       <Link href={event.detailsPage} className="block">
-        <div className="relative aspect-[4/5] sm:aspect-[2/3] overflow-hidden cursor-pointer">{children}</div>
+        <div className="relative aspect-[4/5] overflow-hidden cursor-pointer">{children}</div>
       </Link>
     ) : (
-      <div className="relative aspect-[4/5] sm:aspect-[2/3] overflow-hidden">{children}</div>
+      <div className="relative aspect-[4/5] overflow-hidden">{children}</div>
     )
 
   return (
@@ -111,7 +111,7 @@ function EventCard({ event, past = false }: { event: EventItem; past?: boolean }
             alt={event.alt}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
-            className={`object-cover object-top transition-transform duration-300 hover:scale-105 ${past ? "grayscale-[20%]" : ""}`}
+            className={`object-contain transition-transform duration-300 hover:scale-105 ${past ? "grayscale-[20%]" : ""}`}
           />
         </ImageWrapper>
       </div>
