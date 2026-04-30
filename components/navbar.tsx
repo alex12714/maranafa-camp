@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { useLanguage, type Language, languageNames } from "@/contexts/language-context"
 
 const navItems = [
+  { name: "Аренда", href: "/rental" },
   { name: "Сотрудникам", href: "/staff" },
   { name: "О нас", href: "/about" },
   { name: "Родителям", href: "/parents" },
