@@ -413,7 +413,7 @@ function GridCard({ item, inCart, onAdd, onRemove }: {
 }) {
   return (
     <div className={cn(
-      "bg-white rounded-xl shadow-sm border overflow-hidden transition-all",
+      "bg-white rounded-xl shadow-sm border overflow-hidden transition-all flex flex-col",
       inCart ? "border-[#B22234] ring-2 ring-[#B22234]/20" : "border-gray-200 hover:shadow-md"
     )}>
       <div className="relative h-44 bg-gray-100">
@@ -428,9 +428,9 @@ function GridCard({ item, inCart, onAdd, onRemove }: {
           </span>
         )}
       </div>
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">{item.name}</h3>
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center justify-between mt-auto pt-3">
           <div>
             <span className="text-xl font-bold text-[#B22234]">€{item.pricePerDay}</span>
             <span className="text-xs text-gray-500 ml-1">/ день</span>

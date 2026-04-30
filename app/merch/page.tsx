@@ -78,41 +78,43 @@ export default function MerchPage() {
                   <h3 className="font-bold text-gray-900 text-lg leading-snug">{item.name}</h3>
 
                   {item.description && (
-                    <p className="text-sm text-gray-500 mt-2 leading-relaxed flex-1">{item.description}</p>
+                    <p className="text-sm text-gray-500 mt-2 leading-relaxed">{item.description}</p>
                   )}
 
-                  <div className="mt-4 flex items-center justify-between">
-                    {item.price != null ? (
-                      <div className="flex items-center gap-1.5">
-                        <Tag className="w-4 h-4 text-[#B22234]" />
-                        <span className="text-2xl font-bold text-[#B22234]">€{item.price.toFixed(2)}</span>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-gray-400">Цена по запросу</span>
-                    )}
+                  <div className="mt-auto pt-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      {item.price != null ? (
+                        <div className="flex items-center gap-1.5">
+                          <Tag className="w-4 h-4 text-[#B22234]" />
+                          <span className="text-2xl font-bold text-[#B22234]">€{item.price.toFixed(2)}</span>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-gray-400">Цена по запросу</span>
+                      )}
 
-                    {item.quantity > 0 ? (
-                      <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full font-medium">
-                        В наличии: {item.quantity}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full font-medium">
-                        Под заказ
-                      </span>
+                      {item.quantity > 0 ? (
+                        <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full font-medium">
+                          В наличии: {item.quantity}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full font-medium">
+                          Под заказ
+                        </span>
+                      )}
+                    </div>
+
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#B22234] text-white text-sm font-semibold hover:bg-[#9a1c2a] transition-colors"
+                      >
+                        Заказать
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
                     )}
                   </div>
-
-                  {item.link && (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#B22234] text-white text-sm font-semibold hover:bg-[#9a1c2a] transition-colors"
-                    >
-                      Заказать
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
                 </div>
               </div>
             ))}
