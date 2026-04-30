@@ -22,11 +22,14 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
     const amountTotal = (session.amount_total ?? 0) / 100
     const days = session.metadata?.days ?? "?"
-    const itemsMeta = session.metadata?.items
+
+    // Parse item list — contains id (AirTable record ID) and name
     let itemNames = ""
+    let inventoryRecordIds: string[] = []
     try {
-      const parsed = JSON.parse(itemsMeta ?? "[]")
-      itemNames = parsed.map((i: any) => `${i.name} x${i.qty}`).join(", ")
+      const parsed: Array<{ id: string; name: string; qty: number }> = JSON.parse(session.metadata?.items ?? "[]")
+      itemNames = parsed.map((i) => `${i.name} x${i.qty}`).join(", ")
+      inventoryRecordIds = parsed.map((i) => i.id)
     } catch {}
 
     const today = new Date().toISOString().split("T")[0]
@@ -46,6 +49,7 @@ export async function POST(req: NextRequest) {
               "Прогнозируемые или актуальные": "Актуальные",
               Дата: today,
               Заметки: `Stripe: ${session.id} | Email: ${session.customer_email ?? "—"}`,
+              "Инвентарь аренды": inventoryRecordIds.map((id) => ({ id })),
             },
           },
         ],
