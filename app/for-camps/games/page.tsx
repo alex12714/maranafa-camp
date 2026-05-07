@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Star, Clock, Users } from "lucide-react"
+import { ArrowLeft, Star, Clock, Users, Search, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Game {
@@ -37,7 +37,10 @@ function GameCard({ game }: { game: Game }) {
       : null
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all overflow-hidden flex flex-col">
+    <Link
+      href={`/for-camps/games/${game.id}`}
+      className="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-[#B22234]/30 transition-all overflow-hidden flex flex-col"
+    >
       {/* Cover image */}
       <div className="relative aspect-square bg-gray-100 overflow-hidden">
         {game.image ? (
@@ -45,7 +48,7 @@ function GameCard({ game }: { game: Game }) {
             src={game.image}
             alt={game.name}
             fill
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
             unoptimized
           />
         ) : (
@@ -63,7 +66,9 @@ function GameCard({ game }: { game: Game }) {
 
       {/* Body */}
       <div className="p-4 flex flex-col flex-1 gap-2">
-        <h3 className="font-bold text-gray-900 text-[15px] leading-snug">{game.name}</h3>
+        <h3 className="font-bold text-gray-900 text-[15px] leading-snug group-hover:text-[#B22234] transition-colors">
+          {game.name}
+        </h3>
 
         {/* Type badges */}
         {game.types.length > 0 && (
@@ -122,7 +127,7 @@ function GameCard({ game }: { game: Game }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -156,6 +161,7 @@ export default function GamesPage() {
   const [sortBy, setSortBy] = useState<"popular" | "all">("popular")
   const [activeTypes, setActiveTypes] = useState<Set<string>>(new Set())
   const [activeAges, setActiveAges] = useState<Set<string>>(new Set())
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
     fetch("/api/games")
@@ -174,16 +180,21 @@ export default function GamesPage() {
   }, [games])
 
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
     let result = games.filter((g) => {
       if (activeTypes.size > 0 && !g.types.some((t) => activeTypes.has(t))) return false
       if (activeAges.size > 0 && !g.ageGroups.some((a) => activeAges.has(a))) return false
+      if (q) {
+        const haystack = `${g.name} ${g.shortDescription ?? ""}`.toLowerCase()
+        if (!haystack.includes(q)) return false
+      }
       return true
     })
     if (sortBy === "popular") {
       result = [...result].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
     }
     return result
-  }, [games, activeTypes, activeAges, sortBy])
+  }, [games, activeTypes, activeAges, sortBy, search])
 
   const toggleType = (t: string) =>
     setActiveTypes((prev) => {
@@ -203,9 +214,10 @@ export default function GamesPage() {
     setActiveTypes(new Set())
     setActiveAges(new Set())
     setSortBy("popular")
+    setSearch("")
   }
 
-  const hasFilters = activeTypes.size > 0 || activeAges.size > 0 || sortBy !== "popular"
+  const hasFilters = activeTypes.size > 0 || activeAges.size > 0 || sortBy !== "popular" || search !== ""
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -229,7 +241,28 @@ export default function GamesPage() {
       {/* Sticky filter bar */}
       <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
         <div className="container mx-auto max-w-6xl px-4 py-3 space-y-2.5">
-          {/* Top row: count + sort */}
+
+          {/* Search input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Поиск по названию или описанию..."
+              className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-[#B22234] focus:outline-none transition-colors placeholder:text-gray-400"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Count + sort */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500">
@@ -240,7 +273,7 @@ export default function GamesPage() {
                   onClick={clearFilters}
                   className="text-xs text-[#B22234] hover:underline"
                 >
-                  Сбросить
+                  Сбросить всё
                 </button>
               )}
             </div>
