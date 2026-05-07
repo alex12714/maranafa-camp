@@ -2,83 +2,86 @@ import { NextResponse } from "next/server"
 
 export interface TelegramPost {
   id: string
-  title: string
   text: string
   pubDate: string
   link: string
   imageUrl?: string
 }
 
-function stripHtml(html: string): string {
-  return html
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<[^>]+>/g, "")
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&#33;/g, "!")
+    .replace(/&#039;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
     .replace(/&nbsp;/g, " ")
-    .trim()
 }
 
-function extractImageUrl(html: string): string | undefined {
-  const match = html.match(/<img[^>]+src=["']([^"']+)["']/)
-  return match?.[1]
+function cleanTelegramHtml(html: string): string {
+  return decodeHtmlEntities(
+    html
+      // Extract emoji characters from <i class="emoji"><b>X</b></i>
+      .replace(/<i\s[^>]*class="emoji"[^>]*><b>([^<]*)<\/b><\/i>/g, "$1")
+      // br → newline
+      .replace(/<br\s*\/?>/gi, "\n")
+      // Remove all remaining tags
+      .replace(/<[^>]+>/g, "")
+      .trim()
+  )
 }
 
-function extractLinkFromItem(itemXml: string): string {
-  // Try <link> with content
-  const linkMatch = itemXml.match(/<link>(https?:\/\/[^<]+)<\/link>/)
-  if (linkMatch) return linkMatch[1].trim()
-  // Try <guid>
-  const guidMatch = itemXml.match(/<guid[^>]*>(https?:\/\/[^<]+)<\/guid>/)
-  if (guidMatch) return guidMatch[1].trim()
-  return ""
+function extractBgImage(blockHtml: string): string | undefined {
+  const m = blockHtml.match(/background-image:url\('([^']+)'\)/)
+  return m?.[1]
 }
 
-function extractCdata(tag: string, xml: string): string {
-  const cdataMatch = xml.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`))
-  if (cdataMatch) return cdataMatch[1]
-  const plainMatch = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`))
-  return plainMatch?.[1] ?? ""
-}
-
-async function fetchTelegramPosts(channel: string, limit = 8): Promise<TelegramPost[]> {
-  const res = await fetch(`https://rsshub.app/telegram/channel/${channel}`, {
+async function scrapeTelegramChannel(channel: string, limit = 8): Promise<TelegramPost[]> {
+  const res = await fetch(`https://t.me/s/${channel}`, {
     next: { revalidate: 1800 },
     headers: {
-      "User-Agent": "Mozilla/5.0 (compatible; maranafa-bot/1.0)",
-      Accept: "application/rss+xml, application/xml, text/xml",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      Accept: "text/html,application/xhtml+xml",
+      "Accept-Language": "ru-RU,ru;q=0.9",
     },
-    signal: AbortSignal.timeout(8000),
+    signal: AbortSignal.timeout(10000),
   })
 
-  if (!res.ok) throw new Error(`RSS fetch failed: ${res.status}`)
+  if (!res.ok) throw new Error(`Telegram fetch failed: ${res.status}`)
 
-  const xml = await res.text()
+  const html = await res.text()
   const posts: TelegramPost[] = []
-  const itemRegex = /<item>([\s\S]*?)<\/item>/g
-  let match: RegExpExecArray | null
 
-  while ((match = itemRegex.exec(xml)) !== null && posts.length < limit) {
-    const item = match[1]
-    const rawTitle = extractCdata("title", item)
-    const rawDescription = extractCdata("description", item)
-    const pubDate = extractCdata("pubDate", item)
-    const link = extractLinkFromItem(item)
+  // Split by message wrap containers
+  const messageBlocks = html.split("tgme_widget_message_wrap js-widget_message_wrap")
+  // Iterate in reverse so latest posts come first; skip index 0 (it's before the first container)
+  for (let i = messageBlocks.length - 1; i >= 1 && posts.length < limit; i--) {
+    const block = messageBlocks[i]
 
-    const text = stripHtml(rawDescription || rawTitle)
-    if (!text && !link) continue
+    // Extract post ID from data-post attribute
+    const postIdMatch = block.match(/data-post="([^"]+)"/)
+    if (!postIdMatch) continue
+    const postPath = postIdMatch[1] // e.g. "maranafacamp/4793"
+    const link = `https://t.me/${postPath}`
 
-    posts.push({
-      id: link || String(posts.length),
-      title: stripHtml(rawTitle),
-      text,
-      pubDate,
-      link,
-      imageUrl: extractImageUrl(rawDescription),
-    })
+    // Extract datetime
+    const dateMatch = block.match(/datetime="([^"]+)"/)
+    const pubDate = dateMatch?.[1] ?? ""
+
+    // Extract text content
+    const textMatch = block.match(/<div class="tgme_widget_message_text js-message_text"[^>]*>([\s\S]*?)<\/div>\s*(?:<div class="tgme_widget_message_reactions|<div class="tgme_widget_message_footer)/)
+    const text = textMatch ? cleanTelegramHtml(textMatch[1]) : ""
+
+    // Skip if no text and would just be an image post (we still include image-only posts if they have a date)
+    if (!text && !pubDate) continue
+
+    // Extract first photo background-image
+    const photoWrapMatch = block.match(/tgme_widget_message_photo_wrap[^"]*"[^>]*>([\s\S]*?)(?=tgme_widget_message_footer|tgme_widget_message_text)/)
+    const imageUrl = extractBgImage(photoWrapMatch?.[0] ?? block.slice(0, 2000))
+
+    posts.push({ id: postPath, text, pubDate, link, imageUrl })
   }
 
   return posts
@@ -86,7 +89,7 @@ async function fetchTelegramPosts(channel: string, limit = 8): Promise<TelegramP
 
 export async function GET() {
   try {
-    const posts = await fetchTelegramPosts("maranafacamp", 8)
+    const posts = await scrapeTelegramChannel("maranafacamp", 8)
     return NextResponse.json(
       { posts, ok: true },
       {
@@ -95,7 +98,8 @@ export async function GET() {
         },
       }
     )
-  } catch {
+  } catch (err) {
+    console.error("[blog/api]", err)
     return NextResponse.json(
       { posts: [], ok: false },
       {
