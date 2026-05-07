@@ -8,7 +8,7 @@ export interface TelegramPost {
   imageUrl?: string
 }
 
-function decodeHtmlEntities(str: string): string {
+function decodeEntities(str: string): string {
   return str
     .replace(/&#33;/g, "!")
     .replace(/&#039;/g, "'")
@@ -19,67 +19,54 @@ function decodeHtmlEntities(str: string): string {
     .replace(/&nbsp;/g, " ")
 }
 
-function cleanTelegramHtml(html: string): string {
-  return decodeHtmlEntities(
+function cleanHtml(html: string): string {
+  return decodeEntities(
     html
-      // Extract emoji characters from <i class="emoji"><b>X</b></i>
       .replace(/<i\s[^>]*class="emoji"[^>]*><b>([^<]*)<\/b><\/i>/g, "$1")
-      // br → newline
       .replace(/<br\s*\/?>/gi, "\n")
-      // Remove all remaining tags
       .replace(/<[^>]+>/g, "")
       .trim()
   )
-}
-
-function extractBgImage(blockHtml: string): string | undefined {
-  const m = blockHtml.match(/background-image:url\('([^']+)'\)/)
-  return m?.[1]
 }
 
 async function scrapeTelegramChannel(channel: string, limit = 8): Promise<TelegramPost[]> {
   const res = await fetch(`https://t.me/s/${channel}`, {
     next: { revalidate: 1800 },
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       Accept: "text/html,application/xhtml+xml",
-      "Accept-Language": "ru-RU,ru;q=0.9",
     },
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(12000),
   })
 
-  if (!res.ok) throw new Error(`Telegram fetch failed: ${res.status}`)
+  if (!res.ok) throw new Error(`Telegram fetch ${res.status}`)
 
   const html = await res.text()
+  const blocks = html.split("tgme_widget_message_wrap js-widget_message_wrap")
   const posts: TelegramPost[] = []
 
-  // Split by message wrap containers
-  const messageBlocks = html.split("tgme_widget_message_wrap js-widget_message_wrap")
-  // Iterate in reverse so latest posts come first; skip index 0 (it's before the first container)
-  for (let i = messageBlocks.length - 1; i >= 1 && posts.length < limit; i--) {
-    const block = messageBlocks[i]
+  // Iterate latest-first (reverse), skip index 0 which is pre-first-message HTML
+  for (let i = blocks.length - 1; i >= 1 && posts.length < limit; i--) {
+    const block = blocks[i]
 
-    // Extract post ID from data-post attribute
-    const postIdMatch = block.match(/data-post="([^"]+)"/)
-    if (!postIdMatch) continue
-    const postPath = postIdMatch[1] // e.g. "maranafacamp/4793"
+    const postMatch = block.match(/data-post="([^"]+)"/)
+    if (!postMatch) continue
+    const postPath = postMatch[1]
     const link = `https://t.me/${postPath}`
 
-    // Extract datetime
     const dateMatch = block.match(/datetime="([^"]+)"/)
     const pubDate = dateMatch?.[1] ?? ""
 
-    // Extract text content
-    const textMatch = block.match(/<div class="tgme_widget_message_text js-message_text"[^>]*>([\s\S]*?)<\/div>\s*(?:<div class="tgme_widget_message_reactions|<div class="tgme_widget_message_footer)/)
-    const text = textMatch ? cleanTelegramHtml(textMatch[1]) : ""
+    // Extract text from message_text div (stop at first </div>)
+    const textMatch = block.match(/<div class="tgme_widget_message_text js-message_text"[^>]*>([\s\S]*?)<\/div>/)
+    const text = textMatch ? cleanHtml(textMatch[1]) : ""
 
-    // Skip if no text and would just be an image post (we still include image-only posts if they have a date)
-    if (!text && !pubDate) continue
+    // Extract first image URL from any background-image in the block
+    const imgMatch = block.match(/background-image:url\('(https?:\/\/[^']+)'\)/)
+    const imageUrl = imgMatch?.[1]
 
-    // Extract first photo background-image
-    const photoWrapMatch = block.match(/tgme_widget_message_photo_wrap[^"]*"[^>]*>([\s\S]*?)(?=tgme_widget_message_footer|tgme_widget_message_text)/)
-    const imageUrl = extractBgImage(photoWrapMatch?.[0] ?? block.slice(0, 2000))
+    // Include post if it has any content (text or image)
+    if (!text && !imageUrl && !pubDate) continue
 
     posts.push({ id: postPath, text, pubDate, link, imageUrl })
   }
@@ -92,22 +79,13 @@ export async function GET() {
     const posts = await scrapeTelegramChannel("maranafacamp", 8)
     return NextResponse.json(
       { posts, ok: true },
-      {
-        headers: {
-          "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600",
-        },
-      }
+      { headers: { "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600" } }
     )
   } catch (err) {
     console.error("[blog/api]", err)
     return NextResponse.json(
       { posts: [], ok: false },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
-        },
-      }
+      { status: 200, headers: { "Cache-Control": "public, s-maxage=60" } }
     )
   }
 }
