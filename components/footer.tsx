@@ -73,7 +73,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm hover:text-gray-200">
+                <Link href="/blog" className="text-sm hover:text-gray-200">
                   <TranslatedText text="Медиалента в Телеграме" />
                 </Link>
               </li>
