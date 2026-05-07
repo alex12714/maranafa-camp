@@ -60,7 +60,7 @@ export default function SongsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Поиск по названию..."
-                className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-[#B22234] focus:outline-none transition-colors placeholder:text-gray-400"
+                className="w-full pl-9 pr-9 py-2.5 text-base border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-[#B22234] focus:outline-none transition-colors placeholder:text-gray-400"
               />
               {search && (
                 <button
