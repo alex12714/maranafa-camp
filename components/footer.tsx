@@ -89,7 +89,6 @@ export default function Footer() {
               <TranslatedText text="КОНТАКТЫ" />
             </h3>
             <ul className="mt-4 space-y-2">
-              <li className="text-sm">Ropažu nov., Garkalnes pag.,<br />Bukulti, Vētras iela 14</li>
               <li className="text-sm">info@maranafa.org</li>
               <li className="text-sm">+371 26 123 456</li>
             </ul>
