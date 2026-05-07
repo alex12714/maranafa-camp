@@ -98,43 +98,25 @@ function traumaColor(value: number) {
 function TraumaRiskBar({ value }: { value: number }) {
   const pct = Math.min(100, Math.max(0, (value / 10) * 100))
   return (
-    <div className="col-span-2 sm:col-span-3 bg-white rounded-xl border border-gray-200 p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
-          <ShieldCheck className="w-4 h-4 text-[#B22234]" />
-        </div>
-        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Травмоопасность</p>
+    <div className="flex items-start gap-3 p-4 rounded-xl border border-gray-200 bg-white">
+      <div className="w-8 h-8 rounded-lg bg-[#B22234]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+        <ShieldCheck className="w-4 h-4 text-[#B22234]" />
       </div>
-
-      <div className="relative pt-5 pb-1">
-        {/* Value label above marker */}
-        <div
-          className="absolute top-0 text-xs font-bold"
-          style={{ left: `${pct}%`, transform: "translateX(-50%)", color: traumaColor(value) }}
-        >
-          {value}
-        </div>
-
-        {/* Gradient track */}
-        <div
-          className="relative h-2.5 rounded-full"
-          style={{ background: "linear-gradient(to right, #22c55e 0%, #eab308 40%, #f97316 70%, #ef4444 100%)" }}
-        >
-          {/* Marker dot */}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Травмоопасность</p>
+        <div className="flex items-center gap-2 mt-1.5">
           <div
-            className="absolute top-1/2 w-4 h-4 rounded-full bg-white shadow-md border-2"
-            style={{
-              left: `${pct}%`,
-              transform: "translate(-50%, -50%)",
-              borderColor: traumaColor(value),
-            }}
-          />
-        </div>
-
-        {/* End labels */}
-        <div className="flex justify-between mt-2">
-          <span className="text-[11px] text-emerald-600 font-medium">0 — Безопасная</span>
-          <span className="text-[11px] text-red-500 font-medium">Опасная — 10</span>
+            className="relative flex-1 h-2 rounded-full"
+            style={{ background: "linear-gradient(to right, #22c55e 0%, #eab308 40%, #f97316 70%, #ef4444 100%)" }}
+          >
+            <div
+              className="absolute top-1/2 w-3 h-3 rounded-full bg-white border-2 shadow-sm"
+              style={{ left: `${pct}%`, transform: "translate(-50%, -50%)", borderColor: traumaColor(value) }}
+            />
+          </div>
+          <span className="text-sm font-bold tabular-nums" style={{ color: traumaColor(value) }}>
+            {value}
+          </span>
         </div>
       </div>
     </div>
