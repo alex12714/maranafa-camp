@@ -205,11 +205,6 @@ export default function GameDetailPage() {
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
-        {/* Short description */}
-        {game.shortDescription && (
-          <p className="text-lg text-gray-600 leading-relaxed">{game.shortDescription}</p>
-        )}
-
         {/* Meta grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {game.durationMinutes !== null && (
@@ -239,6 +234,16 @@ export default function GameDetailPage() {
             />
           )}
         </div>
+
+        {/* Short description */}
+        {game.shortDescription && (
+          <section>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Краткое описание</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <p className="text-gray-700 leading-relaxed">{game.shortDescription}</p>
+            </div>
+          </section>
+        )}
 
         {/* Long description */}
         {game.longDescription && (
