@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Gamepad2 } from "lucide-react"
+import { Gamepad2, Music } from "lucide-react"
 
 const resources = [
   {
@@ -9,6 +9,14 @@ const resources = [
     href: "/for-camps/games",
     icon: Gamepad2,
     badge: "50+ игр",
+  },
+  {
+    title: "Песни",
+    description:
+      "Сборник лагерных песен с текстами. Ищи по названию, открывай и пой вместе с отрядом.",
+    href: "/for-camps/songs",
+    icon: Music,
+    badge: "100+ песен",
   },
 ]
 
