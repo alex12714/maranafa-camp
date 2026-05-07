@@ -89,12 +89,18 @@ export default function Footer() {
               <TranslatedText text="КОНТАКТЫ" />
             </h3>
             <ul className="mt-4 space-y-2">
-              <li className="text-sm">
-                <TranslatedText text="Латвия" />
-              </li>
+              <li className="text-sm">Ropažu nov., Garkalnes pag.,<br />Bukulti, Vētras iela 14</li>
               <li className="text-sm">info@maranafa.org</li>
               <li className="text-sm">+371 26 123 456</li>
             </ul>
+            <div className="mt-4 pt-4 border-t border-white/20 space-y-1.5">
+              <p className="text-xs text-white/65">
+                <TranslatedText text="Рег. номер" />: 40008359764
+              </p>
+              <p className="text-xs text-white/65">
+                <TranslatedText text="Получатель EURO" />: LV90ZZZ40008359764
+              </p>
+            </div>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8">
