@@ -8,6 +8,7 @@ import BenefitsSection from "@/components/benefits-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import LimitedOfferSection from "@/components/limited-offer-section"
 import StaffInterviewSection from "@/components/staff-interview-section"
+import HomeBlogSection from "@/components/home-blog-section"
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <StaffSection />
       <BenefitsSection />
       <TestimonialsSection />
+      <HomeBlogSection />
       <LimitedOfferSection />
     </div>
   )

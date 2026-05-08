@@ -88,7 +88,8 @@ function PostCard({ post, language, t }: { post: TelegramPost; language: string;
 // ─── Article Card ─────────────────────────────────────────────────────────────
 function ArticleCard({ article, language, t }: { article: Article; language: string; t: (k: string) => string }) {
   return (
-    <Card className="border border-gray-100 hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden group">
+    <Link href={`/blog/${article.slug}`} className="block group h-full">
+      <Card className="border border-gray-100 group-hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden group">
       {article.coverThumbUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -132,10 +133,11 @@ function ArticleCard({ article, language, t }: { article: Article; language: str
           href={`/blog/${article.slug}`}
           className="inline-flex items-center gap-1 text-sm font-medium text-[#B22234] hover:text-[#8e1c29] transition-colors"
         >
-          {t("Читать далее")} →
-        </Link>
+          {t("Читать dalее")} →
+        </span>
       </CardContent>
-    </Card>
+      </Card>
+    </Link>
   )
 }
 
