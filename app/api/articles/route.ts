@@ -4,7 +4,7 @@ const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
 const TABLE_ID = "tble1JDNo8HBvjjIr"
 
-export const revalidate = 3600
+export const revalidate = 60
 
 export interface Article {
   id: string
@@ -53,7 +53,7 @@ export async function GET() {
 
     const res = await fetch(url.toString(), {
       headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     })
     if (!res.ok) return NextResponse.json({ error: "AirTable error" }, { status: 500 })
 

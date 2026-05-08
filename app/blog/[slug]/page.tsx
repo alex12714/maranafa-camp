@@ -16,7 +16,7 @@ async function getArticle(slug: string): Promise<Article | null> {
     `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${formula}&maxRecords=1`,
     {
       headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     }
   )
   if (!res.ok) return null
