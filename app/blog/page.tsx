@@ -89,57 +89,55 @@ function PostCard({ post, language, t }: { post: TelegramPost; language: string;
 function ArticleCard({ article, language, t }: { article: Article; language: string; t: (k: string) => string }) {
   return (
     <Link href={`/blog/${article.slug}`} className="block group h-full">
-      <Card className="border border-gray-100 group-hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden group">
-      {article.coverThumbUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={article.coverThumbUrl}
-          alt={article.title}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-      ) : (
-        <div className="w-full h-48 bg-gradient-to-br from-[#B22234]/10 to-[#FFD700]/20 flex items-center justify-center">
-          <BookOpen className="w-12 h-12 text-[#B22234]/25" />
-        </div>
-      )}
-      <CardContent className="flex flex-col flex-1 p-5 gap-3">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          {article.category && (
-            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#FFD700]/20 text-[#7a5500]">
-              {article.category}
-            </span>
-          )}
-          {article.date && (
-            <div className="flex items-center gap-1 text-xs text-gray-400">
-              <Calendar className="w-3.5 h-3.5" />
-              {formatDate(article.date, language)}
-            </div>
-          )}
-        </div>
-        <h3 className="font-bold text-gray-900 group-hover:text-[#B22234] transition-colors leading-snug line-clamp-2">
-          {article.title}
-        </h3>
-        {article.subtitle && (
-          <p className="text-sm text-gray-600 leading-relaxed flex-1 line-clamp-3">{article.subtitle}</p>
-        )}
-        {article.author && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto pt-2 border-t border-gray-50">
-            <User className="w-3.5 h-3.5" />
-            {article.author}
+      <Card className="border border-gray-100 group-hover:shadow-md transition-all duration-200 flex flex-col h-full overflow-hidden">
+        {article.coverThumbUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={article.coverThumbUrl}
+            alt={article.title}
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-48 bg-gradient-to-br from-[#B22234]/10 to-[#FFD700]/20 flex items-center justify-center">
+            <BookOpen className="w-12 h-12 text-[#B22234]/25" />
           </div>
         )}
-        <Link
-          href={`/blog/${article.slug}`}
-          className="inline-flex items-center gap-1 text-sm font-medium text-[#B22234] hover:text-[#8e1c29] transition-colors"
-        >
-          {t("Читать dalее")} →
-        </span>
-      </CardContent>
+        <CardContent className="flex flex-col flex-1 p-5 gap-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            {article.category && (
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#FFD700]/20 text-[#7a5500]">
+                {article.category}
+              </span>
+            )}
+            {article.date && (
+              <div className="flex items-center gap-1 text-xs text-gray-400">
+                <Calendar className="w-3.5 h-3.5" />
+                {formatDate(article.date, language)}
+              </div>
+            )}
+          </div>
+          <h3 className="font-bold text-gray-900 group-hover:text-[#B22234] transition-colors leading-snug line-clamp-2">
+            {article.title}
+          </h3>
+          {article.subtitle && (
+            <p className="text-sm text-gray-600 leading-relaxed flex-1 line-clamp-3">{article.subtitle}</p>
+          )}
+          {article.author && (
+            <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto pt-2 border-t border-gray-50">
+              <User className="w-3.5 h-3.5" />
+              {article.author}
+            </div>
+          )}
+          <span className="inline-flex items-center gap-1 text-sm font-medium text-[#B22234] group-hover:text-[#8e1c29] transition-colors">
+            {t("Читать далее")} →
+          </span>
+        </CardContent>
       </Card>
     </Link>
   )
 }
+
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function BlogPage() {
