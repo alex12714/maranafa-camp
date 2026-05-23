@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sparkles } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 
-const EVENT_DATE = "19 сентября 2026"
+const EVENT_DATE = "12 сентября 2026"
 const EVENT_WEEKDAY = "Суббота"
 
 const program = [
