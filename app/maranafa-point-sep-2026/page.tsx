@@ -34,10 +34,10 @@ export default function MaranafaPointSepPage() {
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px]">
         <Image
-          src="/images/events/mp-lights.jpg"
+          src="/images/events/maranafa-point.png"
           alt="Маранафа Point"
           fill
-          className="object-cover object-center brightness-60"
+          className="object-contain object-center bg-[#1ea3d8]"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
