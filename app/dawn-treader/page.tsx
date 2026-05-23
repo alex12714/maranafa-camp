@@ -31,7 +31,7 @@ export default function DawnTreaderPage() {
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px]">
         <Image
-          src="/images/events/dawn-treader.webp"
+          src="/images/events/dawn-treader-2026.png"
           alt="Maranatha Youth – Dawn Treader"
           fill
           className="object-cover object-center brightness-70"
@@ -58,7 +58,7 @@ export default function DawnTreaderPage() {
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <TranslatedText text="17 мая 2026" />
+                <TranslatedText text="14 июня 2026" />
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
