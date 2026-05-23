@@ -98,16 +98,16 @@ const events: EventItem[] = [
     detailsPage: "/maranafa-point-dec-2026",
   },
   {
-    id: "maijas-gafs",
-    title: "Летний праздник Maijas Gafs",
+    id: "maijas-grafs",
+    title: "Летний праздник Maijas Grafs",
     subtitle: "Семейный праздник в Ziedoņdārzs",
     date: "22 мая 2027",
     eventDate: "2027-05-22",
     endDate: "2027-05-22",
     details: "Ziedoņdārzs, Рига · 11:00 – 21:00 · Вход свободный",
-    image: "/images/events/maijas-gafs.jpg",
-    alt: "Летний праздник Maijas Gafs",
-    detailsPage: "/maijas-gafs",
+    image: "/images/events/maijas-grafs.jpg",
+    alt: "Летний праздник Maijas Grafs",
+    detailsPage: "/maijas-grafs",
   },
 ]
 

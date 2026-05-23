@@ -48,14 +48,14 @@ const zones = [
   { emoji: "🍦", title: "Мороженое и вода", desc: "Свободный доступ весь день" },
 ]
 
-export default function MaijasGafsPage() {
+export default function MaijasGrafsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px]">
         <Image
-          src="/images/events/maijas-gafs.jpg"
-          alt="Летний праздник Maijas Gafs"
+          src="/images/events/maijas-grafs.jpg"
+          alt="Летний праздник Maijas Grafs"
           fill
           className="object-cover object-center brightness-75"
           priority
@@ -73,7 +73,7 @@ export default function MaijasGafsPage() {
         <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
           <div className="container mx-auto max-w-5xl">
             <p className="text-[#FFD700] font-medium uppercase tracking-wider text-sm mb-2">
-              <TranslatedText text="Часть фестиваля Maijas Gafs" />
+              <TranslatedText text="Часть фестиваля Maijas Grafs" />
             </p>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3">
               <TranslatedText text="🎉 Летний праздник на улице" />
@@ -233,7 +233,7 @@ export default function MaijasGafsPage() {
             Ziedoņdārzs, <TranslatedText text="Рига" />
           </p>
           <p className="text-gray-600 mt-2">
-            <TranslatedText text="Мероприятие проходит в рамках городского фестиваля Maijas Gafs." />
+            <TranslatedText text="Мероприятие проходит в рамках городского фестиваля Maijas Grafs." />
           </p>
         </div>
 
