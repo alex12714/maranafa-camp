@@ -38,7 +38,7 @@ const events: EventItem[] = [
   {
     id: "dawn-treader",
     title: "Маранафа Youth – Dawn Treader",
-    subtitle: "Маранафа Молодёжь",
+    subtitle: "Путешествие на Яхте",
     date: "14 июня 2026",
     eventDate: "2026-06-14",
     endDate: "2026-06-14",
