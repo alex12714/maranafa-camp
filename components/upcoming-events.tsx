@@ -83,7 +83,7 @@ const events: EventItem[] = [
     details: "Суббота, 16:00 – 21:00 · Мера 36, 2 этаж",
     image: "/images/events/mp-lights.jpg",
     alt: "Маранафа Point — встреча друзей",
-    detailsPage: "/maranafa-point",
+    detailsPage: "/maranafa-point-sep-2026",
   },
   {
     id: "maranafa-point-dec",
@@ -95,7 +95,7 @@ const events: EventItem[] = [
     details: "Суббота, 16:00 – 21:00 · Мера 36, 2 этаж",
     image: "/images/events/mp-hall-snowflakes.jpg",
     alt: "Маранафа Point — встреча друзей",
-    detailsPage: "/maranafa-point",
+    detailsPage: "/maranafa-point-dec-2026",
   },
   {
     id: "maijas-gafs",

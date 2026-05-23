@@ -5,16 +5,8 @@ import Link from "next/link"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sparkles } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 
-type Occurrence = {
-  date: string
-  weekday: string
-  eventDate: string
-}
-
-const occurrences: Occurrence[] = [
-  { date: "19 сентября 2026", weekday: "Суббота", eventDate: "2026-09-19" },
-  { date: "12 декабря 2026", weekday: "Суббота", eventDate: "2026-12-12" },
-]
+const EVENT_DATE = "12 декабря 2026"
+const EVENT_WEEKDAY = "Суббота"
 
 const program = [
   { emoji: "🎬", title: "Кино-вечер" },
@@ -28,21 +20,21 @@ const program = [
 ]
 
 const gallery = [
-  { src: "/images/events/mp-lights.jpg", alt: "Маранафа Point — вечерний свет и атмосфера" },
   { src: "/images/events/mp-hall-snowflakes.jpg", alt: "Зал с зимним оформлением" },
+  { src: "/images/events/mp-lights.jpg", alt: "Маранафа Point — вечерний свет и атмосфера" },
   { src: "/images/events/mp-ballpit.jpg", alt: "Шариковый бассейн" },
   { src: "/images/events/mp-lounge.jpg", alt: "Лаунж зона с диванами" },
   { src: "/images/events/mp-hall-balls.jpg", alt: "Зал с праздничными шарами" },
   { src: "/images/events/mp-kitchen.jpg", alt: "Кухонная зона" },
 ]
 
-export default function MaranafaPointPage() {
+export default function MaranafaPointDecPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px]">
         <Image
-          src="/images/events/mp-lights.jpg"
+          src="/images/events/mp-hall-snowflakes.jpg"
           alt="Маранафа Point"
           fill
           className="object-cover object-center brightness-60"
@@ -71,6 +63,10 @@ export default function MaranafaPointPage() {
             </p>
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                <TranslatedText text={EVENT_DATE} />
+              </span>
+              <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
                 16:00 – 21:00
               </span>
@@ -86,28 +82,19 @@ export default function MaranafaPointPage() {
       {/* Content */}
       <div className="container mx-auto max-w-5xl px-4 py-12">
 
-        {/* Upcoming dates */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            <TranslatedText text="📅 Ближайшие встречи" />
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {occurrences.map((o) => (
-              <div key={o.eventDate} className="bg-white rounded-xl border-l-4 border-[#B22234] shadow-sm p-5 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
-                  <Calendar className="h-5 w-5 text-[#B22234]" />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium">
-                    <TranslatedText text={o.weekday} />
-                  </p>
-                  <p className="text-xl font-bold text-gray-900">
-                    <TranslatedText text={o.date} />
-                  </p>
-                  <p className="text-sm text-gray-600 mt-0.5">16:00 – 21:00</p>
-                </div>
-              </div>
-            ))}
+        {/* Date highlight */}
+        <div className="bg-white rounded-xl border-l-4 border-[#B22234] shadow-sm p-5 flex items-center gap-4 mb-10">
+          <div className="w-14 h-14 rounded-full bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
+            <Calendar className="h-6 w-6 text-[#B22234]" />
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider text-gray-500 font-medium">
+              <TranslatedText text={EVENT_WEEKDAY} />
+            </p>
+            <p className="text-2xl font-bold text-gray-900">
+              <TranslatedText text={EVENT_DATE} />
+            </p>
+            <p className="text-sm text-gray-600 mt-0.5">16:00 – 21:00 · <TranslatedText text="Мера 36, 2 этаж" /></p>
           </div>
         </div>
 
@@ -180,7 +167,7 @@ export default function MaranafaPointPage() {
           </div>
         </div>
 
-        {/* Pricing callout */}
+        {/* Pricing */}
         <div className="bg-gradient-to-br from-[#B22234]/5 to-[#FFD700]/10 border border-[#B22234]/20 rounded-xl p-6 mb-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             <TranslatedText text="💰 Стоимость участия" />
