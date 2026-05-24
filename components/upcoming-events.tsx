@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Calendar, MapPin } from "lucide-react"
+import { Calendar, MapPin, ChevronRight } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 
 type EventItem = {
@@ -206,6 +206,55 @@ function EventCard({ event, past = false }: { event: EventItem; past?: boolean }
   )
 }
 
+function EventLineCard({ event }: { event: EventItem }) {
+  const Wrapper = ({ children }: { children: React.ReactNode }) =>
+    event.detailsPage ? (
+      <Link
+        href={event.detailsPage}
+        className="block bg-white border-l-4 border-[#B22234] rounded-lg shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+      >
+        {children}
+      </Link>
+    ) : (
+      <div className="bg-white border-l-4 border-[#B22234] rounded-lg shadow-sm">
+        {children}
+      </div>
+    )
+
+  return (
+    <Wrapper>
+      <div className="flex items-center gap-4 p-3 sm:p-4">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
+          <Image
+            src={event.image}
+            alt={event.alt}
+            fill
+            sizes="80px"
+            className="object-cover"
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium uppercase tracking-wide text-[#B22234] truncate">
+            <TranslatedText text={event.subtitle} />
+          </p>
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">
+            <TranslatedText text={event.title} />
+          </h3>
+          <div className="flex items-center text-gray-600 mt-1">
+            <Calendar className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-[#B22234]" />
+            <span className="text-xs sm:text-sm font-medium">
+              <TranslatedText text={event.date} />
+            </span>
+          </div>
+        </div>
+        {event.detailsPage && (
+          <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
+        )}
+      </div>
+    </Wrapper>
+  )
+}
+
 export default function UpcomingEvents() {
   const [now, setNow] = useState<number | null>(null)
 
@@ -219,7 +268,11 @@ export default function UpcomingEvents() {
     return cutoff < now
   }
 
-  const upcoming = events.filter((e) => !isPast(e))
+  const upcoming = events
+    .filter((e) => !isPast(e))
+    .sort((a, b) => a.eventDate.localeCompare(b.eventDate))
+  const nextThree = upcoming.slice(0, 3)
+  const later = upcoming.slice(3)
   const past = events.filter((e) => isPast(e))
 
   return (
@@ -233,11 +286,24 @@ export default function UpcomingEvents() {
             <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
-            {upcoming.map((event) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {nextThree.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
+
+          {later.length > 0 && (
+            <div className="mt-12 max-w-3xl mx-auto">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <TranslatedText text="И позже в этом сезоне" />
+              </h3>
+              <div className="space-y-3">
+                {later.map((event) => (
+                  <EventLineCard key={event.id} event={event} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
