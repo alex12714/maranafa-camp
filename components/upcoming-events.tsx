@@ -45,7 +45,7 @@ const events: EventItem[] = [
     details: "Старт в 15:00 на Базницас 12а. Финиш в 18:30 в центре Риги",
     image: "/images/events/dawn-treader-2026.png",
     alt: "Maranatha Youth – Dawn Treader",
-    registrationUrl: "https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw",
+    registrationUrl: "/dawn-treader",
     detailsPage: "/dawn-treader",
   },
   {
@@ -133,6 +133,26 @@ function DaysCountdown({ eventDate }: { eventDate: string }) {
   )
 }
 
+function RegistrationButton({ url }: { url: string }) {
+  const isInternal = url.startsWith("/")
+  if (isInternal) {
+    return (
+      <Button className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white" asChild>
+        <Link href={url}>
+          <TranslatedText text="Регистрироваться" />
+        </Link>
+      </Button>
+    )
+  }
+  return (
+    <Button className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white" asChild>
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        <TranslatedText text="Регистрироваться" />
+      </a>
+    </Button>
+  )
+}
+
 function EventCard({ event, past = false }: { event: EventItem; past?: boolean }) {
   const ImageWrapper = ({ children }: { children: React.ReactNode }) =>
     event.detailsPage ? (
@@ -189,16 +209,7 @@ function EventCard({ event, past = false }: { event: EventItem; past?: boolean }
         )}
         {!past && event.registrationUrl && (
           <div className="mt-auto pt-4">
-            <Button className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white">
-              <a
-                href={event.registrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full"
-              >
-                <TranslatedText text="Регистрироваться" />
-              </a>
-            </Button>
+            <RegistrationButton url={event.registrationUrl} />
           </div>
         )}
       </CardContent>

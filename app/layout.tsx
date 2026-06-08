@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { LanguageProvider } from "@/contexts/language-context"
+import LanguageSelectorModal from "@/components/language-selector-modal"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
@@ -29,6 +30,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <LanguageSelectorModal />
           </LanguageProvider>
         </ThemeProvider>
       </body>

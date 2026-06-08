@@ -180,21 +180,6 @@ export default function ParentsPage() {
                     <p className="font-bold">
                       <TranslatedText text="Директор / Регистрация участников" />
                     </p>
-                    <p>
-                      <TranslatedText text="Алекс одбрезский" />
-                    </p>
-                    <p className="text-gray-600">+371 20172714</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <div className="flex items-start">
-                  <Phone className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-bold">
-                      <TranslatedText text="Зам директора" />
-                    </p>
                     <p>Федор Калниньш</p>
                     <p className="text-gray-600">+371 22331104</p>
                   </div>
@@ -206,10 +191,10 @@ export default function ParentsPage() {
                   <Phone className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-bold">
-                      <TranslatedText text="Координатор Программы (дети 7-12 лет)" />
+                      <TranslatedText text="Зам директора" />
                     </p>
-                    <p>Ирина Йоц</p>
-                    <p className="text-gray-600">+371 26352546</p>
+                    <p>Алекс Подбрезский</p>
+                    <p className="text-gray-600">+371 20172714</p>
                   </div>
                 </div>
               </div>
@@ -219,10 +204,9 @@ export default function ParentsPage() {
                   <Phone className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-bold">
-                      <TranslatedText text="Координатор Программы (дети 13-17 лет)" />
+                      <TranslatedText text="Координатор" />
                     </p>
-                    <p>Лариса Юганова</p>
-                    <p className="text-gray-600">+371 28808607</p>
+                    <p>Екатерина Подбрезская</p>
                   </div>
                 </div>
               </div>
@@ -567,13 +551,13 @@ export default function ParentsPage() {
                     <li className="flex items-start">
                       <Clock className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                       <span>
-                        <TranslatedText text="Пятница, 8 августа, 13:30 - 15:00" />
+                        <TranslatedText text="Воскресенье, 3 августа, автобус отходит в 9:00 от Базницас 12а" />
                       </span>
                     </li>
                     <li className="flex items-start">
                       <Clock className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                       <span>
-                        <TranslatedText text="Расположение по домикам начинается c 14:00" />
+                        <TranslatedText text="Расположение по домикам начинается c 10:00" />
                       </span>
                     </li>
                   </ul>
@@ -590,7 +574,7 @@ export default function ParentsPage() {
                   <div className="flex items-start">
                     <Clock className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                     <span>
-                      <TranslatedText text="Пятница, 15 августа, 13:30 - 16:00. Утром программа по расписанию" />
+                      <TranslatedText text="Суббота, 9 августа, 14:00. Утром программа по расписанию" />
                     </span>
                   </div>
                 </CardContent>
