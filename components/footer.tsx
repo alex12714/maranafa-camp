@@ -100,6 +100,28 @@ export default function Footer() {
                 <TranslatedText text="Получатель EURO" />: LV90ZZZ40008359764
               </p>
             </div>
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <p className="text-xs font-semibold uppercase tracking-wider text-white/80">
+                <TranslatedText text="Для переводов в ЕС / международных" />
+              </p>
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-white/65">
+                  IBAN: <span className="text-white/90">LT183500010019018499</span>
+                </p>
+                <p className="text-xs text-white/65">
+                  <TranslatedText text="Банк" />: <span className="text-white/90">Paysera LT, UAB</span>
+                </p>
+                <p className="text-xs text-white/65">
+                  SWIFT/BIC: <span className="text-white/90">EVIULT2VXXX</span>
+                </p>
+                <p className="text-xs text-white/65">
+                  <TranslatedText text="Получатель" />: <span className="text-white/90">Maranafa</span>
+                </p>
+                <p className="text-xs text-white/65">
+                  <TranslatedText text="Адрес банка" />: <span className="text-white/90">Pilaitės pr. 16, Vilnius, LT-04352, Lithuania</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8">
