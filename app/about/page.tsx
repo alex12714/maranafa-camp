@@ -31,6 +31,64 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Company / Requisites Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">{t("Реквизиты организации")}</h2>
+            <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 rounded-lg p-6 shadow-sm border-t-4 border-t-[#B22234]">
+              <h3 className="text-lg font-bold text-[#B22234] mb-4">{t("Организация")}</h3>
+              <dl className="space-y-3 text-sm text-gray-700">
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Название")}</dt>
+                  <dd>Nodibinājums «Maranafa»</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Регистрационный номер")}</dt>
+                  <dd>40008359764</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Юридический адрес")}</dt>
+                  <dd>Ropažu nov., Garkalnes pag., Bukulti, Vētras iela 14</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6 shadow-sm border-t-4 border-t-[#FFD700]">
+              <h3 className="text-lg font-bold text-[#B22234] mb-4">{t("Банковские реквизиты")}</h3>
+              <dl className="space-y-3 text-sm text-gray-700">
+                <div>
+                  <dt className="font-medium text-gray-900">IBAN</dt>
+                  <dd>LT183500010019018499</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">SWIFT/BIC</dt>
+                  <dd>EVIULT2VXXX</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Банк")}</dt>
+                  <dd>«Paysera LT», UAB</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Код банка")}</dt>
+                  <dd>35000</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">{t("Адрес банка")}</dt>
+                  <dd>Pilaitės pr. 16, LT-04352, Viļņa, Lietuva</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-900">EURO beneficiary ID</dt>
+                  <dd>LV90ZZZ40008359764</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Technologies Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
