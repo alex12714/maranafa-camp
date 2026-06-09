@@ -10,11 +10,11 @@ import { ConferenceRegistrationForm } from "@/components/conference-registration
 import { useLanguage } from "@/contexts/language-context"
 
 const speakers = [
-  { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg" },
-  { nameKey: "David Neal", daysKey: "", image: "/images/events/david-neal.webp" },
-  { nameKey: "Виктор Алексеенко", daysKey: "", image: "/images/events/viktor-alekseenko.webp" },
-  { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg" },
-  { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg" },
+  { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg", descKey: "Молодёжный спикер, основатель проекта «Сильное поколение», Украина" },
+  { nameKey: "David Neal", daysKey: "", image: "/images/events/david-neal.webp", descKey: "Пастор Трансъевропейского дивизиона, отдел коммуникаций" },
+  { nameKey: "Виктор Алексеенко", daysKey: "", image: "/images/events/viktor-alekseenko.webp", descKey: "Руководитель Церкви адвентистов в Украине" },
+  { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg", descKey: "Директор лагеря «Маранафа»" },
+  { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg", descKey: "Пастор Церкви адвентистов в Латвии" },
 ]
 
 type ScheduleItem = {
@@ -128,9 +128,9 @@ export default function ConferencePage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             <T text="Спикеры" />
           </h2>
-          <div className="flex flex-wrap justify-center gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 max-w-5xl mx-auto">
             {speakers.map((speaker) => (
-              <Card key={speaker.nameKey} className="text-center w-36 sm:w-40">
+              <Card key={speaker.nameKey} className="text-center">
                 <CardContent className="pt-6">
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-3">
                     <Image
@@ -143,6 +143,7 @@ export default function ConferencePage() {
                   </div>
                   <h3 className="font-semibold text-base text-gray-900">{t(speaker.nameKey)}</h3>
                   {speaker.daysKey && <p className="text-sm text-gray-500 mt-1">{t(speaker.daysKey)}</p>}
+                  {speaker.descKey && <p className="text-xs text-gray-500 mt-2 leading-snug">{t(speaker.descKey)}</p>}
                 </CardContent>
               </Card>
             ))}
