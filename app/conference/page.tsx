@@ -11,8 +11,8 @@ import { useLanguage } from "@/contexts/language-context"
 
 const speakers = [
   { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg" },
-  { nameKey: "David Neal", daysKey: "", image: "/placeholder-user.jpg" },
-  { nameKey: "Виктор Алексеенко", daysKey: "", image: "/placeholder-user.jpg" },
+  { nameKey: "David Neal", daysKey: "", image: "/images/events/david-neal.webp" },
+  { nameKey: "Виктор Алексеенко", daysKey: "", image: "/images/events/viktor-alekseenko.webp" },
   { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg" },
   { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg" },
 ]
@@ -128,9 +128,9 @@ export default function ConferencePage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             <T text="Спикеры" />
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-6 max-w-3xl mx-auto">
             {speakers.map((speaker) => (
-              <Card key={speaker.nameKey} className="text-center">
+              <Card key={speaker.nameKey} className="text-center w-36 sm:w-40">
                 <CardContent className="pt-6">
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-3">
                     <Image
