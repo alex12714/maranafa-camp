@@ -24,7 +24,7 @@ export default function Hero() {
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-lg text-xl text-white">
-            <TranslatedText text="Детский Христианский Тематический Лагерь" />
+            <TranslatedText text="Христианские мероприятия для детей и молодёжи" />
           </p>
           <div className="mx-auto mt-10 flex justify-center">
             <Button
