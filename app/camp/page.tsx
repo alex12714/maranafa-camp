@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Calendar, Users, ArrowLeft, BookOpen, Star } from "lucide-react"
+import { Calendar, Users, ArrowLeft, BookOpen, Star, Instagram, Send } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 
 const dailyThemes = [
@@ -23,7 +23,6 @@ type ScheduleItem = {
 }
 
 const typicalDay: ScheduleItem[] = [
-  { time: "6:30–7:00", activity: "Личное время с Богом", highlight: "morning" },
   { time: "8:00–8:30", activity: "Подъём, уборка, зарядка", highlight: "morning" },
   { time: "8:30–8:50", activity: "Утренняя история" },
   { time: "8:50–9:00", activity: "Перекличка — стих дня" },
@@ -93,7 +92,7 @@ export default function CampPage() {
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <TranslatedText text="2 – 9 августа 2026" />
+                <TranslatedText text="3 – 9 августа 2026" />
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
@@ -205,13 +204,38 @@ export default function CampPage() {
           </div>
         </div>
 
+        {/* Social */}
+        <div className="text-center mb-12">
+          <p className="text-gray-700 font-medium mb-3">
+            <TranslatedText text="Следите за новостями лагеря" />
+          </p>
+          <div className="flex justify-center gap-6">
+            <a
+              href="https://www.instagram.com/maranafa.camp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[#B22234] hover:underline font-medium"
+            >
+              <Instagram className="h-5 w-5" /> Instagram
+            </a>
+            <a
+              href="https://t.me/maranafacamp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[#B22234] hover:underline font-medium"
+            >
+              <Send className="h-5 w-5" /> Telegram
+            </a>
+          </div>
+        </div>
+
         {/* CTA */}
         <div className="text-center bg-[#B22234] rounded-2xl p-10">
           <h2 className="text-2xl font-bold text-white mb-3">
             <TranslatedText text="Готовься к взлёту!" />
           </h2>
           <p className="text-white/80 mb-6">
-            <TranslatedText text="2 – 9 августа 2026" />
+            <TranslatedText text="3 – 9 августа 2026" />
           </p>
           <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-10 py-6 text-lg">
             <a href="/camp/register">

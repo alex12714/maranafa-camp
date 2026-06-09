@@ -27,7 +27,6 @@ type FormData = {
   swimming: string
   tickVaccine: string
   shirtSize: string
-  believingFamily: string
   characterTraits: string
   interests: string
   instrument: string
@@ -54,7 +53,6 @@ const initialForm: FormData = {
   swimming: "",
   tickVaccine: "",
   shirtSize: "",
-  believingFamily: "",
   characterTraits: "",
   interests: "",
   instrument: "",
@@ -408,29 +406,6 @@ export default function CampRegisterPage() {
               </Section>
 
               <Section title="О ребёнке (дополнительно)">
-                <Field label="Из верующей семьи">
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {[
-                      { value: "yes", label: "Да" },
-                      { value: "no", label: "Нет" },
-                      { value: "adventist", label: "Адвентисты" },
-                    ].map((o) => (
-                      <label key={o.value} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="believingFamily"
-                          value={o.value}
-                          checked={form.believingFamily === o.value}
-                          onChange={(e) => update("believingFamily", e.target.value)}
-                          className="accent-[#B22234]"
-                        />
-                        <span className="text-sm text-gray-700">
-                          <TranslatedText text={o.label} />
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </Field>
                 <Field
                   label="Особенности характера"
                   hint="Что нам важно знать, чтобы лучше позаботиться о ребёнке"

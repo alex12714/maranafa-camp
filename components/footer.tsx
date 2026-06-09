@@ -20,9 +20,6 @@ export default function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wider">
               <TranslatedText text="О НАС" />
             </h3>
-            <p className="mt-4 text-sm">
-              <TranslatedText text="Мы являемся частью общественно полезной организации KEFA.org.lv" />
-            </p>
             <div className="mt-4">
               <Link href="/">
                 <Image
@@ -81,6 +78,26 @@ export default function Footer() {
                 <Link href="#" className="text-sm hover:text-gray-200">
                   <TranslatedText text="YouTube канал" />
                 </Link>
+              </li>
+              <li>
+                <a
+                  href="https://www.instagram.com/maranafa.camp/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-gray-200"
+                >
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/maranafacamp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-gray-200"
+                >
+                  <TranslatedText text="Телеграм-канал" />
+                </a>
               </li>
             </ul>
           </div>

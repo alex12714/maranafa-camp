@@ -27,12 +27,6 @@ const genderMap: Record<string, string> = {
   boy: "Мальчики / Zēni",
 }
 
-const believingFamilyMap: Record<string, string> = {
-  yes: "Да",
-  no: "Нет",
-  adventist: "Адвентисты",
-}
-
 const contractMap: Record<string, string> = {
   email: "Pa e-pastu / Через э-почту (bezmaksas / бесплатно)",
   paper: "Uz papira nometnē / На бумаге в лагере (+EUR 10)",
@@ -82,7 +76,6 @@ export async function POST(req: NextRequest) {
       "Умение плавать": swimmingMap[body.swimming] || null,
       "Прививка от клеща": body.tickVaccine || null,
       "Размер майки": body.shirtSize || null,
-      "Из верующей семьи": believingFamilyMap[body.believingFamily] || null,
       "Особенности Характера": body.characterTraits || "",
       "Интересы -Хобби": body.interests || "",
       "Музыкальный инструмент": body.instrument || "",

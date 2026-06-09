@@ -156,7 +156,7 @@ export default function DawnTreaderPage() {
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <TranslatedText text="14 июня 2026" />
+                <TranslatedText text="21 июня 2026" />
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
@@ -214,6 +214,15 @@ export default function DawnTreaderPage() {
               <div>
                 <p className="font-medium text-gray-900"><TranslatedText text="Корабль" /></p>
                 <p><TranslatedText text="Яхта «Либава»" /></p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#B22234]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Users className="h-4 w-4 text-[#B22234]" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-900"><TranslatedText text="Свободных мест" /></p>
+                <p>40</p>
               </div>
             </div>
           </div>

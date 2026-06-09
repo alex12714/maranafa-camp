@@ -26,26 +26,15 @@ export default function Hero() {
           <p className="mx-auto mt-6 max-w-lg text-xl text-white">
             <TranslatedText text="Детский Христианский Тематический Лагерь" />
           </p>
-          <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
-            <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
-              <Button className="flex items-center justify-center bg-[#B22234] hover:bg-[#8e1c29] text-white px-8 py-6 text-base font-medium">
-                <a
-                  href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <TranslatedText text="Регистрироваться" />
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center justify-center border-white bg-transparent text-white hover:bg-white hover:text-[#B22234] px-8 py-6 text-base font-medium"
-              >
-                <a href="/parents">
-                  <TranslatedText text="Узнать больше" />
-                </a>
-              </Button>
-            </div>
+          <div className="mx-auto mt-10 flex justify-center">
+            <Button
+              variant="outline"
+              className="flex items-center justify-center border-white bg-transparent text-white hover:bg-white hover:text-[#B22234] px-8 py-6 text-base font-medium"
+            >
+              <a href="/parents">
+                <TranslatedText text="Узнать больше" />
+              </a>
+            </Button>
           </div>
         </div>
       </div>

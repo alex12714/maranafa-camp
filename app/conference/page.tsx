@@ -4,14 +4,15 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils, Phone } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { ConferenceRegistrationForm } from "@/components/conference-registration-form"
 import { useLanguage } from "@/contexts/language-context"
 
 const speakers = [
   { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg" },
-  { nameKey: "Юрий Бондаренко", daysKey: "13–14 августа", image: "/images/events/bondarenko.jpg" },
+  { nameKey: "David Neal", daysKey: "", image: "/placeholder-user.jpg" },
+  { nameKey: "Виктор Алексеенко", daysKey: "", image: "/placeholder-user.jpg" },
   { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg" },
   { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg" },
 ]
@@ -235,6 +236,20 @@ export default function ConferencePage() {
               <T text="Регистрироваться" />
             </a>
           </Button>
+        </div>
+
+        {/* Contact */}
+        <div className="text-center mt-8">
+          <p className="text-gray-600 text-sm">
+            <T text="Вопросы? Свяжитесь с нами" />
+          </p>
+          <a
+            href="tel:+37122331104"
+            className="inline-flex items-center gap-2 text-[#B22234] font-semibold text-lg mt-1 hover:underline"
+          >
+            <Phone className="h-5 w-5" />
+            Фёдор: +371 2 2331104
+          </a>
         </div>
       </div>
     </div>
