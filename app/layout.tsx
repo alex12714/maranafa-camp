@@ -11,8 +11,8 @@ import LanguageSelectorModal from "@/components/language-selector-modal"
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  title: "Маранафа - Детский Христианский Тематический Лагерь",
-  description: "Детский Христианский Тематический Лагерь Маранафа",
+  title: "Маранафа — Христианские мероприятия для детей и молодёжи",
+  description: "Маранафа — христианские мероприятия для детей и молодёжи: лагеря, конференции и события для всей семьи.",
 }
 
 export default function RootLayout({
