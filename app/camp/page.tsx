@@ -96,7 +96,7 @@ export default function CampPage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
-                <TranslatedText text="Дети 7–14 лет" />
+                <TranslatedText text="Дети 9–15 лет" />
               </span>
             </div>
           </div>
