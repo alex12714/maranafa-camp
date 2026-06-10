@@ -11,7 +11,7 @@ import { useLanguage } from "@/contexts/language-context"
 
 const speakers = [
   { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg", descKey: "Молодёжный спикер, основатель проекта «Сильное поколение», Украина" },
-  { nameKey: "David Neal", daysKey: "", image: "/images/events/david-neal.webp", descKey: "Пастор Трансъевропейского дивизиона, отдел коммуникаций" },
+  { nameKey: "David Neal", daysKey: "13–14 августа", image: "/images/events/david-neal.webp", descKey: "Пастор Трансъевропейского дивизиона, отдел коммуникаций" },
   { nameKey: "Виктор Алексеенко", daysKey: "", image: "/images/events/viktor-alekseenko.webp", descKey: "Руководитель Церкви адвентистов в Украине" },
   { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg", descKey: "Директор лагеря «Маранафа»" },
   { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg", descKey: "Пастор Церкви адвентистов в Латвии" },
@@ -28,23 +28,23 @@ type ScheduleItem = {
 
 const schedule: ScheduleItem[] = [
   { time: "7:00–7:25", tue: "", wed: "Личное общение с Богом", thu: "Личное общение с Богом", fri: "Личное общение с Богом" },
-  { time: "7:30–8:00", tue: "", wed: "Зарядка", thu: "Зарядка", fri: "Зарядка" },
+  { time: "7:30–7:45", tue: "", wed: "Зарядка", thu: "Зарядка", fri: "Зарядка" },
   { time: "8:00–8:15", tue: "", wed: "Подъём", thu: "Подъём", fri: "Подъём" },
-  { time: "8:20–8:50", tue: "", wed: "Взгляд в будущее", thu: "Взгляд в будущее", fri: "Взгляд в будущее", highlight: "morning" },
+  { time: "8:20–8:50", tue: "", wed: "Малая группа / Взгляд в будущее", thu: "Малая группа / Взгляд в будущее", fri: "Малая группа / Взгляд в будущее", highlight: "morning" },
   { time: "9:00–9:50", tue: "", wed: "Завтрак", thu: "Завтрак", fri: "Завтрак", highlight: "meal" },
   { time: "10:00–11:00", tue: "РЕГИСТРАЦИЯ", wed: "Утренняя встреча в зале", thu: "Утренняя встреча в зале", fri: "Семинар", highlight: "morning" },
-  { time: "11:15–11:55", tue: "", wed: "Семинар", thu: "Семинар", fri: "Закрытие", highlight: "activity" },
-  { time: "12:05–12:45", tue: "", wed: "Семинар", thu: "", fri: "Фото / Прощание", highlight: "activity" },
-  { time: "13:00–14:00", tue: "", wed: "Обед", thu: "Обед", fri: "", highlight: "meal" },
-  { time: "14:00–15:00", tue: "Открытие конференции", wed: "Свободное время", thu: "Свободное время", fri: "", highlight: "morning" },
+  { time: "11:15–11:55", tue: "РЕГИСТРАЦИЯ", wed: "Семинар", thu: "Семинар", fri: "Закрытие", highlight: "activity" },
+  { time: "12:05–12:45", tue: "РЕГИСТРАЦИЯ", wed: "Семинар", thu: "Семинар", fri: "Фото / Прощание", highlight: "activity" },
+  { time: "13:00–14:00", tue: "Обед", wed: "Обед", thu: "Обед", fri: "Обед", highlight: "meal" },
+  { time: "14:00–15:00", tue: "Открытие конференции", wed: "Свободное время", thu: "Свободное время", fri: "Разъезд", highlight: "morning" },
   { time: "15:00–16:00", tue: "Активити", wed: "Активити", thu: "Активити", fri: "Разъезд", highlight: "activity" },
   { time: "16:15–16:55", tue: "Семинар", wed: "Семинар", thu: "Семинар", fri: "", highlight: "activity" },
   { time: "17:10–17:50", tue: "Семинар", wed: "Свободное время", thu: "Свободное время", fri: "", highlight: "activity" },
   { time: "18:00–19:00", tue: "Ужин", wed: "Ужин", thu: "Ужин", fri: "", highlight: "meal" },
   { time: "19:10–20:40", tue: "Вечерняя встреча в зале", wed: "Вечерняя встреча в зале", thu: "Вечерняя встреча в зале", fri: "", highlight: "evening" },
-  { time: "20:40–21:10", tue: "Снек — Прощание с прошлым", wed: "Снек — Прощание с прошлым", thu: "Снек — Прощание с прошлым", fri: "", highlight: "night" },
+  { time: "20:40–21:10", tue: "Снек — Малая группа / Прощание с прошлым", wed: "Снек — Малая группа / Прощание с прошлым", thu: "Снек — Малая группа / Прощание с прошлым", fri: "", highlight: "night" },
   { time: "21:10–23:00", tue: "Молитвенная тропа", wed: "Ночной поход", thu: "Костёр / Ночной волейбол", fri: "", highlight: "night" },
-  { time: "23:00–0:00", tue: "Столовая, Костровая, Большой зал", wed: "Столовая, Костровая, Большой зал", thu: "Столовая, Костровая, Большой зал", fri: "", highlight: "night" },
+  { time: "23:00–24:00", tue: "Общение — Столовая, Костровая, Большой зал", wed: "Общение — Столовая, Костровая, Большой зал", thu: "Общение — Столовая, Костровая, Большой зал", fri: "", highlight: "night" },
   { time: "0:00", tue: "Отбой", wed: "Отбой", thu: "Отбой", fri: "", highlight: "night" },
 ]
 
