@@ -34,6 +34,11 @@ export default function RootLayout({
               <Footer />
             </div>
             <LanguageSelectorModal />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `(function(){var s=document.createElement("script");var d=new Date();s.src="https://bank.paysera.com/js/compiled/quality-sign.js?v="+d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear();s.setAttribute("data-paysera-project-id","257577");s.setAttribute("data-lang","lv");s.async=true;document.head.appendChild(s);})();`,
+              }}
+            />
           </LanguageProvider>
         </ThemeProvider>
       </body>
