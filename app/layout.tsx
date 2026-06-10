@@ -13,6 +13,9 @@ const inter = Inter({ subsets: ["latin", "cyrillic"] })
 export const metadata: Metadata = {
   title: "Маранафа — Христианские мероприятия для детей и молодёжи",
   description: "Маранафа — христианские мероприятия для детей и молодёжи: лагеря, конференции и события для всей семьи.",
+  other: {
+    "verify-paysera": "4491d24eebdd94b4f70a9da42e9491ed",
+  },
 }
 
 export default function RootLayout({
