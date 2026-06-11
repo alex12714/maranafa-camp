@@ -837,6 +837,19 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Присоединиться": "Join",
     "Нужна помощь": "Need help",
     "Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся.": "You or your loved ones in a difficult situation? Create a request — participants will respond.",
+    // Conference portal (login)
+    "Вход в портал": "Sign in to the portal",
+    "Введите телефон или email, указанные при регистрации": "Enter the phone number or email you used to register",
+    "Телефон или email": "Phone or email",
+    "Войти": "Sign in",
+    "Неверный телефон или email": "Wrong phone number or email",
+    "Ошибка сети. Попробуйте ещё раз.": "Network error. Please try again.",
+    "На этот контакт зарегистрировано несколько участников. Выберите свой профиль.": "Several participants are registered with this contact. Choose your profile.",
+    "Назад": "Back",
+    "Сотрудник": "Staff",
+    "Участник": "Participant",
+    "Родитель": "Parent",
+    "Загрузка…": "Loading…",
   },
   ru: {
     // Russian translations (source language - key equals value)
@@ -1643,6 +1656,19 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Присоединиться": "Присоединиться",
     "Нужна помощь": "Нужна помощь",
     "Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся.": "Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся.",
+    // Conference portal (login)
+    "Вход в портал": "Вход в портал",
+    "Введите телефон или email, указанные при регистрации": "Введите телефон или email, указанные при регистрации",
+    "Телефон или email": "Телефон или email",
+    "Войти": "Войти",
+    "Неверный телефон или email": "Неверный телефон или email",
+    "Ошибка сети. Попробуйте ещё раз.": "Ошибка сети. Попробуйте ещё раз.",
+    "На этот контакт зарегистрировано несколько участников. Выберите свой профиль.": "На этот контакт зарегистрировано несколько участников. Выберите свой профиль.",
+    "Назад": "Назад",
+    "Сотрудник": "Сотрудник",
+    "Участник": "Участник",
+    "Родитель": "Родитель",
+    "Загрузка…": "Загрузка…",
   },
   lv: {
     // Latvian translations
@@ -2447,6 +2473,19 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Присоединиться": "Pievienoties",
     "Нужна помощь": "Nepieciešama palīdzība",
     "Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся.": "Jūs vai jūsu tuvinieki sarežģītā situācijā? Izveidojiet pieprasījumu — dalībnieki atsauksies.",
+    // Conference portal (login)
+    "Вход в портал": "Ieeja portālā",
+    "Введите телефон или email, указанные при регистрации": "Ievadiet reģistrācijā norādīto tālruni vai e-pastu",
+    "Телефон или email": "Tālrunis vai e-pasts",
+    "Войти": "Ienākt",
+    "Неверный телефон или email": "Nepareizs tālrunis vai e-pasts",
+    "Ошибка сети. Попробуйте ещё раз.": "Tīkla kļūda. Lūdzu, mēģiniet vēlreiz.",
+    "На этот контакт зарегистрировано несколько участников. Выберите свой профиль.": "Ar šo kontaktu ir reģistrēti vairāki dalībnieki. Izvēlieties savu profilu.",
+    "Назад": "Atpakaļ",
+    "Сотрудник": "Darbinieks",
+    "Участник": "Dalībnieks",
+    "Родитель": "Vecāks",
+    "Загрузка…": "Notiek ielāde…",
   },
   uk: {
     // Ukrainian translations
@@ -3250,6 +3289,19 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Присоединиться": "Приєднатися",
     "Нужна помощь": "Потрібна допомога",
     "Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся.": "Ви або ваші близькі в складній ситуації? Створіть запит — учасники відгукнуться.",
+    // Conference portal (login)
+    "Вход в портал": "Вхід до порталу",
+    "Введите телефон или email, указанные при регистрации": "Введіть телефон або email, вказані під час реєстрації",
+    "Телефон или email": "Телефон або email",
+    "Войти": "Увійти",
+    "Неверный телефон или email": "Невірний телефон або email",
+    "Ошибка сети. Попробуйте ещё раз.": "Помилка мережі. Спробуйте ще раз.",
+    "На этот контакт зарегистрировано несколько участников. Выберите свой профиль.": "На цей контакт зареєстровано кілька учасників. Виберіть свій профіль.",
+    "Назад": "Назад",
+    "Сотрудник": "Співробітник",
+    "Участник": "Учасник",
+    "Родитель": "Один з батьків",
+    "Загрузка…": "Завантаження…",
   },
 }
 
