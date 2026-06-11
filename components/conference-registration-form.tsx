@@ -49,20 +49,94 @@ const initialForm: FormData = {
   parentalConsent: false,
 }
 
+const REGISTER_URL = "https://app.maranafa.camp/conference/register"
+
+const ERROR_GENERIC = "Произошла ошибка при отправке. Попробуйте ещё раз."
+const ERROR_RATE_LIMIT = "Не удалось отправить регистрацию. Попробуйте позже."
+const ERROR_PHONE = "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678."
+
+function buildPayload(form: FormData, honeypot: string, formTs: number) {
+  const churchInfo =
+    form.faith === "член церкви"
+      ? form.faithChurchName
+      : form.faith === "не являюсь членом церкви"
+        ? form.faithNoChurchName
+        : ""
+  const allergyDetails = form.allergyDetails.trim()
+  const allergies =
+    form.allergies === "есть" && allergyDetails ? `есть: ${allergyDetails}` : form.allergies
+  const heardFromCustom = form.heardFromCustom.trim()
+  const heardFrom =
+    form.heardFrom === "свой вариант" && heardFromCustom ? heardFromCustom : form.heardFrom
+
+  return {
+    full_name: form.fullName.trim(),
+    phone: form.phone.trim(),
+    email: form.email.trim() || null,
+    birth_date: form.birthDate || null,
+    address: form.address.trim() || null,
+    faith: form.faith || null,
+    church_info: churchInfo.trim() || null,
+    diet: form.diet || null,
+    allergies: allergies || null,
+    arrived_with: form.arrivedWith || null,
+    heard_from: heardFrom || null,
+    expectations: form.expectations.trim() || null,
+    emergency_phone: form.emergencyPhone.trim() || null,
+    parental_consent: form.parentalConsent,
+    // Spam protection: honeypot field (must stay empty for humans) and the
+    // epoch seconds when the form was rendered (backend rejects <3s fills).
+    website: honeypot,
+    form_ts: formTs,
+  }
+}
+
 export function ConferenceRegistrationForm() {
   const { translations = {} } = useLanguage()
   const t = (text: string) => translations[text] || text
   const [form, setForm] = useState<FormData>(initialForm)
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [honeypot, setHoneypot] = useState("")
+  const [formTs] = useState(() => Date.now() / 1000)
 
   const update = (field: keyof FormData, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: connect to backend
-    setSubmitted(true)
+    setError(null)
+    setSubmitting(true)
+    try {
+      const res = await fetch(REGISTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildPayload(form, honeypot, formTs)),
+      })
+      if (!res.ok) {
+        let message = ERROR_GENERIC
+        if (res.status === 429) {
+          message = ERROR_RATE_LIMIT
+        } else if (res.status === 422) {
+          const detail = await res
+            .json()
+            .then((data) => data?.detail)
+            .catch(() => null)
+          if (detail === "Phone number could not be parsed") {
+            message = ERROR_PHONE
+          }
+        }
+        setError(message)
+        return
+      }
+      setSubmitted(true)
+    } catch {
+      setError(ERROR_GENERIC)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (submitted) {
@@ -416,11 +490,35 @@ export function ConferenceRegistrationForm() {
             </label>
           </div>
 
+          {/* Honeypot: hidden from humans, bots fill it and get silently dropped */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
+
+          {error && (
+            <div
+              role="alert"
+              className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 text-sm"
+            >
+              <TranslatedText text={error} />
+            </div>
+          )}
+
           <Button
             type="submit"
-            className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white py-6 text-lg"
+            disabled={submitting}
+            className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white py-6 text-lg disabled:opacity-70"
           >
-            <TranslatedText text="Зарегистрироваться" />
+            <TranslatedText text={submitting ? "Отправка..." : "Зарегистрироваться"} />
           </Button>
         </form>
       </CardContent>

@@ -38,6 +38,7 @@ const LanguageContext = createContext<LanguageContextType>(defaultContext)
 export const translationData: Record<Language, Record<string, string>> = {
   en: {
     // English translations
+    "Портал конференции скоро откроется": "The conference portal is coming soon",
     "Маранафа": "Maranafa",
     "Детский Христианский Тематический Лагерь": "Children's Christian Themed Camp",
     "Регистрироваться": "Register",
@@ -733,6 +734,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Согласен(на) с обработкой персональных данных в целях организации лагеря": "I consent to the processing of personal data for camp organisation purposes",
     "Необходимо согласие на обработку данных": "Data processing consent is required",
     "Не удалось отправить регистрацию. Попробуйте позже.": "Failed to submit registration. Please try again later.",
+    "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678.":
+      "We could not recognize the phone number. Please enter it in international format, e.g. +371 12345678.",
     "Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу.": "We have received your application and will contact you soon via your chosen channel.",
     "parent@example.com": "parent@example.com",
     "Да": "Yes",
@@ -837,6 +840,7 @@ export const translationData: Record<Language, Record<string, string>> = {
   },
   ru: {
     // Russian translations (source language - key equals value)
+    "Портал конференции скоро откроется": "Портал конференции скоро откроется",
     "Маранафа": "Маранафа",
     "Детский Христианский Тематический Лагерь": "Детский Христианский Тематический Лагерь",
     "Регистрироваться": "Регистрироваться",
@@ -1536,6 +1540,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Согласен(на) с обработкой персональных данных в целях организации лагеря": "Согласен(на) с обработкой персональных данных в целях организации лагеря",
     "Необходимо согласие на обработку данных": "Необходимо согласие на обработку данных",
     "Не удалось отправить регистрацию. Попробуйте позже.": "Не удалось отправить регистрацию. Попробуйте позже.",
+    "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678.":
+      "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678.",
     "Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу.": "Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу.",
     "parent@example.com": "parent@example.com",
     "Да": "Да",
@@ -1640,6 +1646,7 @@ export const translationData: Record<Language, Record<string, string>> = {
   },
   lv: {
     // Latvian translations
+    "Портал конференции скоро откроется": "Konferences portāls drīz tiks atvērts",
     "Маранафа": "Maranafa",
     "Детский Христианский Тематический Лагерь": "Bērnu kristīgā tematiskā nometne",
     "Регистрироваться": "Reģistrēties",
@@ -2337,6 +2344,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Согласен(на) с обработкой персональных данных в целях организации лагеря": "Piekrītu personas datu apstrādei nometnes organizēšanas vajadzībām",
     "Необходимо согласие на обработку данных": "Nepieciešama piekrišana datu apstrādei",
     "Не удалось отправить регистрацию. Попробуйте позже.": "Reģistrāciju neizdevās nosūtīt. Lūdzu, mēģiniet vēlāk.",
+    "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678.":
+      "Neizdevās atpazīt tālruņa numuru. Lūdzu, norādiet numuru starptautiskā formātā, piemēram, +371 12345678.",
     "Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу.": "Esam saņēmuši jūsu pieteikumu un drīz sazināsimies izvēlētajā kanālā.",
     "parent@example.com": "parent@example.com",
     "Да": "Jā",
@@ -2441,6 +2450,7 @@ export const translationData: Record<Language, Record<string, string>> = {
   },
   uk: {
     // Ukrainian translations
+    "Портал конференции скоро откроется": "Портал конференції незабаром відкриється",
     "Маранафа": "Маранафа",
     "Детский Христианский Тематический Лагерь": "Дитячий Християнський Тематичний Табір",
     "Регистрироваться": "Зареєструватися",
@@ -3137,6 +3147,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Согласен(на) с обработкой персональных данных в целях организации лагеря": "Погоджуюсь на обробку персональних даних з метою організації табору",
     "Необходимо согласие на обработку данных": "Необхідна згода на обробку даних",
     "Не удалось отправить регистрацию. Попробуйте позже.": "Не вдалося надіслати реєстрацію. Спробуйте пізніше.",
+    "Не удалось распознать номер телефона. Укажите номер в международном формате, например +371 12345678.":
+      "Не вдалося розпізнати номер телефону. Вкажіть номер у міжнародному форматі, наприклад +371 12345678.",
     "Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу.": "Ми отримали вашу заявку і незабаром зв'яжемось з вами обраним каналом.",
     "parent@example.com": "parent@example.com",
     "Да": "Так",
