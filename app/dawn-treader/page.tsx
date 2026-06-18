@@ -13,7 +13,7 @@ const activities = [
   { emoji: "🍽️", text: "Еда – угощения и перекусы на борту" },
   { emoji: "🎵", text: "Музыка и поклонение под открытым небом" },
   { emoji: "📖", text: "Живой пересказ историй апостола Павла" },
-  { emoji: "🏁", text: "Завершение в 18:00 на причале яхтклуба" },
+  { emoji: "🏁", text: "Завершение в 17:00 на причале яхтклуба" },
 ]
 
 const gallery = [
@@ -160,7 +160,7 @@ export default function DawnTreaderPage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
-                16:00 – 18:00
+                15:00 – 17:00
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
@@ -186,7 +186,7 @@ export default function DawnTreaderPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900"><TranslatedText text="Старт и финиш" /></p>
-                <p><TranslatedText text="«Pilsētas Jahtklubs», Balasta dambis 36, Рига – старт в 16:00" /></p>
+                <p><TranslatedText text="«Pilsētas Jahtklubs», Balasta dambis 36, Рига – старт в 15:00" /></p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -195,7 +195,7 @@ export default function DawnTreaderPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900"><TranslatedText text="Окончание" /></p>
-                <p><TranslatedText text="18:00 на причале яхтклуба" /></p>
+                <p><TranslatedText text="17:00 на причале яхтклуба" /></p>
               </div>
             </div>
             <div className="flex items-start gap-3">
