@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Anchor, CheckCircle } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Anchor, CheckCircle, Navigation, AlertTriangle, Car } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 
 const activities = [
@@ -13,7 +13,7 @@ const activities = [
   { emoji: "🍽️", text: "Еда – угощения и перекусы на борту" },
   { emoji: "🎵", text: "Музыка и поклонение под открытым небом" },
   { emoji: "📖", text: "Живой пересказ историй апостола Павла" },
-  { emoji: "🏁", text: "Завершение в 18:30 в центре Риги" },
+  { emoji: "🏁", text: "Завершение в 18:00 на причале яхтклуба" },
 ]
 
 const gallery = [
@@ -156,11 +156,11 @@ export default function DawnTreaderPage() {
             <div className="flex flex-wrap gap-4 text-white/90 text-sm">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <TranslatedText text="21 июня 2026" />
+                <TranslatedText text="14 июня 2026" />
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
-                15:00 – 18:30
+                16:00 – 18:00
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
@@ -185,8 +185,8 @@ export default function DawnTreaderPage() {
                 <MapPin className="h-4 w-4 text-[#B22234]" />
               </div>
               <div>
-                <p className="font-medium text-gray-900"><TranslatedText text="Место встречи" /></p>
-                <p><TranslatedText text="Базницас 12а, Рига – старт в 15:00" /></p>
+                <p className="font-medium text-gray-900"><TranslatedText text="Старт и финиш" /></p>
+                <p><TranslatedText text="«Pilsētas Jahtklubs», Balasta dambis 36, Рига – старт в 16:00" /></p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -195,7 +195,7 @@ export default function DawnTreaderPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900"><TranslatedText text="Окончание" /></p>
-                <p><TranslatedText text="18:30 в центре Риги" /></p>
+                <p><TranslatedText text="18:00 на причале яхтклуба" /></p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -221,8 +221,8 @@ export default function DawnTreaderPage() {
                 <Users className="h-4 w-4 text-[#B22234]" />
               </div>
               <div>
-                <p className="font-medium text-gray-900"><TranslatedText text="Свободных мест" /></p>
-                <p>40</p>
+                <p className="font-medium text-gray-900"><TranslatedText text="Количество мест" /></p>
+                <p><TranslatedText text="до 40 человек" /></p>
               </div>
             </div>
           </div>
@@ -277,6 +277,96 @@ export default function DawnTreaderPage() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* How to find the pier */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <TranslatedText text="Как найти причал" />
+          </h2>
+          <div className="bg-white rounded-xl shadow-sm border p-6 space-y-4 text-sm text-gray-800 leading-relaxed">
+            <div className="flex items-start gap-3">
+              <Navigation className="h-5 w-5 text-[#B22234] flex-shrink-0 mt-0.5" />
+              <p>
+                <TranslatedText text="Точное место спуска к причалам" />:{" "}
+                <a
+                  href="https://maps.app.goo.gl/YEuEGwFUUdXGUYEc8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#B22234] underline font-medium"
+                >
+                  <TranslatedText text="открыть на карте" />
+                </a>{" "}
+                <span className="text-gray-500">
+                  (<TranslatedText text="удобнее смотреть в приложении Google Maps в спутниковом режиме" />)
+                </span>
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <Anchor className="h-5 w-5 text-[#B22234] flex-shrink-0 mt-0.5" />
+              <p>
+                <TranslatedText text="Если калитка закрыта — её можно открыть, нажав кнопку с внутренней стороны (рука проходит через ячейку забора)." />
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <MapPin className="h-5 w-5 text-[#B22234] flex-shrink-0 mt-0.5" />
+              <p>
+                <TranslatedText text="Пройдя за калитку и спустившись вниз на бетонный причал, идём направо до конца, затем налево до конца и ещё раз налево — до парусника." />
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <Anchor className="h-5 w-5 text-[#B22234] flex-shrink-0 mt-0.5" />
+              <p>
+                <TranslatedText text="Место парусника у причала" />:{" "}
+                <a
+                  href="https://maps.app.goo.gl/Pm2WUQxzoKWqts2m8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#B22234] underline font-medium"
+                >
+                  <TranslatedText text="открыть на карте" />
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Rules */}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <AlertTriangle className="h-6 w-6 text-amber-600 flex-shrink-0" />
+            <TranslatedText text="Правила" />
+          </h2>
+          <ul className="space-y-3 text-sm text-gray-800">
+            <li>
+              <TranslatedText text="Просьба ознакомить всех участников с правилами поведения на яхте" />:{" "}
+              <a
+                href="https://arjahtu.lv/jahtas-nomas-noteikumi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#B22234] underline font-medium"
+              >
+                arjahtu.lv
+              </a>
+            </li>
+            <li>
+              <TranslatedText text="Особое внимание — правилам про обувь, закуски, напитки и одежду!" />
+            </li>
+            <li className="font-semibold">
+              <TranslatedText text="Крепкий алкоголь на яхте категорически запрещён." />
+            </li>
+          </ul>
+        </div>
+
+        {/* Parking */}
+        <div className="bg-white rounded-xl shadow-sm border p-6 mb-10 flex items-start gap-3">
+          <Car className="h-5 w-5 text-[#B22234] flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-gray-800">
+            <p className="font-medium text-gray-900 mb-1"><TranslatedText text="Парковка" /></p>
+            <p>
+              <TranslatedText text="Машины — там же, вдоль Balasta dambis, на брусчатке в свободных местах. Зона оплаты «D»." />
+            </p>
           </div>
         </div>
 
