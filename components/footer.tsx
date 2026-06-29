@@ -99,6 +99,16 @@ export default function Footer() {
                   <TranslatedText text="Телеграм-канал" />
                 </a>
               </li>
+              <li>
+                <Link href="/privacy" className="text-sm hover:text-gray-200">
+                  <TranslatedText text="Политика конфиденциальности" />
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm hover:text-gray-200">
+                  <TranslatedText text="Условия использования" />
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
