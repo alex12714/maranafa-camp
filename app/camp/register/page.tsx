@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { TranslatedText } from "@/components/translated-text"
 import { useLanguage, type Language } from "@/contexts/language-context"
-import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react"
+import { ArrowLeft, Banknote, CheckCircle2, CreditCard, Landmark, Loader2, Mail, Smartphone } from "lucide-react"
+import { campTotalEur, campOnlineTotalEur, daysUntilCampStart } from "@/lib/camp-payment"
 
 type FormData = {
   nameRu: string
@@ -125,6 +126,32 @@ export default function CampRegisterPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [paying, setPaying] = useState(false)
+  const [payError, setPayError] = useState<string | null>(null)
+
+  const handlePayOnline = async () => {
+    setPayError(null)
+    setPaying(true)
+    try {
+      const res = await fetch("/api/camp-pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          childName: form.nameLv || form.nameRu,
+          email: form.email,
+          language,
+          paperContract: form.contractMethod === "paper",
+        }),
+      })
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok || !j.url) throw new Error(j.error || "Failed")
+      window.location.href = j.url
+    } catch (err) {
+      console.error(err)
+      setPayError(t("Не удалось открыть страницу оплаты. Попробуйте позже."))
+      setPaying(false)
+    }
+  }
 
   const update = <K extends keyof FormData>(field: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -159,25 +186,212 @@ export default function CampRegisterPage() {
   }
 
   if (submitted) {
+    const paperContract = form.contractMethod === "paper"
+    const baseTotal = campTotalEur(paperContract)
+    const onlineTotal = campOnlineTotalEur(paperContract)
+    const childName = form.nameRu || form.nameLv
+    const bankReference = `Nometne Maranafa — ${form.nameLv || form.nameRu}`
+
     return (
-      <div className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
+      <div className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl space-y-6">
+          {/* Confirmation */}
           <Card>
-            <CardContent className="py-16 text-center">
+            <CardContent className="pt-10 pb-8 text-center">
               <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 <TranslatedText text="Спасибо за регистрацию!" />
               </h1>
-              <p className="text-gray-600 mb-6">
-                <TranslatedText text="Мы получили вашу заявку и скоро свяжемся с вами по указанному каналу." />
+              <p className="text-gray-600">
+                <TranslatedText text="Мы получили вашу заявку на участие в лагере." />
+                {childName && <span className="font-semibold"> {childName}</span>}
               </p>
-              <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white" asChild>
-                <Link href="/">
-                  <TranslatedText text="Вернуться на главную" />
-                </Link>
-              </Button>
+              <div className="mt-4 inline-flex items-start gap-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-left">
+                <Mail className="h-4 w-4 mt-0.5 shrink-0 text-[#B22234]" />
+                <span>
+                  <TranslatedText text="Копию этой информации мы отправили на вашу электронную почту:" />{" "}
+                  <strong>{form.email}</strong>
+                </span>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Contract */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-xs font-bold uppercase tracking-wide text-[#B22234] mb-2">
+                <TranslatedText text="Договор" />
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                {paperContract ? (
+                  <TranslatedText text="Бумажный договор будет подготовлен для подписания в лагере (+€10)." />
+                ) : (
+                  <>
+                    <TranslatedText text="В ближайшее время вышлем договор для подписания на вашу электронную почту:" />{" "}
+                    <strong>{form.email}</strong>
+                  </>
+                )}
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Camp start */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-xs font-bold uppercase tracking-wide text-[#B22234] mb-2">
+                <TranslatedText text="Начало лагеря" />
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                <TranslatedText text="С нетерпением ждём старта 3 августа 2026." />{" "}
+                <TranslatedText text="До начала осталось дней:" />{" "}
+                <strong>{daysUntilCampStart()}</strong>
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Payment */}
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              <TranslatedText text="Оплата участия" />
+            </h2>
+            <p className="text-sm text-gray-700 mb-4">
+              <TranslatedText text="Стоимость участия:" /> <strong>EUR {baseTotal}</strong>
+              {paperContract && (
+                <span className="text-gray-500">
+                  {" "}
+                  <TranslatedText text="(включая бумажный договор +€10)" />
+                </span>
+              )}
+              {". "}
+              <TranslatedText text="Оплатить можно любым удобным способом:" />
+            </p>
+
+            <div className="space-y-3">
+              {/* 1. Online card via Stripe */}
+              <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
+                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
+                  <CreditCard className="h-4 w-4 text-[#B22234]" />
+                  1. <TranslatedText text="Картой онлайн" />
+                </div>
+                <p className="text-sm text-gray-700 mb-1">
+                  <TranslatedText text="К сумме добавляется 5% за обработку онлайн-платежа." />
+                </p>
+                <p className="text-sm text-gray-700 mb-3">
+                  <TranslatedText text="Итого к оплате:" />{" "}
+                  <strong>EUR {onlineTotal.toFixed(2)}</strong>
+                </p>
+                <Button
+                  onClick={handlePayOnline}
+                  disabled={paying}
+                  className="bg-[#B22234] hover:bg-[#8e1c29] text-white"
+                >
+                  {paying ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <TranslatedText text="Отправка..." />
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      <TranslatedText text="Оплатить картой" />
+                    </>
+                  )}
+                </Button>
+                {payError && <p className="mt-2 text-sm text-red-700">{payError}</p>}
+              </div>
+
+              {/* 2. Cash in envelope */}
+              <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
+                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
+                  <Banknote className="h-4 w-4 text-[#B22234]" />
+                  2. <TranslatedText text="Наличными в конверте" />
+                </div>
+                <p className="text-sm text-gray-700">
+                  <TranslatedText text="Оставить на проходной по адресу Базницас 12а. На конверте укажите:" />
+                </p>
+                <ul className="mt-2 text-sm text-gray-700 space-y-1 pl-1">
+                  <li>• Aleksandrs Podbrezskis</li>
+                  <li>
+                    • <TranslatedText text="Лагерь Маранафа" />
+                  </li>
+                  <li>
+                    • <TranslatedText text="Имя и фамилия участника" />
+                    {childName && (
+                      <span className="text-gray-500"> ({childName})</span>
+                    )}
+                  </li>
+                </ul>
+              </div>
+
+              {/* 3. Revolut */}
+              <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
+                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
+                  <Smartphone className="h-4 w-4 text-[#B22234]" />
+                  3. <TranslatedText text="Переводом на Revolut" />
+                </div>
+                <p className="text-sm text-gray-700">
+                  <TranslatedText text="На номер" /> <strong>+371 20172714</strong>
+                </p>
+              </div>
+
+              {/* 4. Bank transfer */}
+              <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
+                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-3">
+                  <Landmark className="h-4 w-4 text-[#B22234]" />
+                  4. <TranslatedText text="Банковским переводом" />
+                </div>
+                <table className="w-full text-sm text-gray-700">
+                  <tbody>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top whitespace-nowrap">
+                        <TranslatedText text="Получатель" />
+                      </td>
+                      <td className="py-0.5 font-semibold">Nodibinājums Maranafa</td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top">IBAN</td>
+                      <td className="py-0.5 font-semibold break-all">
+                        LT18 3500 0100 1901 8499
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top">SWIFT / BIC</td>
+                      <td className="py-0.5 font-semibold">EVIULT2VXXX</td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top">
+                        <TranslatedText text="Банк" />
+                      </td>
+                      <td className="py-0.5">«Paysera LT», UAB</td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top">
+                        <TranslatedText text="Адрес банка" />
+                      </td>
+                      <td className="py-0.5">Pilaitės pr. 16, LT-04352, Vilnius, Lithuania</td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-500 py-0.5 pr-3 align-top">
+                        <TranslatedText text="Назначение платежа" />
+                      </td>
+                      <td className="py-0.5">{bankReference}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p className="mt-2 text-xs text-gray-500">
+                  <TranslatedText text="Перевод в EUR в пределах SEPA." />
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center pt-2">
+            <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white" asChild>
+              <Link href="/">
+                <TranslatedText text="Вернуться на главную" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     )
