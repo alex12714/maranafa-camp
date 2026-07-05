@@ -922,6 +922,10 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Не удалось открыть страницу оплаты. Попробуйте позже.": "Could not open the payment page. Please try again later.",
     "Оплата получена!": "Payment received!",
     "Спасибо! Ваш платёж за лагерь успешно обработан. Подтверждение придёт на вашу электронную почту.": "Thank you! Your camp payment has been processed successfully. A confirmation will be sent to your email.",
+    "Выберите способ оплаты:": "Choose a payment method:",
+    "Карта": "Card",
+    "Банковский перевод": "Bank transfer",
+    "Наличные": "Cash",
   },
   ru: {
     // Russian translations (source language - key equals value)
@@ -1813,6 +1817,10 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Не удалось открыть страницу оплаты. Попробуйте позже.": "Не удалось открыть страницу оплаты. Попробуйте позже.",
     "Оплата получена!": "Оплата получена!",
     "Спасибо! Ваш платёж за лагерь успешно обработан. Подтверждение придёт на вашу электронную почту.": "Спасибо! Ваш платёж за лагерь успешно обработан. Подтверждение придёт на вашу электронную почту.",
+    "Выберите способ оплаты:": "Выберите способ оплаты:",
+    "Карта": "Карта",
+    "Банковский перевод": "Банковский перевод",
+    "Наличные": "Наличные",
   },
   lv: {
     // Latvian translations
@@ -2702,6 +2710,10 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Не удалось открыть страницу оплаты. Попробуйте позже.": "Neizdevās atvērt maksājuma lapu. Lūdzu, mēģiniet vēlāk.",
     "Оплата получена!": "Maksājums saņemts!",
     "Спасибо! Ваш платёж за лагерь успешно обработан. Подтверждение придёт на вашу электронную почту.": "Paldies! Jūsu maksājums par nometni ir veiksmīgi apstrādāts. Apstiprinājums tiks nosūtīts uz jūsu e-pastu.",
+    "Выберите способ оплаты:": "Izvēlieties apmaksas veidu:",
+    "Карта": "Karte",
+    "Банковский перевод": "Bankas pārskaitījums",
+    "Наличные": "Skaidra nauda",
   },
   uk: {
     // Ukrainian translations
@@ -3590,6 +3602,10 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Не удалось открыть страницу оплаты. Попробуйте позже.": "Не вдалося відкрити сторінку оплати. Спробуйте пізніше.",
     "Оплата получена!": "Оплату отримано!",
     "Спасибо! Ваш платёж за лагерь успешно обработан. Подтверждение придёт на вашу электронную почту.": "Дякуємо! Ваш платіж за табір успішно оброблено. Підтвердження надійде на вашу електронну пошту.",
+    "Выберите способ оплаты:": "Оберіть спосіб оплати:",
+    "Карта": "Картка",
+    "Банковский перевод": "Банківський переказ",
+    "Наличные": "Готівка",
   },
 }
 

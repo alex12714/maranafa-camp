@@ -128,6 +128,7 @@ export default function CampRegisterPage() {
   const [error, setError] = useState<string | null>(null)
   const [paying, setPaying] = useState(false)
   const [payError, setPayError] = useState<string | null>(null)
+  const [payMethod, setPayMethod] = useState<"card" | "bank" | "revolut" | "cash" | null>(null)
 
   const handlePayOnline = async () => {
     setPayError(null)
@@ -263,16 +264,45 @@ export default function CampRegisterPage() {
                 </span>
               )}
               {". "}
-              <TranslatedText text="Оплатить можно любым удобным способом:" />
+              <TranslatedText text="Выберите способ оплаты:" />
             </p>
 
-            <div className="space-y-3">
-              {/* 1. Online card via Stripe */}
+            {/* Payment method cards */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {(
+                [
+                  { key: "card", Icon: CreditCard, label: "Карта" },
+                  { key: "bank", Icon: Landmark, label: "Банковский перевод" },
+                  { key: "revolut", Icon: Smartphone, label: "Revolut" },
+                  { key: "cash", Icon: Banknote, label: "Наличные" },
+                ] as const
+              ).map(({ key, Icon, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setPayMethod(payMethod === key ? null : key)}
+                  aria-pressed={payMethod === key}
+                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-5 sm:p-6 text-center transition-colors ${
+                    payMethod === key
+                      ? "border-[#B22234] bg-red-50 shadow-sm"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
+                >
+                  <Icon
+                    className={`h-8 w-8 ${
+                      payMethod === key ? "text-[#B22234]" : "text-gray-400"
+                    }`}
+                  />
+                  <span className="text-sm font-semibold text-gray-900">
+                    {key === "revolut" ? "Revolut" : <TranslatedText text={label} />}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Card (Stripe) */}
+            {payMethod === "card" && (
               <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
-                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
-                  <CreditCard className="h-4 w-4 text-[#B22234]" />
-                  1. <TranslatedText text="Картой онлайн" />
-                </div>
                 <p className="text-sm text-gray-700 mb-1">
                   <TranslatedText text="К сумме добавляется 5% за обработку онлайн-платежа." />
                 </p>
@@ -283,7 +313,7 @@ export default function CampRegisterPage() {
                 <Button
                   onClick={handlePayOnline}
                   disabled={paying}
-                  className="bg-[#B22234] hover:bg-[#8e1c29] text-white"
+                  className="w-full sm:w-auto bg-[#B22234] hover:bg-[#8e1c29] text-white"
                 >
                   {paying ? (
                     <>
@@ -299,13 +329,11 @@ export default function CampRegisterPage() {
                 </Button>
                 {payError && <p className="mt-2 text-sm text-red-700">{payError}</p>}
               </div>
+            )}
 
-              {/* 2. Cash in envelope */}
+            {/* Cash in envelope */}
+            {payMethod === "cash" && (
               <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
-                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
-                  <Banknote className="h-4 w-4 text-[#B22234]" />
-                  2. <TranslatedText text="Наличными в конверте" />
-                </div>
                 <p className="text-sm text-gray-700">
                   <TranslatedText text="Оставить на проходной по адресу Базницас 12а. На конверте укажите:" />
                 </p>
@@ -322,24 +350,20 @@ export default function CampRegisterPage() {
                   </li>
                 </ul>
               </div>
+            )}
 
-              {/* 3. Revolut */}
+            {/* Revolut */}
+            {payMethod === "revolut" && (
               <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
-                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-2">
-                  <Smartphone className="h-4 w-4 text-[#B22234]" />
-                  3. <TranslatedText text="Переводом на Revolut" />
-                </div>
                 <p className="text-sm text-gray-700">
                   <TranslatedText text="На номер" /> <strong>+371 20172714</strong>
                 </p>
               </div>
+            )}
 
-              {/* 4. Bank transfer */}
+            {/* Bank transfer */}
+            {payMethod === "bank" && (
               <div className="bg-red-50 border-l-4 border-[#B22234] rounded-md p-4">
-                <div className="flex items-center gap-2 font-bold text-sm text-gray-900 mb-3">
-                  <Landmark className="h-4 w-4 text-[#B22234]" />
-                  4. <TranslatedText text="Банковским переводом" />
-                </div>
                 <table className="w-full text-sm text-gray-700">
                   <tbody>
                     <tr>
@@ -382,7 +406,7 @@ export default function CampRegisterPage() {
                   <TranslatedText text="Перевод в EUR в пределах SEPA." />
                 </p>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="text-center pt-2">
