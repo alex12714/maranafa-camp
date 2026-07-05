@@ -49,7 +49,7 @@ const initialForm: FormData = {
   parentalConsent: false,
 }
 
-const REGISTER_URL = "https://app.maranafa.camp/conference/register"
+const REGISTER_URL = "https://api.maranafa.camp/conference/register"
 
 const ERROR_GENERIC = "Произошла ошибка при отправке. Попробуйте ещё раз."
 const ERROR_RATE_LIMIT = "Не удалось отправить регистрацию. Попробуйте позже."

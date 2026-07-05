@@ -1,7 +1,7 @@
 /**
  * Client helper for the conference portal -> backend API.
  *
- * The API (FastAPI at app.maranafa.camp) is cross-origin from the portal
+ * The API (FastAPI at api.maranafa.camp) is cross-origin from the portal
  * host (conference.maranafa.camp), so the session is a JWT kept in
  * localStorage and sent as an `Authorization: Bearer` header — no cookies.
  *
@@ -10,7 +10,7 @@
  * clears the session and redirects to the login page.
  */
 
-export const PORTAL_API_BASE = "https://app.maranafa.camp"
+export const PORTAL_API_BASE = "https://api.maranafa.camp"
 
 /** Public (un-rewritten) path of the portal login page. */
 export const PORTAL_LOGIN_PATH = "/portal/login"
