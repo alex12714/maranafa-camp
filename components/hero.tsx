@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
 
 export default function Hero() {
@@ -26,16 +25,6 @@ export default function Hero() {
           <p className="mx-auto mt-6 max-w-lg text-xl text-white">
             <TranslatedText text="Христианские мероприятия для детей и молодёжи" />
           </p>
-          <div className="mx-auto mt-10 flex justify-center">
-            <Button
-              variant="outline"
-              className="flex items-center justify-center border-white bg-transparent text-white hover:bg-white hover:text-[#B22234] px-8 py-6 text-base font-medium"
-            >
-              <a href="/parents">
-                <TranslatedText text="Узнать больше" />
-              </a>
-            </Button>
-          </div>
         </div>
       </div>
     </div>
