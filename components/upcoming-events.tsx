@@ -24,6 +24,18 @@ type EventItem = {
 
 const events: EventItem[] = [
   {
+    id: "imantas-svetki",
+    title: "Праздник открытия Общественного центра Иманты",
+    subtitle: "Бесплатный семейный праздник",
+    date: "19 июля 2026",
+    eventDate: "2026-07-19",
+    endDate: "2026-07-19",
+    details: "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15",
+    image: "/images/events/imantas-svetki.webp",
+    alt: "Праздник открытия Общественного центра Иманты",
+    detailsPage: "/imantas-svetki-2026",
+  },
+  {
     id: "friends",
     title: "Friends – Репортёры истории",
     subtitle: "Маранафа Friends",
