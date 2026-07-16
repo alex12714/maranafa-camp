@@ -889,13 +889,9 @@ export default function ParentsPage() {
             </p>
             <div className="mt-8">
               <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-8 py-6 text-xl" asChild>
-                <a
-                  href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href="/camp/register">
                   <TranslatedText text="Регистрация" />
-                </a>
+                </Link>
               </Button>
             </div>
           </div>

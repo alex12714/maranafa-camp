@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Clock } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
@@ -17,14 +18,10 @@ export default function LimitedOfferSection() {
             <TranslatedText text="После 1го июня, скидка больше не будет доступна" />
           </p>
           <div className="mt-8">
-            <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-8 py-6 text-xl">
-              <a
-                href="https://airtable.com/appARC2ZsIecCWY2s/shr0CciHO8TthCjJw"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            <Button className="bg-white text-[#B22234] hover:bg-gray-100 px-8 py-6 text-xl" asChild>
+              <Link href="/camp/register">
                 <TranslatedText text="Поехали в лагерь" />
-              </a>
+              </Link>
             </Button>
           </div>
         </div>
