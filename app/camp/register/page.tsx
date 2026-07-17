@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -83,6 +83,60 @@ const channelOptions = [
   { value: "telegram", label: "Telegram" },
 ]
 
+// Russian pluralisation for "год / года / лет".
+function pluralYears(n: number): string {
+  const abs = Math.abs(n) % 100
+  const d = abs % 10
+  if (abs > 10 && abs < 20) return "лет"
+  if (d === 1) return "год"
+  if (d >= 2 && d <= 4) return "года"
+  return "лет"
+}
+
+// Compute age in whole years from an ISO date string, or null if invalid.
+function ageFromBirthDate(birthDate: string): number | null {
+  if (!birthDate) return null
+  const b = new Date(birthDate)
+  if (isNaN(b.getTime())) return null
+  const today = new Date()
+  let age = today.getFullYear() - b.getFullYear()
+  const m = today.getMonth() - b.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < b.getDate())) age--
+  return age >= 0 && age < 120 ? age : null
+}
+
+// Visually distinct wrapper that separates the child block from the parent block.
+function Panel({
+  title,
+  emoji,
+  accent,
+  children,
+}: {
+  title: string
+  emoji: string
+  accent: "child" | "parent"
+  children: React.ReactNode
+}) {
+  const box =
+    accent === "child"
+      ? "border-[#B22234]/20 bg-[#B22234]/[0.03]"
+      : "border-sky-200 bg-sky-50/50"
+  const titleColor = accent === "child" ? "text-[#B22234]" : "text-sky-800"
+  return (
+    <div className={`rounded-xl border-2 ${box} p-5 md:p-6 space-y-8`}>
+      <div className="flex items-center gap-2.5">
+        <span className="text-2xl" aria-hidden="true">
+          {emoji}
+        </span>
+        <h2 className={`text-xl font-bold ${titleColor}`}>
+          <TranslatedText text={title} />
+        </h2>
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="space-y-4">
@@ -159,6 +213,8 @@ export default function CampRegisterPage() {
   const update = <K extends keyof FormData>(field: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
+
+  const childAge = useMemo(() => ageFromBirthDate(form.birthDate), [form.birthDate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -470,236 +526,51 @@ export default function CampRegisterPage() {
                   />
                 </label>
               </div>
-              <Section title="О ребёнке">
-                <Field label="Фамилия и имя на русском" required>
-                  <Input
-                    required
-                    value={form.nameRu}
-                    onChange={(e) => update("nameRu", e.target.value)}
-                    placeholder={t("Иванов Иван")}
-                  />
-                </Field>
-                <Field label="Vārds un uzvārds latviski" required>
-                  <Input
-                    required
-                    value={form.nameLv}
-                    onChange={(e) => update("nameLv", e.target.value)}
-                    placeholder={t("Ivanovs Ivans")}
-                  />
-                </Field>
-                <Field label="Дата рождения" required>
-                  <Input
-                    type="date"
-                    required
-                    value={form.birthDate}
-                    onChange={(e) => update("birthDate", e.target.value)}
-                  />
-                </Field>
-                <Field label="Пол" required>
-                  <div className="flex gap-6">
-                    {[
-                      { value: "girl", label: "Девочка" },
-                      { value: "boy", label: "Мальчик" },
-                    ].map((o) => (
-                      <label key={o.value} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="gender"
-                          required
-                          value={o.value}
-                          checked={form.gender === o.value}
-                          onChange={(e) => update("gender", e.target.value)}
-                          className="accent-[#B22234]"
-                        />
-                        <span className="text-sm text-gray-700">
-                          <TranslatedText text={o.label} />
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </Field>
-                <Field label="Персональный код (Personas kods)">
-                  <Input
-                    value={form.personalCode}
-                    onChange={(e) => update("personalCode", e.target.value)}
-                    placeholder="123456-12345"
-                  />
-                </Field>
-              </Section>
-
-              <Section title="Адрес проживания">
-                <Field label="Улица, дом, квартира" required>
-                  <Input
-                    required
-                    value={form.street}
-                    onChange={(e) => update("street", e.target.value)}
-                    placeholder={t("Baznicas iela 12a-3")}
-                  />
-                </Field>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Field label="Город" required>
+              <Panel title="Данные ребёнка" emoji="🧒" accent="child">
+                <Section title="Основные данные">
+                  <Field label="Фамилия и имя на русском" required>
                     <Input
                       required
-                      value={form.city}
-                      onChange={(e) => update("city", e.target.value)}
-                      placeholder={t("Рига")}
+                      value={form.nameRu}
+                      onChange={(e) => update("nameRu", e.target.value)}
+                      placeholder={t("Иванов Иван")}
                     />
                   </Field>
-                  <Field label="Страна" required>
+                  <Field label="Vārds un uzvārds latviski" required>
                     <Input
                       required
-                      value={form.country}
-                      onChange={(e) => update("country", e.target.value)}
+                      value={form.nameLv}
+                      onChange={(e) => update("nameLv", e.target.value)}
+                      placeholder={t("Ivanovs Ivans")}
                     />
                   </Field>
-                </div>
-              </Section>
-
-              <Section title="Контакты родителя">
-                <Field label="Имя и фамилия родителя" required>
-                  <Input
-                    required
-                    value={form.parentName}
-                    onChange={(e) => update("parentName", e.target.value)}
-                  />
-                </Field>
-                <Field label="Телефон" required>
-                  <Input
-                    type="tel"
-                    required
-                    inputMode="tel"
-                    pattern="\+[1-9][0-9 ()\-.]{6,}"
-                    title={t("Один номер, начиная с + и кода страны, например +37120172714")}
-                    value={form.phone}
-                    onChange={(e) => update("phone", e.target.value)}
-                    placeholder="+371 ..."
-                  />
-                </Field>
-                <Field label="Электронная почта (для договора)" required>
-                  <Input
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={(e) => update("email", e.target.value)}
-                    placeholder="parent@example.com"
-                  />
-                </Field>
-                <Field label="Удобный канал связи" required>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {channelOptions.map((o) => (
-                      <label key={o.value} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="contactChannel"
-                          required
-                          value={o.value}
-                          checked={form.contactChannel === o.value}
-                          onChange={(e) => update("contactChannel", e.target.value)}
-                          className="accent-[#B22234]"
-                        />
-                        <span className="text-sm text-gray-700">{o.label}</span>
-                      </label>
-                    ))}
-                  </div>
-                </Field>
-              </Section>
-
-              <Section title="Здоровье и подготовка">
-                <Field label="Аллергии" hint="Если нет, оставьте пустым или напишите «нет»">
-                  <Input
-                    value={form.allergies}
-                    onChange={(e) => update("allergies", e.target.value)}
-                    placeholder={t("Например: орехи, лактоза")}
-                  />
-                </Field>
-                <Field label="Умение плавать" required>
-                  <select
-                    required
-                    value={form.swimming}
-                    onChange={(e) => update("swimming", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  >
-                    <option value="">{t("— выбрать —")}</option>
-                    {swimmingOptions.map((o) => (
-                      <option key={o.value} value={o.value}>
-                        {t(o.label)}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="Прививка от клеща (год последней прививки)">
-                  <select
-                    value={form.tickVaccine}
-                    onChange={(e) => update("tickVaccine", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  >
-                    <option value="">{t("— выбрать —")}</option>
-                    {tickVaccineOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o === "Нет" ? t("Нет") : o}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="Размер майки" required>
-                  <div className="flex gap-3">
-                    {["S", "M", "L", "XL"].map((s) => (
-                      <label key={s} className="flex items-center gap-1 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="shirtSize"
-                          required
-                          value={s}
-                          checked={form.shirtSize === s}
-                          onChange={(e) => update("shirtSize", e.target.value)}
-                          className="accent-[#B22234]"
-                        />
-                        <span className="text-sm text-gray-700">{s}</span>
-                      </label>
-                    ))}
-                  </div>
-                </Field>
-              </Section>
-
-              <Section title="О ребёнке (дополнительно)">
-                <Field
-                  label="Особенности характера"
-                  hint="Что нам важно знать, чтобы лучше позаботиться о ребёнке"
-                >
-                  <Textarea
-                    value={form.characterTraits}
-                    onChange={(e) => update("characterTraits", e.target.value)}
-                    rows={2}
-                  />
-                </Field>
-                <Field label="Интересы и хобби">
-                  <Input
-                    value={form.interests}
-                    onChange={(e) => update("interests", e.target.value)}
-                    placeholder={t("Например: рисование, футбол, музыка")}
-                  />
-                </Field>
-                <Field label="Музыкальный инструмент">
-                  <Input
-                    value={form.instrument}
-                    onChange={(e) => update("instrument", e.target.value)}
-                    placeholder={t("Например: гитара, фортепиано")}
-                  />
-                </Field>
-                {form.instrument.trim().length > 0 && (
-                  <Field label="Возможность привезти инструмент в лагерь">
+                  <Field label="Дата рождения" required>
+                    <Input
+                      type="date"
+                      required
+                      value={form.birthDate}
+                      onChange={(e) => update("birthDate", e.target.value)}
+                    />
+                    {childAge !== null && (
+                      <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#B22234]/10 px-3 py-1 text-sm font-medium text-[#B22234]">
+                        <TranslatedText text="Возраст" />: {childAge} {pluralYears(childAge)}
+                      </p>
+                    )}
+                  </Field>
+                  <Field label="Пол" required>
                     <div className="flex gap-6">
                       {[
-                        { value: "Да", label: "Да" },
-                        { value: "Нет", label: "Нет" },
+                        { value: "girl", label: "Девочка" },
+                        { value: "boy", label: "Мальчик" },
                       ].map((o) => (
                         <label key={o.value} className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="radio"
-                            name="canBringInstrument"
+                            name="gender"
+                            required
                             value={o.value}
-                            checked={form.canBringInstrument === o.value}
-                            onChange={(e) => update("canBringInstrument", e.target.value)}
+                            checked={form.gender === o.value}
+                            onChange={(e) => update("gender", e.target.value)}
                             className="accent-[#B22234]"
                           />
                           <span className="text-sm text-gray-700">
@@ -709,8 +580,205 @@ export default function CampRegisterPage() {
                       ))}
                     </div>
                   </Field>
-                )}
-              </Section>
+                </Section>
+
+                <Section title="Здоровье и подготовка">
+                  <Field label="Аллергии" hint="Если нет, оставьте пустым или напишите «нет»">
+                    <Input
+                      value={form.allergies}
+                      onChange={(e) => update("allergies", e.target.value)}
+                      placeholder={t("Например: орехи, лактоза")}
+                    />
+                  </Field>
+                  <Field label="Умение плавать" required>
+                    <select
+                      required
+                      value={form.swimming}
+                      onChange={(e) => update("swimming", e.target.value)}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">{t("— выбрать —")}</option>
+                      {swimmingOptions.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {t(o.label)}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Прививка от клеща (год последней прививки)">
+                    <select
+                      value={form.tickVaccine}
+                      onChange={(e) => update("tickVaccine", e.target.value)}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">{t("— выбрать —")}</option>
+                      {tickVaccineOptions.map((o) => (
+                        <option key={o} value={o}>
+                          {o === "Нет" ? t("Нет") : o}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Размер майки" required>
+                    <div className="flex gap-3">
+                      {["S", "M", "L", "XL"].map((s) => (
+                        <label key={s} className="flex items-center gap-1 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="shirtSize"
+                            required
+                            value={s}
+                            checked={form.shirtSize === s}
+                            onChange={(e) => update("shirtSize", e.target.value)}
+                            className="accent-[#B22234]"
+                          />
+                          <span className="text-sm text-gray-700">{s}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </Field>
+                </Section>
+
+                <Section title="Дополнительно о ребёнке">
+                  <Field
+                    label="Особенности характера"
+                    hint="Что нам важно знать, чтобы лучше позаботиться о ребёнке"
+                  >
+                    <Textarea
+                      value={form.characterTraits}
+                      onChange={(e) => update("characterTraits", e.target.value)}
+                      rows={2}
+                    />
+                  </Field>
+                  <Field label="Интересы и хобби">
+                    <Input
+                      value={form.interests}
+                      onChange={(e) => update("interests", e.target.value)}
+                      placeholder={t("Например: рисование, футбол, музыка")}
+                    />
+                  </Field>
+                  <Field label="Музыкальный инструмент">
+                    <Input
+                      value={form.instrument}
+                      onChange={(e) => update("instrument", e.target.value)}
+                      placeholder={t("Например: гитара, фортепиано")}
+                    />
+                  </Field>
+                  {form.instrument.trim().length > 0 && (
+                    <Field label="Возможность привезти инструмент в лагерь">
+                      <div className="flex gap-6">
+                        {[
+                          { value: "Да", label: "Да" },
+                          { value: "Нет", label: "Нет" },
+                        ].map((o) => (
+                          <label key={o.value} className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="canBringInstrument"
+                              value={o.value}
+                              checked={form.canBringInstrument === o.value}
+                              onChange={(e) => update("canBringInstrument", e.target.value)}
+                              className="accent-[#B22234]"
+                            />
+                            <span className="text-sm text-gray-700">
+                              <TranslatedText text={o.label} />
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </Field>
+                  )}
+                </Section>
+              </Panel>
+
+              <Panel title="Данные родителя / законного представителя" emoji="👤" accent="parent">
+                <Section title="Контактные данные">
+                  <Field label="Имя и фамилия родителя" required>
+                    <Input
+                      required
+                      value={form.parentName}
+                      onChange={(e) => update("parentName", e.target.value)}
+                    />
+                  </Field>
+                  <Field
+                    label="Персональный код родителя (Personas kods)"
+                    hint="Код взрослого, который подписывает договор"
+                  >
+                    <Input
+                      value={form.personalCode}
+                      onChange={(e) => update("personalCode", e.target.value)}
+                      placeholder="123456-12345"
+                    />
+                  </Field>
+                  <Field label="Телефон" required>
+                    <Input
+                      type="tel"
+                      required
+                      inputMode="tel"
+                      pattern="\+[1-9][0-9 ()\-.]{6,}"
+                      title={t("Один номер, начиная с + и кода страны, например +37120172714")}
+                      value={form.phone}
+                      onChange={(e) => update("phone", e.target.value)}
+                      placeholder="+371 ..."
+                    />
+                  </Field>
+                  <Field label="Электронная почта (для договора)" required>
+                    <Input
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={(e) => update("email", e.target.value)}
+                      placeholder="parent@example.com"
+                    />
+                  </Field>
+                  <Field label="Удобный канал связи" required>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2">
+                      {channelOptions.map((o) => (
+                        <label key={o.value} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="contactChannel"
+                            required
+                            value={o.value}
+                            checked={form.contactChannel === o.value}
+                            onChange={(e) => update("contactChannel", e.target.value)}
+                            className="accent-[#B22234]"
+                          />
+                          <span className="text-sm text-gray-700">{o.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </Field>
+                </Section>
+
+                <Section title="Адрес проживания">
+                  <Field label="Улица, дом, квартира" required>
+                    <Input
+                      required
+                      value={form.street}
+                      onChange={(e) => update("street", e.target.value)}
+                      placeholder={t("Baznicas iela 12a-3")}
+                    />
+                  </Field>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Field label="Город" required>
+                      <Input
+                        required
+                        value={form.city}
+                        onChange={(e) => update("city", e.target.value)}
+                        placeholder={t("Рига")}
+                      />
+                    </Field>
+                    <Field label="Страна" required>
+                      <Input
+                        required
+                        value={form.country}
+                        onChange={(e) => update("country", e.target.value)}
+                      />
+                    </Field>
+                  </div>
+                </Section>
+              </Panel>
 
               <Section title="Договор">
                 <Field label="Как хотите подписать договор?" required>
