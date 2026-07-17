@@ -83,14 +83,23 @@ const channelOptions = [
   { value: "telegram", label: "Telegram" },
 ]
 
-// Russian pluralisation for "год / года / лет".
-function pluralYears(n: number): string {
-  const abs = Math.abs(n) % 100
+// Language-aware "years" unit for the calculated age (e.g. 12 лет / 12 years / 12 gadi / 12 років).
+function yearsUnit(n: number, lang: Language): string {
+  const abs = Math.abs(n)
+  if (lang === "en") return abs === 1 ? "year" : "years"
+  if (lang === "lv") {
+    // Latvian: ends in 1 but not 11 → singular "gads", otherwise plural "gadi".
+    return abs % 10 === 1 && abs % 100 !== 11 ? "gads" : "gadi"
+  }
+  // Russian & Ukrainian share the East-Slavic 3-form rule.
   const d = abs % 10
-  if (abs > 10 && abs < 20) return "лет"
-  if (d === 1) return "год"
-  if (d >= 2 && d <= 4) return "года"
-  return "лет"
+  const dd = abs % 100
+  const [one, few, many] =
+    lang === "uk" ? ["рік", "роки", "років"] : ["год", "года", "лет"]
+  if (dd > 10 && dd < 20) return many
+  if (d === 1) return one
+  if (d >= 2 && d <= 4) return few
+  return many
 }
 
 // Compute age in whole years from an ISO date string, or null if invalid.
@@ -553,7 +562,7 @@ export default function CampRegisterPage() {
                     />
                     {childAge !== null && (
                       <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#B22234]/10 px-3 py-1 text-sm font-medium text-[#B22234]">
-                        <TranslatedText text="Возраст" />: {childAge} {pluralYears(childAge)}
+                        <TranslatedText text="Возраст" />: {childAge} {yearsUnit(childAge, language)}
                       </p>
                     )}
                   </Field>

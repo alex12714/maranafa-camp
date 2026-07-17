@@ -37,6 +37,14 @@ const LanguageContext = createContext<LanguageContextType>(defaultContext)
 // Translations for each language
 export const translationData: Record<Language, Record<string, string>> = {
   en: {
+    "Данные ребёнка": "Child's details",
+    "Данные родителя / законного представителя": "Parent / legal guardian details",
+    "Основные данные": "Basic information",
+    "Дополнительно о ребёнке": "Additional information about the child",
+    "Контактные данные": "Contact details",
+    "Персональный код родителя (Personas kods)": "Parent's personal code (Personas kods)",
+    "Код взрослого, который подписывает договор": "The code of the adult who signs the contract",
+    "Один номер, начиная с + и кода страны, например +37120172714": "One number, starting with + and the country code, e.g. +37120172714",
     // --- Imanta community center opening (/imantas-svetki-2026) ---
     "Бесплатный семейный праздник": "Free family event",
     "Праздник открытия Общественного центра Иманты": "Imanta Community Center Opening Celebration",
@@ -1048,6 +1056,14 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Наличные": "Cash",
   },
   ru: {
+    "Данные ребёнка": "Данные ребёнка",
+    "Данные родителя / законного представителя": "Данные родителя / законного представителя",
+    "Основные данные": "Основные данные",
+    "Дополнительно о ребёнке": "Дополнительно о ребёнке",
+    "Контактные данные": "Контактные данные",
+    "Персональный код родителя (Personas kods)": "Персональный код родителя (Personas kods)",
+    "Код взрослого, который подписывает договор": "Код взрослого, который подписывает договор",
+    "Один номер, начиная с + и кода страны, например +37120172714": "Один номер, начиная с + и кода страны, например +37120172714",
     // Russian translations (source language - key equals value)
     // --- Imanta community center opening (/imantas-svetki-2026) ---
     "Бесплатный семейный праздник": "Бесплатный семейный праздник",
@@ -1964,6 +1980,14 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Наличные": "Наличные",
   },
   lv: {
+    "Данные ребёнка": "Bērna dati",
+    "Данные родителя / законного представителя": "Vecāka / likumiskā pārstāvja dati",
+    "Основные данные": "Pamatinformācija",
+    "Дополнительно о ребёнке": "Papildinformācija par bērnu",
+    "Контактные данные": "Kontaktinformācija",
+    "Персональный код родителя (Personas kods)": "Vecāka personas kods",
+    "Код взрослого, который подписывает договор": "Tā pieaugušā kods, kurš paraksta līgumu",
+    "Один номер, начиная с + и кода страны, например +37120172714": "Viens numurs, sākot ar + un valsts kodu, piemēram, +37120172714",
     // --- Imanta community center opening (/imantas-svetki-2026) ---
     "Бесплатный семейный праздник": "Bezmaksas ģimeņu pasākums",
     "Праздник открытия Общественного центра Иманты": "Imantas kopienas centra atklāšanas svētki",
@@ -2977,6 +3001,14 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Наличные": "Skaidra nauda",
   },
   uk: {
+    "Данные ребёнка": "Дані дитини",
+    "Данные родителя / законного представителя": "Дані батьків / законного представника",
+    "Основные данные": "Основні дані",
+    "Дополнительно о ребёнке": "Додатково про дитину",
+    "Контактные данные": "Контактні дані",
+    "Персональный код родителя (Personas kods)": "Персональний код батьків (Personas kods)",
+    "Код взрослого, который подписывает договор": "Код дорослого, який підписує договір",
+    "Один номер, начиная с + и кода страны, например +37120172714": "Один номер, починаючи з + та коду країни, наприклад +37120172714",
     // --- Imanta community center opening (/imantas-svetki-2026) ---
     "Бесплатный семейный праздник": "Безкоштовне сімейне свято",
     "Праздник открытия Общественного центра Иманты": "Свято відкриття Громадського центру Іманти",
