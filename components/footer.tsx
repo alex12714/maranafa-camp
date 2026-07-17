@@ -23,7 +23,7 @@ export default function Footer() {
             <div className="mt-4">
               <Link href="/">
                 <Image
-                  src="/images/maranafa-logo.webp"
+                  src="/images/maranafa-logo-white.webp"
                   alt="Маранафа"
                   width={150}
                   height={40}
@@ -122,9 +122,6 @@ export default function Footer() {
             <div className="mt-4 pt-4 border-t border-white/20 space-y-1.5">
               <p className="text-xs text-white/65">
                 <TranslatedText text="Рег. номер" />: 40008359764
-              </p>
-              <p className="text-xs text-white/65">
-                <TranslatedText text="Получатель EURO" />: LV90ZZZ40008359764
               </p>
             </div>
             <div className="mt-4 pt-4 border-t border-white/20">
