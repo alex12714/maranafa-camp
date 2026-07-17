@@ -207,6 +207,7 @@ export default function ParentsPage() {
                       <TranslatedText text="Координатор" />
                     </p>
                     <p>Екатерина Подбрезская</p>
+                    <p className="text-gray-600">+371 24406207</p>
                   </div>
                 </div>
               </div>
@@ -551,7 +552,7 @@ export default function ParentsPage() {
                     <li className="flex items-start">
                       <Clock className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                       <span>
-                        <TranslatedText text="Воскресенье, 3 августа, автобус отходит в 9:00 от Базницас 12а" />
+                        <TranslatedText text="Понедельник, 3 августа, автобус отходит в 9:00 от Базницас 12а" />
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -574,7 +575,7 @@ export default function ParentsPage() {
                   <div className="flex items-start">
                     <Clock className="h-5 w-5 text-[#B22234] mr-3 mt-1 flex-shrink-0" />
                     <span>
-                      <TranslatedText text="Суббота, 9 августа, 14:00. Утром программа по расписанию" />
+                      <TranslatedText text="Воскресенье, 9 августа, 16:00. Утром программа по расписанию" />
                     </span>
                   </div>
                 </CardContent>
