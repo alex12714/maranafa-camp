@@ -17,17 +17,14 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider">
-              <TranslatedText text="О НАС" />
-            </h3>
-            <div className="mt-4">
+            <div>
               <Link href="/">
                 <Image
                   src="/images/maranafa-logo-white.webp"
                   alt="Маранафа"
-                  width={150}
-                  height={40}
-                  className="h-12 w-auto"
+                  width={300}
+                  height={80}
+                  className="h-24 w-auto"
                 />
               </Link>
             </div>
