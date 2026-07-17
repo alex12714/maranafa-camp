@@ -12,8 +12,8 @@ import { ArrowLeft, Banknote, CheckCircle2, CreditCard, Landmark, Loader2, Mail,
 import { campTotalEur, campOnlineTotalEur, daysUntilCampStart } from "@/lib/camp-payment"
 
 type FormData = {
-  nameRu: string
-  nameLv: string
+  surname: string
+  firstName: string
   birthDate: string
   gender: string
   personalCode: string
@@ -39,8 +39,8 @@ type FormData = {
 }
 
 const initialForm: FormData = {
-  nameRu: "",
-  nameLv: "",
+  surname: "",
+  firstName: "",
   birthDate: "",
   gender: "",
   personalCode: "",
@@ -184,12 +184,45 @@ function Field({
   )
 }
 
+const genderLabels: Record<string, string> = { girl: "Девочка", boy: "Мальчик" }
+const contractLabels: Record<string, string> = {
+  email: "По электронной почте (бесплатно)",
+  paper: "На бумаге в лагере (+€10)",
+}
+
+// Prominent key/value tile used in the review summary highlight box.
+function Highlight({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-xs uppercase tracking-wide text-gray-500">
+        <TranslatedText text={label} />
+      </div>
+      <div className="text-lg font-bold text-gray-900 break-words">{value || "—"}</div>
+    </div>
+  )
+}
+
+// One row in the full "what you submitted" list on the review screen.
+function ReviewRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-0.5 sm:gap-4 border-b border-gray-100 pb-2">
+      <span className="text-sm text-gray-500 shrink-0">
+        <TranslatedText text={label} />
+      </span>
+      <span className="text-sm font-medium text-gray-900 sm:text-right break-words">
+        {value || "—"}
+      </span>
+    </div>
+  )
+}
+
 export default function CampRegisterPage() {
   const { translations = {}, language, setLanguage } = useLanguage()
   const t = (text: string) => translations[text] || text
   const [form, setForm] = useState<FormData>(initialForm)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [reviewing, setReviewing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [paying, setPaying] = useState(false)
   const [payError, setPayError] = useState<string | null>(null)
@@ -203,7 +236,7 @@ export default function CampRegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          childName: form.nameLv || form.nameRu,
+          childName: `${form.surname} ${form.firstName}`.trim(),
           email: form.email,
           language,
           paperContract: form.contractMethod === "paper",
@@ -225,13 +258,23 @@ export default function CampRegisterPage() {
 
   const childAge = useMemo(() => ageFromBirthDate(form.birthDate), [form.birthDate])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Step 1: validate consent and move to the review screen. Native required-field
+  // validation on the <form> has already passed by the time this runs, so the
+  // review screen always has the data. Nothing is written to AirTable yet.
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     if (!form.dataConsent) {
       setError(t("Необходимо согласие на обработку данных"))
       return
     }
+    setReviewing(true)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  // Step 2: parent confirmed the review — write the registration to AirTable.
+  const handleConfirm = async () => {
+    setError(null)
     setSubmitting(true)
     try {
       const res = await fetch("/api/camp-register", {
@@ -244,6 +287,7 @@ export default function CampRegisterPage() {
         throw new Error(j.error || "Failed")
       }
       setSubmitted(true)
+      setReviewing(false)
       window.scrollTo({ top: 0, behavior: "smooth" })
     } catch (err) {
       setError(t("Не удалось отправить регистрацию. Попробуйте позже."))
@@ -257,8 +301,8 @@ export default function CampRegisterPage() {
     const paperContract = form.contractMethod === "paper"
     const baseTotal = campTotalEur(paperContract)
     const onlineTotal = campOnlineTotalEur(paperContract)
-    const childName = form.nameRu || form.nameLv
-    const bankReference = `Nometne Maranafa — ${form.nameLv || form.nameRu}`
+    const childName = `${form.surname} ${form.firstName}`.trim()
+    const bankReference = `Nometne Maranafa — ${childName}`
 
     return (
       <div className="py-12 bg-gray-50">
@@ -488,6 +532,121 @@ export default function CampRegisterPage() {
     )
   }
 
+  if (reviewing) {
+    const ageText =
+      childAge !== null ? `${childAge} ${yearsUnit(childAge, language)}` : ""
+    const fullAddress = [form.street, form.city, form.country]
+      .filter((s) => s && s.trim().length > 0)
+      .join(", ")
+    return (
+      <div className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl space-y-6">
+          <Card>
+            <CardContent className="p-6 md:p-8 space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                  <TranslatedText text="Проверьте данные" />
+                </h1>
+                <p className="text-gray-600 text-sm">
+                  <TranslatedText text="Пожалуйста, проверьте, всё ли верно, прежде чем отправить." />
+                </p>
+              </div>
+
+              <div className="rounded-xl border-2 border-[#B22234]/20 bg-[#B22234]/[0.03] p-5 grid gap-4 sm:grid-cols-2">
+                <Highlight label="Фамилия ребёнка" value={form.surname} />
+                <Highlight label="Возраст" value={ageText} />
+                <Highlight label="Телефон родителя" value={form.phone} />
+                <Highlight label="Эл. почта родителя" value={form.email} />
+              </div>
+
+              <div className="space-y-2">
+                <ReviewRow label="Фамилия ребёнка" value={form.surname} />
+                <ReviewRow label="Имя ребёнка" value={form.firstName} />
+                <ReviewRow label="Дата рождения" value={form.birthDate} />
+                <ReviewRow label="Возраст" value={ageText} />
+                <ReviewRow label="Пол" value={t(genderLabels[form.gender] || "")} />
+                <ReviewRow
+                  label="Персональный код родителя (Personas kods)"
+                  value={form.personalCode}
+                />
+                <ReviewRow label="Имя и фамилия родителя" value={form.parentName} />
+                <ReviewRow label="Телефон" value={form.phone} />
+                <ReviewRow label="Электронная почта (для договора)" value={form.email} />
+                <ReviewRow
+                  label="Удобный канал связи"
+                  value={
+                    channelOptions.find((o) => o.value === form.contactChannel)?.label || ""
+                  }
+                />
+                <ReviewRow label="Адрес" value={fullAddress} />
+                <ReviewRow label="Аллергии" value={form.allergies} />
+                <ReviewRow
+                  label="Умение плавать"
+                  value={t(swimmingOptions.find((o) => o.value === form.swimming)?.label || "")}
+                />
+                <ReviewRow
+                  label="Прививка от клеща (год последней прививки)"
+                  value={form.tickVaccine}
+                />
+                <ReviewRow label="Размер майки" value={form.shirtSize} />
+                <ReviewRow label="Особенности характера" value={form.characterTraits} />
+                <ReviewRow label="Интересы и хобби" value={form.interests} />
+                <ReviewRow label="Музыкальный инструмент" value={form.instrument} />
+                {form.instrument.trim().length > 0 && (
+                  <ReviewRow
+                    label="Возможность привезти инструмент в лагерь"
+                    value={form.canBringInstrument}
+                  />
+                )}
+                <ReviewRow
+                  label="Как хотите подписать договор?"
+                  value={t(contractLabels[form.contractMethod] || "")}
+                />
+              </div>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex flex-col-reverse sm:flex-row gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={submitting}
+                  onClick={() => {
+                    setError(null)
+                    setReviewing(false)
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  <TranslatedText text="Изменить" />
+                </Button>
+                <Button
+                  type="button"
+                  disabled={submitting}
+                  onClick={handleConfirm}
+                  className="w-full flex-1 bg-[#B22234] hover:bg-[#8e1c29] text-white py-6 text-lg"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      <TranslatedText text="Отправка..." />
+                    </>
+                  ) : (
+                    <TranslatedText text="Подтвердить и отправить" />
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
@@ -537,20 +696,20 @@ export default function CampRegisterPage() {
               </div>
               <Panel title="Данные ребёнка" emoji="🧒" accent="child">
                 <Section title="Основные данные">
-                  <Field label="Фамилия и имя на русском" required>
+                  <Field label="Фамилия ребёнка" required>
                     <Input
                       required
-                      value={form.nameRu}
-                      onChange={(e) => update("nameRu", e.target.value)}
-                      placeholder={t("Иванов Иван")}
+                      value={form.surname}
+                      onChange={(e) => update("surname", e.target.value)}
+                      placeholder={t("Иванов")}
                     />
                   </Field>
-                  <Field label="Vārds un uzvārds latviski" required>
+                  <Field label="Имя ребёнка" required>
                     <Input
                       required
-                      value={form.nameLv}
-                      onChange={(e) => update("nameLv", e.target.value)}
-                      placeholder={t("Ivanovs Ivans")}
+                      value={form.firstName}
+                      onChange={(e) => update("firstName", e.target.value)}
+                      placeholder={t("Иван")}
                     />
                   </Field>
                   <Field label="Дата рождения" required>

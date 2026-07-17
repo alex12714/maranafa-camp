@@ -63,8 +63,8 @@ export async function POST(req: NextRequest) {
 
     // Required identity fields — reject blank/bot submissions.
     const requiredText: Record<string, unknown> = {
-      nameRu: body.nameRu,
-      nameLv: body.nameLv,
+      surname: body.surname,
+      firstName: body.firstName,
       birthDate: body.birthDate,
       gender: body.gender,
       parentName: body.parentName,
@@ -101,9 +101,16 @@ export async function POST(req: NextRequest) {
       .filter((s) => s && String(s).trim().length > 0)
       .join(", ")
 
+    // Name is collected as separate surname + first name in a single language;
+    // store the combined "Surname Name" in both the RU and LV name fields so
+    // the downstream formulas and the contract keep working.
+    const childName = `${String(body.surname).trim()} ${String(
+      body.firstName
+    ).trim()}`.trim()
+
     const fields: Record<string, unknown> = {
-      "Фамилия Имя на русском": String(body.nameRu).trim(),
-      "Фамилия Имя на латышском": String(body.nameLv).trim(),
+      "Фамилия Имя на русском": childName,
+      "Фамилия Имя на латышском": childName,
       "Дата Рождения": body.birthDate || null,
       "Пол": genderMap[body.gender] || null,
       "Персональный Код": body.personalCode || "",
