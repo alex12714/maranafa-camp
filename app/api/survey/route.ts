@@ -5,6 +5,15 @@ import { logSubmission, clientMeta } from "@/lib/submission-log"
 const WEBHOOK_URL = "https://hook.eu1.make.com/2ka4hn8pew9kpzt84mfw1x656ugva3p3"
 const ENDPOINT = "survey"
 
+// Booth voucher code — 5 unambiguous chars (no 0/O/1/I). Generated here so the
+// same value goes to the SMS and the AirTable record via the Make scenario.
+function generateCode(): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+  let s = ""
+  for (let i = 0; i < 5; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)]
+  return s
+}
+
 // Canonical (Russian) labels for the interest keys, so the webhook always
 // receives readable, language-independent labels regardless of UI language.
 const INTEREST_LABELS: Record<string, string> = {
@@ -69,7 +78,9 @@ export async function POST(req: NextRequest) {
       gdprConsent: true,
       interests: interestKeys,
       interestLabels,
+      interestLabelsText: interestLabels.join(", "), // pre-joined for the Make record
       otherInterest,
+      code: generateCode(), // sent by SMS + stored in AirTable for the booth
       language: typeof body.language === "string" ? body.language : "ru",
       event: "2026-07-19",
       submittedAt: new Date().toISOString(),
