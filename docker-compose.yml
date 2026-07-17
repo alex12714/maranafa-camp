@@ -13,6 +13,10 @@ services:
     restart: unless-stopped
     env_file:
       - ../.env
+    volumes:
+      # Durable, out-of-repo store for registration submission logs so a real
+      # person's failed/partial submission is never lost across deploys.
+      - /data/websites/maranafa-camp/logs:/app/logs
     networks:
       - coolify
     labels:
