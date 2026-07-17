@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { isBot, isFilled, isValidEmail, normalizePhone } from "@/lib/validation"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
@@ -48,9 +49,50 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
 
+    // Bot honeypot — pretend it worked so bots don't retry with variations.
+    if (isBot(body)) {
+      return NextResponse.json({ success: true })
+    }
+
     if (!body.dataConsent) {
       return NextResponse.json(
         { error: "Data processing consent is required" },
+        { status: 400 }
+      )
+    }
+
+    // Required identity fields — reject blank/bot submissions.
+    const requiredText: Record<string, unknown> = {
+      nameRu: body.nameRu,
+      nameLv: body.nameLv,
+      birthDate: body.birthDate,
+      gender: body.gender,
+      parentName: body.parentName,
+    }
+    const missing = Object.entries(requiredText)
+      .filter(([, v]) => !isFilled(v))
+      .map(([k]) => k)
+    if (missing.length > 0) {
+      return NextResponse.json(
+        { error: `Missing required fields: ${missing.join(", ")}` },
+        { status: 400 }
+      )
+    }
+
+    if (!isValidEmail(body.email)) {
+      return NextResponse.json(
+        { error: "A valid e-mail address is required" },
+        { status: 400 }
+      )
+    }
+
+    const phone = normalizePhone(body.phone)
+    if (!phone) {
+      return NextResponse.json(
+        {
+          error:
+            "Enter a single valid phone number starting with + and the country code",
+        },
         { status: 400 }
       )
     }
@@ -60,17 +102,17 @@ export async function POST(req: NextRequest) {
       .join(", ")
 
     const fields: Record<string, unknown> = {
-      "Фамилия Имя на русском": body.nameRu || "",
-      "Фамилия Имя на латышском": body.nameLv || "",
+      "Фамилия Имя на русском": String(body.nameRu).trim(),
+      "Фамилия Имя на латышском": String(body.nameLv).trim(),
       "Дата Рождения": body.birthDate || null,
       "Пол": genderMap[body.gender] || null,
       "Персональный Код": body.personalCode || "",
       "Адрес": fullAddress,
       "Город проживания": body.city || "",
       "Страна": body.country || "",
-      "Имя-фамилия родителя": body.parentName || "",
-      "Телефон": body.phone || "",
-      "E-mail для договора": body.email || "",
+      "Имя-фамилия родителя": String(body.parentName).trim(),
+      "Телефон": phone,
+      "E-mail для договора": String(body.email).trim(),
       "Канал связи": channelMap[body.contactChannel] || null,
       "Аллергии": body.allergies || "",
       "Умение плавать": swimmingMap[body.swimming] || null,

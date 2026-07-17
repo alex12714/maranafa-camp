@@ -35,6 +35,7 @@ type FormData = {
   contractMethod: string
   paperContractConsent: boolean
   dataConsent: boolean
+  website: string
 }
 
 const initialForm: FormData = {
@@ -61,6 +62,7 @@ const initialForm: FormData = {
   contractMethod: "",
   paperContractConsent: false,
   dataConsent: false,
+  website: "",
 }
 
 const swimmingOptions = [
@@ -455,6 +457,19 @@ export default function CampRegisterPage() {
           </CardHeader>
           <CardContent className="p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Honeypot — hidden from users; bots that fill it are silently dropped */}
+              <div className="hidden" aria-hidden="true">
+                <label>
+                  Website
+                  <input
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={form.website}
+                    onChange={(e) => update("website", e.target.value)}
+                  />
+                </label>
+              </div>
               <Section title="О ребёнке">
                 <Field label="Фамилия и имя на русском" required>
                   <Input
@@ -552,6 +567,9 @@ export default function CampRegisterPage() {
                   <Input
                     type="tel"
                     required
+                    inputMode="tel"
+                    pattern="\+[1-9][0-9 ()\-.]{6,}"
+                    title={t("Один номер, начиная с + и кода страны, например +37120172714")}
                     value={form.phone}
                     onChange={(e) => update("phone", e.target.value)}
                     placeholder="+371 ..."

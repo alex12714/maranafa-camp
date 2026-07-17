@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { isBot, isFilled, isValidEmail, normalizePhone } from "@/lib/validation"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
@@ -17,14 +18,35 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
 
-    if (!body.name || !body.phone || !body.email) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    // Bot honeypot — pretend it worked so bots don't retry with variations.
+    if (isBot(body)) {
+      return NextResponse.json({ success: true })
+    }
+
+    if (!isFilled(body.name)) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 })
+    }
+    if (!isValidEmail(body.email)) {
+      return NextResponse.json(
+        { error: "A valid e-mail address is required" },
+        { status: 400 }
+      )
+    }
+    const phone = normalizePhone(body.phone)
+    if (!phone) {
+      return NextResponse.json(
+        {
+          error:
+            "Enter a single valid phone number starting with + and the country code",
+        },
+        { status: 400 }
+      )
     }
 
     const fields: Record<string, unknown> = {
-      "Имя": body.name,
-      "Телефон": body.phone,
-      "Электронная почта": body.email,
+      "Имя": String(body.name).trim(),
+      "Телефон": phone,
+      "Электронная почта": String(body.email).trim(),
       "Дата регистрации": new Date().toISOString().split("T")[0],
     }
 

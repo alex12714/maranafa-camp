@@ -30,6 +30,7 @@ function RegistrationForm() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
+  const [website, setWebsite] = useState("") // honeypot
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
@@ -42,7 +43,7 @@ function RegistrationForm() {
       const res = await fetch("/api/dawn-treader-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email }),
+        body: JSON.stringify({ name, phone, email, website }),
       })
       if (!res.ok) throw new Error("error")
       setSuccess(true)
@@ -69,6 +70,19 @@ function RegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Honeypot — hidden from users; bots that fill it are silently dropped */}
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Website
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </label>
+      </div>
       <p className="text-sm text-gray-500 mb-2">
         <TranslatedText text="Регистрация на одного участника" />
       </p>
@@ -92,6 +106,9 @@ function RegistrationForm() {
         <input
           type="tel"
           required
+          inputMode="tel"
+          pattern="\+[1-9][0-9 ()\-.]{6,}"
+          title="Один номер, начиная с + и кода страны, например +37120172714"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
