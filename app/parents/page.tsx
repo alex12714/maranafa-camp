@@ -99,12 +99,6 @@ export default function ParentsPage() {
                   >
                     <TranslatedText text="Правила лагеря" />
                   </Link>
-                  <Link
-                    href="#camp2025"
-                    className="block py-2 text-gray-700 hover:text-[#B22234] border-b border-gray-100"
-                  >
-                    <TranslatedText text="Информация о лагере 2025" />
-                  </Link>
                 </nav>
               </CardContent>
             </Card>
