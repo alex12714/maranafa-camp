@@ -62,6 +62,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "consent" }, { status: 400 })
     }
 
+    // Age branch: under-18 gives a parent's name (their phone is the parent's);
+    // over-18 optionally reports their children's age ranges.
+    const over18 = body.over18 !== false
+    const parentName = isFilled(body.parentName) ? String(body.parentName).trim() : ""
+    if (!over18 && !parentName) {
+      await logSubmission({ endpoint: ENDPOINT, outcome: "rejected", reason: "missing:parentName", ...meta, data: body })
+      return NextResponse.json({ error: "parentName" }, { status: 400 })
+    }
+    const childrenAges: string[] =
+      over18 && Array.isArray(body.childrenAges)
+        ? body.childrenAges.filter((r: unknown): r is string => typeof r === "string")
+        : []
+
     const interestKeys: string[] = Array.isArray(body.interests)
       ? body.interests.filter((k: unknown): k is string => typeof k === "string")
       : []
@@ -80,6 +93,11 @@ export async function POST(req: NextRequest) {
       interestLabels,
       interestLabelsText: interestLabels.join(", "), // pre-joined for the Make record
       otherInterest,
+      over18,
+      ageLabel: over18 ? "18+" : "До 18",
+      parentName,
+      childrenAges,
+      childrenAgesText: childrenAges.join(", "),
       code: generateCode(), // sent by SMS + stored in AirTable for the booth
       language: typeof body.language === "string" ? body.language : "ru",
       event: "2026-07-19",

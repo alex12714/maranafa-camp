@@ -23,6 +23,9 @@ const INTEREST_KEYS = [
 ] as const
 type InterestKey = (typeof INTEREST_KEYS)[number]
 
+// Child age ranges (over-18 respondents). Numeric labels, shared across languages.
+const CHILD_AGE_RANGES = ["0–5", "5–12", "12–14", "14+"] as const
+
 type Copy = {
   heading: string
   intro: string
@@ -47,6 +50,13 @@ type Copy = {
   dupHeading: string
   dupMsg: string
   booth: string
+  ageQuestion: string
+  ageOver: string
+  ageUnder: string
+  parentName: string
+  parentPhone: string
+  childrenTitle: string
+  errParentName: string
   interests: Record<InterestKey, string>
 }
 
@@ -78,6 +88,13 @@ const S: Record<Language, Copy> = {
     dupHeading: "Мы тебя очень ценим!",
     dupMsg: "Но мороженое можно получить только один раз :)",
     booth: "Покажи код из SMS на стойке в лагере, чтобы получить ваучер на мороженое и батут.",
+    ageQuestion: "Твой возраст",
+    ageOver: "Мне 18 или больше",
+    ageUnder: "Мне меньше 18",
+    parentName: "Имя родителя",
+    parentPhone: "Телефон родителя",
+    childrenTitle: "Возраст ваших детей",
+    errParentName: "Укажите имя родителя",
     interests: {
       language: "Изучение языков",
       electronics: "Электроника",
@@ -118,6 +135,13 @@ const S: Record<Language, Copy> = {
     dupHeading: "Mēs tevi ļoti novērtējam!",
     dupMsg: "Bet saldējumu var saņemt tikai vienu reizi :)",
     booth: "Parādi SMS kodu nometnes stendā, lai saņemtu saldējuma un atrakcijas kuponu.",
+    ageQuestion: "Tavs vecums",
+    ageOver: "Man ir 18 vai vairāk",
+    ageUnder: "Esmu jaunāks par 18",
+    parentName: "Vecāka vārds",
+    parentPhone: "Vecāka tālrunis",
+    childrenTitle: "Jūsu bērnu vecums",
+    errParentName: "Lūdzu, norādi vecāka vārdu",
     interests: {
       language: "Valodu apguve",
       electronics: "Elektronika",
@@ -158,6 +182,13 @@ const S: Record<Language, Copy> = {
     dupHeading: "Ми тебе дуже цінуємо!",
     dupMsg: "Але морозиво можна отримати лише один раз :)",
     booth: "Покажи код із SMS на стійці в таборі, щоб отримати ваучер на морозиво та гірку.",
+    ageQuestion: "Твій вік",
+    ageOver: "Мені 18 або більше",
+    ageUnder: "Мені менше 18",
+    parentName: "Ім'я батьків",
+    parentPhone: "Телефон батьків",
+    childrenTitle: "Вік ваших дітей",
+    errParentName: "Вкажіть ім'я батьків",
     interests: {
       language: "Вивчення мов",
       electronics: "Електроніка",
@@ -198,6 +229,13 @@ const S: Record<Language, Copy> = {
     dupHeading: "We value you a lot!",
     dupMsg: "But an ice cream can only be claimed once :)",
     booth: "Show the code from the SMS at the camp booth to get your ice cream & bouncy castle voucher.",
+    ageQuestion: "Your age",
+    ageOver: "I'm 18 or older",
+    ageUnder: "I'm under 18",
+    parentName: "Parent's name",
+    parentPhone: "Parent's phone",
+    childrenTitle: "Your children's ages",
+    errParentName: "Please enter the parent's name",
     interests: {
       language: "Language learning",
       electronics: "Electronics",
@@ -234,6 +272,9 @@ export default function SurveyPage() {
   const [smsConsent, setSmsConsent] = useState(false)
   const [gdprConsent, setGdprConsent] = useState(false)
   const [website, setWebsite] = useState("") // honeypot
+  const [over18, setOver18] = useState(true)
+  const [parentName, setParentName] = useState("")
+  const [childrenAges, setChildrenAges] = useState<string[]>([])
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -245,11 +286,18 @@ export default function SurveyPage() {
     )
   }
 
+  const toggleChildAge = (range: string) => {
+    setChildrenAges((prev) =>
+      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range]
+    )
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
 
     if (!name.trim()) return setError(c.errName)
+    if (!over18 && !parentName.trim()) return setError(c.errParentName)
     if (!normalizePhone(phone)) return setError(c.errPhone)
     if (email.trim() && !isValidEmail(email)) return setError(c.errEmail)
     if (!smsConsent || !gdprConsent) return setError(c.errConsent)
@@ -265,6 +313,9 @@ export default function SurveyPage() {
           email,
           interests,
           otherInterest: other,
+          over18,
+          parentName: over18 ? "" : parentName,
+          childrenAges: over18 ? childrenAges : [],
           smsConsent,
           gdprConsent,
           language,
@@ -336,6 +387,37 @@ export default function SurveyPage() {
                 </label>
               </div>
 
+              {/* Age toggle */}
+              <div>
+                <div className="block text-sm font-medium text-gray-700 mb-2">
+                  {c.ageQuestion} *
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setOver18(true)}
+                    className={`rounded-md border px-3 py-2.5 text-sm font-medium transition-colors ${
+                      over18
+                        ? "border-[#B22234] bg-[#B22234] text-white"
+                        : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {c.ageOver}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOver18(false)}
+                    className={`rounded-md border px-3 py-2.5 text-sm font-medium transition-colors ${
+                      !over18
+                        ? "border-[#B22234] bg-[#B22234] text-white"
+                        : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {c.ageUnder}
+                  </button>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {c.name} *
@@ -347,15 +429,28 @@ export default function SurveyPage() {
                 />
               </div>
 
+              {!over18 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {c.parentName} *
+                  </label>
+                  <Input
+                    required
+                    value={parentName}
+                    onChange={(e) => setParentName(e.target.value)}
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {c.phone} *
+                  {over18 ? c.phone : c.parentPhone} *
                 </label>
                 <Input
                   type="tel"
                   required
                   inputMode="tel"
-                  pattern="\+[1-9][0-9 ()\-.]{6,}"
+                  pattern="\+[1-9][0-9\s\-]{6,}"
                   title={c.phoneHint}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -376,6 +471,30 @@ export default function SurveyPage() {
                   placeholder="name@example.com"
                 />
               </div>
+
+              {over18 && (
+                <div>
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
+                    {c.childrenTitle}
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {CHILD_AGE_RANGES.map((range) => (
+                      <label
+                        key={range}
+                        className="flex items-center justify-center gap-2 cursor-pointer rounded-md border border-gray-200 px-3 py-2 hover:bg-gray-50"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={childrenAges.includes(range)}
+                          onChange={() => toggleChildAge(range)}
+                          className="accent-[#B22234]"
+                        />
+                        <span className="text-sm text-gray-700">{range}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <div className="block text-sm font-medium text-gray-700 mb-2">
