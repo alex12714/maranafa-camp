@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,14 +22,6 @@ const INTEREST_KEYS = [
   "other",
 ] as const
 type InterestKey = (typeof INTEREST_KEYS)[number]
-
-// Language tabs (order tuned for the Latvian audience).
-const TABS: { lang: Language; label: string }[] = [
-  { lang: "ru", label: "RU" },
-  { lang: "lv", label: "LV" },
-  { lang: "uk", label: "UK" },
-  { lang: "en", label: "EN" },
-]
 
 type Copy = {
   heading: string
@@ -222,36 +214,17 @@ const S: Record<Language, Copy> = {
   },
 }
 
-function LanguageTabs({
-  language,
-  setLanguage,
-}: {
-  language: Language
-  setLanguage: (l: Language) => void
-}) {
-  return (
-    <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
-      {TABS.map((t) => (
-        <button
-          key={t.lang}
-          type="button"
-          onClick={() => setLanguage(t.lang)}
-          className={`px-3 py-1.5 text-sm font-semibold rounded-md transition-colors ${
-            language === t.lang
-              ? "bg-[#B22234] text-white"
-              : "text-gray-600 hover:bg-gray-100"
-          }`}
-        >
-          {t.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 export default function SurveyPage() {
-  const { language, setLanguage } = useLanguage()
+  const { language, setShowLanguageModal } = useLanguage()
   const c = S[language] || S.ru
+
+  // QR visitors are new each time — always prompt for a language via the same
+  // site-wide modal shown on first visit. The timeout lets the LanguageProvider's
+  // own mount effect settle first so it can't immediately re-close it.
+  useEffect(() => {
+    const id = setTimeout(() => setShowLanguageModal(true), 0)
+    return () => clearTimeout(id)
+  }, [setShowLanguageModal])
 
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("+371")
@@ -315,9 +288,6 @@ export default function SurveyPage() {
     return (
       <div className="py-12 bg-gray-50 min-h-[70vh]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-xl">
-          <div className="mb-6 flex justify-center">
-            <LanguageTabs language={language} setLanguage={setLanguage} />
-          </div>
           <Card>
             <CardContent className="pt-10 pb-8 px-6 text-center">
               {dup ? (
@@ -343,10 +313,6 @@ export default function SurveyPage() {
   return (
     <div className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-xl">
-        <div className="mb-6 flex justify-center">
-          <LanguageTabs language={language} setLanguage={setLanguage} />
-        </div>
-
         <Card>
           <CardContent className="p-6 md:p-8">
             <div className="text-center mb-6">
