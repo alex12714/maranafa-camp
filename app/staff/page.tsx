@@ -205,12 +205,6 @@ export default function StaffPage() {
                 {t("Роли в лагере")}
               </TabsTrigger>
               <TabsTrigger
-                value="personnel"
-                className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white"
-              >
-                {t("Наш персонал")}
-              </TabsTrigger>
-              <TabsTrigger
                 value="documents"
                 className="data-[state=active]:bg-[#B22234] data-[state=active]:text-white"
               >
@@ -240,17 +234,6 @@ export default function StaffPage() {
                     </Link>
                   </CardFooter>
                 </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="personnel" className="mt-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {staffMembers.map((member, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-lg text-center">
-                  <p className="font-bold text-[#B22234]">{member.name}</p>
-                  <p className="text-gray-600 text-sm">{t(member.role)}</p>
-                </div>
               ))}
             </div>
           </TabsContent>
