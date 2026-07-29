@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { OnFireShareButton } from "@/components/onfire-share-button"
 import {
   localizeCategory,
   mapArticleRecord,
@@ -18,11 +19,11 @@ const TABLE_ID = "tble1JDNo8HBvjjIr"
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maranafa.camp"
 
 // Server-rendered chrome in the article's own language
-const UI: Record<ArticleLanguage, { back: string; backAll: string; share: string; notFound: string; locale: string }> = {
-  ru: { back: "← Назад в блог", backAll: "← Все статьи", share: "Поделиться:", notFound: "Статья не найдена", locale: "ru-RU" },
-  en: { back: "← Back to blog", backAll: "← All articles", share: "Share:", notFound: "Article not found", locale: "en-GB" },
-  lv: { back: "← Atpakaļ uz blogu", backAll: "← Visi raksti", share: "Dalīties:", notFound: "Raksts nav atrasts", locale: "lv-LV" },
-  uk: { back: "← Назад до блогу", backAll: "← Всі статті", share: "Поділитися:", notFound: "Статтю не знайдено", locale: "uk-UA" },
+const UI: Record<ArticleLanguage, { back: string; backAll: string; share: string; notFound: string; copied: string; locale: string }> = {
+  ru: { back: "← Назад в блог", backAll: "← Все статьи", share: "Поделиться:", notFound: "Статья не найдена", copied: "Ссылка скопирована", locale: "ru-RU" },
+  en: { back: "← Back to blog", backAll: "← All articles", share: "Share:", notFound: "Article not found", copied: "Link copied", locale: "en-GB" },
+  lv: { back: "← Atpakaļ uz blogu", backAll: "← Visi raksti", share: "Dalīties:", notFound: "Raksts nav atrasts", copied: "Saite nokopēta", locale: "lv-LV" },
+  uk: { back: "← Назад до блогу", backAll: "← Всі статті", share: "Поділитися:", notFound: "Статтю не знайдено", copied: "Посилання скопійовано", locale: "uk-UA" },
 }
 
 const SITE_LANGUAGES = ["ru", "en", "lv", "uk"] as const
@@ -98,7 +99,7 @@ export async function generateMetadata({
 }
 
 // ─── Social share buttons ────────────────────────────────────────────────────
-function ShareButtons({ url, title, shareLabel }: { url: string; title: string; shareLabel: string }) {
+function ShareButtons({ url, title, shareLabel, copiedLabel }: { url: string; title: string; shareLabel: string; copiedLabel: string }) {
   const encoded = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
@@ -148,6 +149,7 @@ function ShareButtons({ url, title, shareLabel }: { url: string; title: string; 
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-sm font-medium text-gray-500 mr-1">{shareLabel}</span>
+      <OnFireShareButton url={url} title={title} copiedLabel={copiedLabel} />
       {shares.map((s) => (
         <a
           key={s.label}
@@ -243,7 +245,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         {/* Share section */}
         <div className="mt-12 pt-8 border-t border-gray-100 space-y-4">
-          <ShareButtons url={articleUrl} title={article.title} shareLabel={UI[lang].share} />
+          <ShareButtons url={articleUrl} title={article.title} shareLabel={UI[lang].share} copiedLabel={UI[lang].copied} />
         </div>
 
         {/* Back link */}
