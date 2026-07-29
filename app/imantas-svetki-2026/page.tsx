@@ -71,6 +71,24 @@ export default function ImantasSvetkiPage() {
       {/* Content */}
       <div className="container mx-auto max-w-5xl px-4 py-12">
 
+        {/* Post-event report */}
+        <div className="bg-gradient-to-r from-[#B22234] to-[#7a0e1e] text-white rounded-xl shadow-md p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-lg font-bold mb-1">
+              <TranslatedText text="🎉 Праздник состоялся!" />
+            </p>
+            <p className="text-white/85 text-sm">
+              <TranslatedText text="19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было." />
+            </p>
+          </div>
+          <Link
+            href="/blog/otkrytie-centra-imanta-2026"
+            className="flex-shrink-0 bg-white text-[#B22234] font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-colors text-sm"
+          >
+            <TranslatedText text="Читать репортаж →" />
+          </Link>
+        </div>
+
         {/* Key info */}
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-10">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
