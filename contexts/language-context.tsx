@@ -4100,6 +4100,30 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // Initialize on client-side only
   useEffect(() => {
     setIsClient(true)
+
+    const isSupported = (lang: string | null | undefined): lang is Language =>
+      Boolean(lang) && Object.keys(translationData).includes(lang as string)
+
+    // 1. A /ru|/en|/lv|/uk|/ukr deep link states the language outright
+    const prefix = window.location.pathname.match(/^\/(ru|en|lv|uk|ukr)(?:\/|$)/i)
+    const prefixed = prefix ? prefix[1].toLowerCase() : null
+    const urlLanguage = prefixed === "ukr" ? "uk" : prefixed
+
+    if (isSupported(urlLanguage)) {
+      setLanguageState(urlLanguage)
+      localStorage.setItem("preferredLanguage", urlLanguage)
+      setShowLanguageModal(false)
+      return
+    }
+
+    // 2. The cookie the middleware left behind on an earlier prefixed visit
+    const cookieLanguage = document.cookie.match(/(?:^|;\s*)NEXT_LOCALE=([^;]*)/)?.[1]
+    if (isSupported(cookieLanguage)) {
+      setLanguageState(cookieLanguage)
+      setShowLanguageModal(false)
+      return
+    }
+
     const savedLanguage = localStorage.getItem("preferredLanguage") as Language | null
 
     if (savedLanguage && Object.keys(translationData).includes(savedLanguage)) {

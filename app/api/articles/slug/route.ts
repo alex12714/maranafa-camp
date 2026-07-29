@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import type { Article } from "@/app/api/articles/route"
+import { mapArticleRecord, normalizeArticleLanguage, pickTranslation } from "@/lib/articles"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
@@ -14,9 +14,12 @@ export async function GET(req: Request) {
   const slug = searchParams.get("slug")
   if (!slug) return NextResponse.json({ error: "slug required" }, { status: 400 })
 
+  const lang = normalizeArticleLanguage(searchParams.get("lang"))
+
+  // Every translation shares the slug, so fetch them all and pick one.
   const formula = encodeURIComponent(`{Slug}='${slug}'`)
   const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${formula}&maxRecords=1`,
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${formula}`,
     {
       headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
       next: { revalidate: 3600 },
@@ -28,23 +31,8 @@ export async function GET(req: Request) {
   const data = await res.json()
   if (!data.records?.length) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const r = data.records[0]
-  const f = r.fields
-  const cover = f["Обложка"]?.[0]
-
-  const article: Article = {
-    id: r.id,
-    title: f["Заголовок"] ?? "",
-    subtitle: f["Подзаголовок"] ?? "",
-    slug: f["Slug"] ?? r.id,
-    author: f["Автор"] ?? "",
-    date: f["Дата"] ?? "",
-    status: f["Статус"] ?? "Черновик",
-    category: f["Категория"] ?? "",
-    content: f["Содержимое"] ?? "",
-    coverUrl: cover?.url ?? undefined,
-    coverThumbUrl: cover?.thumbnails?.large?.url ?? cover?.url ?? undefined,
-  }
+  const article = pickTranslation(data.records.map(mapArticleRecord), lang)
+  if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   return NextResponse.json({ article })
 }

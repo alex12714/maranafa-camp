@@ -1,19 +1,35 @@
 import type { Metadata } from "next"
+import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import type { Article } from "@/app/api/articles/route"
+import {
+  mapArticleRecord,
+  normalizeArticleLanguage,
+  pickTranslation,
+  type Article,
+  type ArticleLanguage,
+} from "@/lib/articles"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
 const TABLE_ID = "tble1JDNo8HBvjjIr"
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maranafa.org"
 
-async function getArticle(slug: string): Promise<Article | null> {
+const SITE_LANGUAGES = ["ru", "en", "lv", "uk"] as const
+
+// The middleware writes NEXT_LOCALE whenever someone opens a /ru|/en|/lv|/uk link
+async function resolveLanguage(): Promise<ArticleLanguage> {
+  const store = await cookies()
+  return normalizeArticleLanguage(store.get("NEXT_LOCALE")?.value)
+}
+
+async function getArticle(slug: string, lang: ArticleLanguage): Promise<Article | null> {
   if (!AIRTABLE_TOKEN) return null
   const formula = encodeURIComponent(`AND({Slug}='${slug}', {Статус}='Опубликовано')`)
+  // Every translation shares the slug, so fetch them all and pick one
   const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${formula}&maxRecords=1`,
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${formula}`,
     {
       headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
       next: { revalidate: 60 },
@@ -23,22 +39,7 @@ async function getArticle(slug: string): Promise<Article | null> {
   const data = await res.json()
   if (!data.records?.length) return null
 
-  const r = data.records[0]
-  const f = r.fields
-  const cover = f["Обложка"]?.[0]
-  return {
-    id: r.id,
-    title: f["Заголовок"] ?? "",
-    subtitle: f["Подзаголовок"] ?? "",
-    slug: f["Slug"] ?? r.id,
-    author: f["Автор"] ?? "",
-    date: f["Дата"] ?? "",
-    status: f["Статус"] ?? "Черновик",
-    category: f["Категория"] ?? "",
-    content: f["Содержимое"] ?? "",
-    coverUrl: cover?.url ?? undefined,
-    coverThumbUrl: cover?.thumbnails?.large?.url ?? cover?.url ?? undefined,
-  }
+  return pickTranslation(data.records.map(mapArticleRecord), lang)
 }
 
 // ─── OG Metadata ─────────────────────────────────────────────────────────────
@@ -48,7 +49,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const article = await getArticle(slug)
+  const article = await getArticle(slug, await resolveLanguage())
   if (!article) return { title: "Статья не найдена" }
 
   const url = `${SITE_URL}/blog/${slug}`
@@ -77,7 +78,12 @@ export async function generateMetadata({
         ? [article.coverUrl]
         : [`${SITE_URL}/images/maranafa-og.jpg`],
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: Object.fromEntries(
+        SITE_LANGUAGES.map((code) => [code, `${SITE_URL}/${code}/blog/${slug}`])
+      ),
+    },
   }
 }
 
@@ -152,7 +158,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const article = await getArticle(slug)
+  const article = await getArticle(slug, await resolveLanguage())
   if (!article) notFound()
 
   const articleUrl = `${SITE_URL}/blog/${slug}`

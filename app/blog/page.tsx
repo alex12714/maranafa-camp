@@ -157,13 +157,18 @@ export default function BlogPage() {
       .then((d) => { setPosts(d.posts ?? []); setPostsError(!d.ok && !d.posts?.length) })
       .catch(() => setPostsError(true))
       .finally(() => setPostsLoading(false))
-
-    fetch("/api/articles")
-      .then((r) => r.json())
-      .then((d) => setArticles(d.articles ?? []))
-      .catch(() => {})
-      .finally(() => setArticlesLoading(false))
   }, [])
+
+  // Articles come translated per language, so reload them when it changes
+  useEffect(() => {
+    let active = true
+    fetch(`/api/articles?lang=${language}`)
+      .then((r) => r.json())
+      .then((d) => { if (active) setArticles(d.articles ?? []) })
+      .catch(() => {})
+      .finally(() => { if (active) setArticlesLoading(false) })
+    return () => { active = false }
+  }, [language])
 
   return (
     <div className="bg-white min-h-screen">

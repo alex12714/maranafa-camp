@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { mapArticleRecord, normalizeArticleLanguage, pickTranslationsPerSlug } from "@/lib/articles"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
@@ -6,40 +7,12 @@ const TABLE_ID = "tble1JDNo8HBvjjIr"
 
 export const revalidate = 60
 
-export interface Article {
-  id: string
-  title: string
-  subtitle: string
-  slug: string
-  author: string
-  date: string
-  status: string
-  category: string
-  content: string
-  coverUrl?: string
-  coverThumbUrl?: string
-}
+export type { Article } from "@/lib/articles"
 
-function mapRecord(r: any): Article {
-  const f = r.fields
-  const cover = f["Обложка"]?.[0]
-  return {
-    id: r.id,
-    title: f["Заголовок"] ?? "",
-    subtitle: f["Подзаголовок"] ?? "",
-    slug: f["Slug"] ?? r.id,
-    author: f["Автор"] ?? "",
-    date: f["Дата"] ?? "",
-    status: f["Статус"] ?? "Черновик",
-    category: f["Категория"] ?? "",
-    content: f["Содержимое"] ?? "",
-    coverUrl: cover?.url ?? undefined,
-    coverThumbUrl: cover?.thumbnails?.large?.url ?? cover?.url ?? undefined,
-  }
-}
-
-export async function GET() {
+export async function GET(req: Request) {
   if (!AIRTABLE_TOKEN) return NextResponse.json({ error: "Server misconfigured" }, { status: 500 })
+
+  const lang = normalizeArticleLanguage(new URL(req.url).searchParams.get("lang"))
 
   const records: any[] = []
   let offset: string | undefined
@@ -63,6 +36,6 @@ export async function GET() {
   } while (offset)
 
   return NextResponse.json({
-    articles: records.map(mapRecord),
+    articles: pickTranslationsPerSlug(records.map(mapArticleRecord), lang),
   })
 }

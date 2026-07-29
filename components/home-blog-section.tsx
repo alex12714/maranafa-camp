@@ -110,14 +110,17 @@ export default function HomeBlogSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let active = true
     Promise.all([
-      fetch("/api/articles").then((r) => r.json()).catch(() => ({ articles: [] })),
+      fetch(`/api/articles?lang=${language}`).then((r) => r.json()).catch(() => ({ articles: [] })),
       fetch("/api/blog").then((r) => r.json()).catch(() => ({ posts: [] })),
     ]).then(([articlesData, postsData]) => {
+      if (!active) return
       setArticles((articlesData.articles ?? []).slice(0, 3))
       setPosts((postsData.posts ?? []).slice(0, 4))
-    }).finally(() => setLoading(false))
-  }, [])
+    }).finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
+  }, [language])
 
   const hasContent = articles.length > 0 || posts.length > 0
 
