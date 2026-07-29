@@ -174,7 +174,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
       )}
 
@@ -195,17 +194,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       ) : (
-        <div className="relative -mt-24 container mx-auto max-w-3xl px-4 z-10">
-          <Link href="/blog" className="inline-flex items-center text-white/80 hover:text-white text-sm mb-4">
-            ← Назад в блог
-          </Link>
-          {article.category && (
-            <span className="inline-block bg-[#FFD700] text-[#5a3a00] text-xs font-semibold px-3 py-1 rounded-full mb-3">
-              {article.category}
-            </span>
-          )}
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 drop-shadow-lg">{article.title}</h1>
-          {article.subtitle && <p className="text-white/85 text-lg drop-shadow">{article.subtitle}</p>}
+        <div className="container mx-auto max-w-3xl px-4 pt-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Link href="/blog" className="inline-flex items-center text-gray-500 hover:text-[#B22234] text-sm">
+              ← Назад в блог
+            </Link>
+            {article.category && (
+              <span className="inline-block bg-[#FFD700]/20 text-[#7a5500] text-xs font-semibold px-3 py-1 rounded-full">
+                {article.category}
+              </span>
+            )}
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">{article.title}</h1>
+          {article.subtitle && <p className="text-gray-600 text-lg">{article.subtitle}</p>}
         </div>
       )}
 
