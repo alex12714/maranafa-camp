@@ -15,7 +15,7 @@ function formatDate(raw: string, lang: string): string {
   const d = new Date(raw)
   if (isNaN(d.getTime())) return raw
   const locale = lang === "ru" ? "ru-RU" : lang === "lv" ? "lv-LV" : lang === "uk" ? "uk-UA" : "en-GB"
-  return d.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })
+  return d.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
 }
 
 function truncate(text: string, max = 200): string {
@@ -88,7 +88,7 @@ function PostCard({ post, language, t }: { post: TelegramPost; language: string;
 // ─── Article Card ─────────────────────────────────────────────────────────────
 function ArticleCard({ article, language, t }: { article: Article; language: string; t: (k: string) => string }) {
   return (
-    <Link href={`/blog/${article.slug}`} className="block group h-full">
+    <Link href={`/${language}/blog/${article.slug}`} className="block group h-full">
       <Card className="border border-gray-100 group-hover:shadow-md transition-all duration-200 flex flex-col h-full overflow-hidden">
         {article.coverThumbUrl ? (
           // eslint-disable-next-line @next/next/no-img-element

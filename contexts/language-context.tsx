@@ -63,6 +63,23 @@ export const translationData: Record<Language, Record<string, string>> = {
     "19 июля 2026": "19 July 2026",
     "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15": "Sunday, 16:00–18:00 · Kurzemes prospekts 15",
     "Надувные аттракционы, шоу мыльных пузырей, аниматор, лотерея и мороженое — приходите всей семьёй!": "Inflatable attractions, a bubble show, an entertainer, a lottery and ice cream — come with the whole family!",
+    "Новости и статьи": "News & Articles",
+    "Блог Маранафа": "Maranafa Blog",
+    "Следите за новостями лагеря в нашем Telegram канале и читайте наши статьи и материалы": "Follow camp news on our Telegram channel and read our articles and materials",
+    "Статьи и материалы": "Articles & Materials",
+    "Наш Telegram канал": "Our Telegram Channel",
+    "Telegram канал": "Telegram channel",
+    "Новости, фото, объявления": "News, photos, announcements",
+    "Подписаться": "Subscribe",
+    "Читать в Telegram": "Read on Telegram",
+    "Фото из Telegram": "Photo from Telegram",
+    "Читать далее": "Read more",
+    "Не удалось загрузить посты": "Couldn't load posts",
+    "Открыть канал в Telegram": "Open the channel on Telegram",
+    "Последние публикации": "Latest posts",
+    "Все публикации в Telegram": "All posts on Telegram",
+    "Все публикации": "All posts",
+    "Открыть": "Open",
     "Блог": "Blog",
     "🎉 Праздник состоялся!": "🎉 The event has taken place!",
     "19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было.": "On 19 July we opened the new centre together — see the photo gallery and read how it went.",
@@ -1098,6 +1115,23 @@ export const translationData: Record<Language, Record<string, string>> = {
     "19 июля 2026": "19 июля 2026",
     "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15": "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15",
     "Надувные аттракционы, шоу мыльных пузырей, аниматор, лотерея и мороженое — приходите всей семьёй!": "Надувные аттракционы, шоу мыльных пузырей, аниматор, лотерея и мороженое — приходите всей семьёй!",
+    "Новости и статьи": "Новости и статьи",
+    "Блог Маранафа": "Блог Маранафа",
+    "Следите за новостями лагеря в нашем Telegram канале и читайте наши статьи и материалы": "Следите за новостями лагеря в нашем Telegram канале и читайте наши статьи и материалы",
+    "Статьи и материалы": "Статьи и материалы",
+    "Наш Telegram канал": "Наш Telegram канал",
+    "Telegram канал": "Telegram канал",
+    "Новости, фото, объявления": "Новости, фото, объявления",
+    "Подписаться": "Подписаться",
+    "Читать в Telegram": "Читать в Telegram",
+    "Фото из Telegram": "Фото из Telegram",
+    "Читать далее": "Читать далее",
+    "Не удалось загрузить посты": "Не удалось загрузить посты",
+    "Открыть канал в Telegram": "Открыть канал в Telegram",
+    "Последние публикации": "Последние публикации",
+    "Все публикации в Telegram": "Все публикации в Telegram",
+    "Все публикации": "Все публикации",
+    "Открыть": "Открыть",
     "Блог": "Блог",
     "🎉 Праздник состоялся!": "🎉 Праздник состоялся!",
     "19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было.": "19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было.",
@@ -2036,6 +2070,23 @@ export const translationData: Record<Language, Record<string, string>> = {
     "19 июля 2026": "19. jūlijā 2026",
     "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15": "Svētdien, 16:00–18:00 · Kurzemes prospekts 15",
     "Надувные аттракционы, шоу мыльных пузырей, аниматор, лотерея и мороженое — приходите всей семьёй!": "Piepūšamās atrakcijas, burbuļu šovs, animators, loterijas un saldējums — nāc ar visu ģimeni!",
+    "Новости и статьи": "Ziņas un raksti",
+    "Блог Маранафа": "Maranafas blogs",
+    "Следите за новостями лагеря в нашем Telegram канале и читайте наши статьи и материалы": "Seko nometnes jaunumiem mūsu Telegram kanālā un lasi mūsu rakstus un materiālus",
+    "Статьи и материалы": "Raksti un materiāli",
+    "Наш Telegram канал": "Mūsu Telegram kanāls",
+    "Telegram канал": "Telegram kanāls",
+    "Новости, фото, объявления": "Ziņas, foto, paziņojumi",
+    "Подписаться": "Abonēt",
+    "Читать в Telegram": "Lasīt Telegram",
+    "Фото из Telegram": "Foto no Telegram",
+    "Читать далее": "Lasīt tālāk",
+    "Не удалось загрузить посты": "Neizdevās ielādēt ierakstus",
+    "Открыть канал в Telegram": "Atvērt kanālu Telegram",
+    "Последние публикации": "Jaunākās publikācijas",
+    "Все публикации в Telegram": "Visas publikācijas Telegram",
+    "Все публикации": "Visas publikācijas",
+    "Открыть": "Atvērt",
     "Блог": "Blogs",
     "🎉 Праздник состоялся!": "🎉 Svētki ir aizvadīti!",
     "19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было.": "19. jūlijā mēs kopā atklājām jauno centru — apskatiet fotogaleriju un izlasiet, kā tas notika.",
@@ -3072,6 +3123,23 @@ export const translationData: Record<Language, Record<string, string>> = {
     "19 июля 2026": "19 липня 2026",
     "Воскресенье, 16:00 – 18:00 · Kurzemes prospekts 15": "Неділя, 16:00–18:00 · Kurzemes prospekts 15",
     "Надувные аттракционы, шоу мыльных пузырей, аниматор, лотерея и мороженое — приходите всей семьёй!": "Надувні атракціони, шоу мильних бульбашок, аніматор, лотерея та морозиво — приходьте всією сім'єю!",
+    "Новости и статьи": "Новини та статті",
+    "Блог Маранафа": "Блог Маранафа",
+    "Следите за новостями лагеря в нашем Telegram канале и читайте наши статьи и материалы": "Стежте за новинами табору в нашому Telegram-каналі та читайте наші статті й матеріали",
+    "Статьи и материалы": "Статті та матеріали",
+    "Наш Telegram канал": "Наш Telegram-канал",
+    "Telegram канал": "Telegram-канал",
+    "Новости, фото, объявления": "Новини, фото, оголошення",
+    "Подписаться": "Підписатися",
+    "Читать в Telegram": "Читати в Telegram",
+    "Фото из Telegram": "Фото з Telegram",
+    "Читать далее": "Читати далі",
+    "Не удалось загрузить посты": "Не вдалося завантажити пости",
+    "Открыть канал в Telegram": "Відкрити канал у Telegram",
+    "Последние публикации": "Останні публікації",
+    "Все публикации в Telegram": "Всі публікації в Telegram",
+    "Все публикации": "Всі публікації",
+    "Открыть": "Відкрити",
     "Блог": "Блог",
     "🎉 Праздник состоялся!": "🎉 Свято відбулося!",
     "19 июля мы вместе открыли новый центр — смотрите фотогалерею и читайте, как это было.": "19 липня ми разом відкрили новий центр — дивіться фотогалерею та читайте, як це було.",
@@ -4083,6 +4151,19 @@ export const translationData: Record<Language, Record<string, string>> = {
 }
 
 // Provider component
+// Keep the address bar and the NEXT_LOCALE cookie in step with the chosen
+// language, so /lv, /en... links are shareable and the server renders the
+// same language the client shows.
+function syncLanguageUrl(lang: Language) {
+  document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000; samesite=lax`
+  const { pathname, search, hash } = window.location
+  const stripped = pathname.replace(/^\/(ru|en|lv|uk|ukr)(?=\/|$)/i, "") || "/"
+  const prefixed = `/${lang}${stripped === "/" ? "" : stripped}`
+  if (pathname !== prefixed) {
+    window.history.replaceState(window.history.state, "", `${prefixed}${search}${hash}`)
+  }
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // Initialize with default language
   const [language, setLanguageState] = useState<Language>("ru")
@@ -4094,6 +4175,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguageState(lang)
     if (typeof window !== "undefined") {
       localStorage.setItem("preferredLanguage", lang)
+      syncLanguageUrl(lang)
     }
   }
 
@@ -4112,6 +4194,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (isSupported(urlLanguage)) {
       setLanguageState(urlLanguage)
       localStorage.setItem("preferredLanguage", urlLanguage)
+      syncLanguageUrl(urlLanguage)
       setShowLanguageModal(false)
       return
     }

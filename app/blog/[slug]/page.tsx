@@ -16,6 +16,14 @@ const BASE_ID = "appARC2ZsIecCWY2s"
 const TABLE_ID = "tble1JDNo8HBvjjIr"
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maranafa.camp"
 
+// Server-rendered chrome in the article's own language
+const UI: Record<ArticleLanguage, { back: string; backAll: string; share: string; notFound: string; locale: string }> = {
+  ru: { back: "← Назад в блог", backAll: "← Все статьи", share: "Поделиться:", notFound: "Статья не найдена", locale: "ru-RU" },
+  en: { back: "← Back to blog", backAll: "← All articles", share: "Share:", notFound: "Article not found", locale: "en-GB" },
+  lv: { back: "← Atpakaļ uz blogu", backAll: "← Visi raksti", share: "Dalīties:", notFound: "Raksts nav atrasts", locale: "lv-LV" },
+  uk: { back: "← Назад до блогу", backAll: "← Всі статті", share: "Поділитися:", notFound: "Статтю не знайдено", locale: "uk-UA" },
+}
+
 const SITE_LANGUAGES = ["ru", "en", "lv", "uk"] as const
 
 // The middleware writes NEXT_LOCALE whenever someone opens a /ru|/en|/lv|/uk link
@@ -49,10 +57,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const article = await getArticle(slug, await resolveLanguage())
-  if (!article) return { title: "Статья не найдена" }
+  const lang = await resolveLanguage()
+  const article = await getArticle(slug, lang)
+  if (!article) return { title: UI[lang].notFound }
 
-  const url = `${SITE_URL}/blog/${slug}`
+  const url = `${SITE_URL}/${lang}/blog/${slug}`
   const description = article.subtitle || article.title
 
   return {
@@ -88,7 +97,7 @@ export async function generateMetadata({
 }
 
 // ─── Social share buttons ────────────────────────────────────────────────────
-function ShareButtons({ url, title }: { url: string; title: string }) {
+function ShareButtons({ url, title, shareLabel }: { url: string; title: string; shareLabel: string }) {
   const encoded = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
@@ -137,7 +146,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm font-medium text-gray-500 mr-1">Поделиться:</span>
+      <span className="text-sm font-medium text-gray-500 mr-1">{shareLabel}</span>
       {shares.map((s) => (
         <a
           key={s.label}
@@ -158,15 +167,16 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const article = await getArticle(slug, await resolveLanguage())
+  const lang = await resolveLanguage()
+  const article = await getArticle(slug, lang)
   if (!article) notFound()
 
-  const articleUrl = `${SITE_URL}/blog/${slug}`
+  const articleUrl = `${SITE_URL}/${lang}/blog/${slug}`
 
   const d = new Date(article.date)
   const dateStr = isNaN(d.getTime())
     ? article.date
-    : d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })
+    : d.toLocaleDateString(UI[lang].locale, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
 
   return (
     <div className="bg-white min-h-screen">
@@ -187,8 +197,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {!article.coverUrl ? (
         <div className="bg-gradient-to-br from-[#B22234] to-[#7a0e1e] text-white py-16 px-4">
           <div className="container mx-auto max-w-3xl">
-            <Link href="/blog" className="inline-flex items-center text-white/70 hover:text-white text-sm mb-6">
-              ← Назад в блог
+            <Link href={`/${lang}/blog`} className="inline-flex items-center text-white/70 hover:text-white text-sm mb-6">
+              {UI[lang].back}
             </Link>
             {article.category && (
               <span className="inline-block bg-[#FFD700] text-[#5a3a00] text-xs font-semibold px-3 py-1 rounded-full mb-4">
@@ -202,8 +212,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       ) : (
         <div className="container mx-auto max-w-3xl px-4 pt-8">
           <div className="flex items-center gap-3 mb-4">
-            <Link href="/blog" className="inline-flex items-center text-gray-500 hover:text-[#B22234] text-sm">
-              ← Назад в блог
+            <Link href={`/${lang}/blog`} className="inline-flex items-center text-gray-500 hover:text-[#B22234] text-sm">
+              {UI[lang].back}
             </Link>
             {article.category && (
               <span className="inline-block bg-[#FFD700]/20 text-[#7a5500] text-xs font-semibold px-3 py-1 rounded-full">
@@ -232,16 +242,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         {/* Share section */}
         <div className="mt-12 pt-8 border-t border-gray-100 space-y-4">
-          <ShareButtons url={articleUrl} title={article.title} />
+          <ShareButtons url={articleUrl} title={article.title} shareLabel={UI[lang].share} />
         </div>
 
         {/* Back link */}
         <div className="mt-8">
           <Link
-            href="/blog"
+            href={`/${lang}/blog`}
             className="inline-flex items-center gap-2 text-[#B22234] font-medium hover:underline"
           >
-            ← Все статьи
+            {UI[lang].backAll}
           </Link>
         </div>
       </div>

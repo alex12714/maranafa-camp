@@ -25,7 +25,7 @@ function truncate(text: string, max: number): string {
 // ─── Article card (homepage compact) ─────────────────────────────────────────
 function ArticleCard({ article, language, t }: { article: Article; language: string; t: (k: string) => string }) {
   return (
-    <Link href={`/blog/${article.slug}`} className="block group h-full">
+    <Link href={`/${language}/blog/${article.slug}`} className="block group h-full">
       <Card className="border border-gray-100 group-hover:shadow-md transition-all duration-200 flex flex-col h-full overflow-hidden">
         {article.coverThumbUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
