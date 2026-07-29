@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useState, useEffect, useContext, type ReactNode } from "react"
+import { useRouter } from "next/navigation"
 
 // Define available languages
 export type Language = "en" | "ru" | "lv" | "uk"
@@ -4182,6 +4183,7 @@ function syncLanguageUrl(lang: Language) {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // Initialize with default language
+  const router = useRouter()
   const [language, setLanguageState] = useState<Language>("ru")
   const [showLanguageModal, setShowLanguageModal] = useState(false)
   const [isClient, setIsClient] = useState(false)
@@ -4192,6 +4194,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.setItem("preferredLanguage", lang)
       syncLanguageUrl(lang)
+      // re-render server components (article bodies, dates) in the new language
+      router.refresh()
     }
   }
 
