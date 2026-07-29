@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, Globe, ChevronDown, ShoppingBag, Film, Package, Tent, Send } from "lucide-react"
+import { Menu, X, Globe, ChevronDown, ShoppingBag, Film, Package, Tent, HeartHandshake } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage, type Language, languageNames } from "@/contexts/language-context"
 
 const mainNavItems = [
-  { name: "Rosetto", href: "/rosetto" },
+  { name: "Блог", href: "/blog" },
   { name: "Сотрудникам", href: "/staff" },
   { name: "О нас", href: "/about" },
   { name: "Родителям", href: "/parents" },
@@ -17,7 +17,7 @@ const mainNavItems = [
 ]
 
 const moreItems = [
-  { name: "Блог", href: "/blog", icon: Send },
+  { name: "Rosetto", href: "/rosetto", icon: HeartHandshake },
   { name: "Для лагерей", href: "/for-camps", icon: Tent },
   { name: "Аренда", href: "/rental", icon: Package },
   { name: "Видео архив", href: "/video-archive", icon: Film },
