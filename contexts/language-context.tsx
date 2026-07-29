@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useState, useEffect, useContext, type ReactNode } from "react"
-import { useRouter } from "next/navigation"
 
 // Define available languages
 export type Language = "en" | "ru" | "lv" | "uk"
@@ -4183,7 +4182,6 @@ function syncLanguageUrl(lang: Language) {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // Initialize with default language
-  const router = useRouter()
   const [language, setLanguageState] = useState<Language>("ru")
   const [showLanguageModal, setShowLanguageModal] = useState(false)
   const [isClient, setIsClient] = useState(false)
@@ -4193,9 +4191,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguageState(lang)
     if (typeof window !== "undefined") {
       localStorage.setItem("preferredLanguage", lang)
-      syncLanguageUrl(lang)
-      // re-render server components (article bodies, dates) in the new language
-      router.refresh()
+      // A real navigation to the prefixed URL: the middleware stamps the
+      // cookie and the whole page re-renders in the chosen language.
+      document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000; samesite=lax`
+      const { pathname, search, hash } = window.location
+      const stripped = pathname.replace(/^\/(ru|en|lv|uk|ukr)(?=\/|$)/i, "") || "/"
+      const prefixed = `/${lang}${stripped === "/" ? "" : stripped}`
+      if (pathname !== prefixed) {
+        window.location.assign(`${prefixed}${search}${hash}`)
+      } else {
+        window.location.reload()
+      }
     }
   }
 
