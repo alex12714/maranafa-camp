@@ -88,3 +88,16 @@ export function pickTranslationsPerSlug(articles: Article[], lang: ArticleLangua
     })
     .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""))
 }
+
+// «Категория» options are Russian names; show them in the article's language.
+const CATEGORY_LABELS: Record<string, Partial<Record<ArticleLanguage, string>>> = {
+  "Новости": { en: "News", lv: "Ziņas", uk: "Новини" },
+  "События": { en: "Events", lv: "Notikumi", uk: "Події" },
+  "О лагере": { en: "About the Camp", lv: "Par nometni", uk: "Про табір" },
+  "Родителям": { en: "For Parents", lv: "Vecākiem", uk: "Батькам" },
+  "Команда": { en: "Team", lv: "Komanda", uk: "Команда" },
+}
+
+export function localizeCategory(category: string, lang: ArticleLanguage): string {
+  return CATEGORY_LABELS[category]?.[lang] ?? category
+}

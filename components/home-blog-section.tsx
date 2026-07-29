@@ -44,7 +44,7 @@ function ArticleCard({ article, language, t }: { article: Article; language: str
           <div className="flex items-center justify-between gap-2 flex-wrap">
             {article.category && (
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#FFD700]/20 text-[#7a5500]">
-                {article.category}
+                {t(article.category)}
               </span>
             )}
             {article.date && (

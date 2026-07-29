@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import {
+  localizeCategory,
   mapArticleRecord,
   normalizeArticleLanguage,
   pickTranslation,
@@ -202,7 +203,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </Link>
             {article.category && (
               <span className="inline-block bg-[#FFD700] text-[#5a3a00] text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                {article.category}
+                {localizeCategory(article.category, lang)}
               </span>
             )}
             <h1 className="text-3xl sm:text-4xl font-bold mb-3">{article.title}</h1>
@@ -217,7 +218,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </Link>
             {article.category && (
               <span className="inline-block bg-[#FFD700]/20 text-[#7a5500] text-xs font-semibold px-3 py-1 rounded-full">
-                {article.category}
+                {localizeCategory(article.category, lang)}
               </span>
             )}
           </div>
