@@ -14,7 +14,7 @@ import {
 const AIRTABLE_TOKEN = process.env.AIRTABLE_API_KEY
 const BASE_ID = "appARC2ZsIecCWY2s"
 const TABLE_ID = "tble1JDNo8HBvjjIr"
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maranafa.org"
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maranafa.camp"
 
 const SITE_LANGUAGES = ["ru", "en", "lv", "uk"] as const
 
