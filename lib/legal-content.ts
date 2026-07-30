@@ -4,10 +4,8 @@
 // Data controller (verified from the organization requisites):
 //   Nodibinājums «Maranafa», reg. No. 40008359764
 //   Kurzemes prospekts 15, Rīga, Latvia
-//   Contact: info@maranafa.org
+//   Contact: welcome@maranafa.camp
 //
-// NOTE FOR OWNER: confirm info@maranafa.org is a monitored inbox for data
-// requests (or create privacy@maranafa.org and update CONTACT_EMAIL below).
 // The Latvian (lv) text is fit-for-purpose but should get a native review.
 
 import type { Language } from "@/contexts/language-context"
@@ -15,7 +13,7 @@ import type { Language } from "@/contexts/language-context"
 export const CONTROLLER_NAME = "Nodibinājums «Maranafa»"
 export const CONTROLLER_REG = "40008359764"
 export const CONTROLLER_ADDRESS = "Kurzemes prospekts 15, Rīga, Latvia"
-export const CONTACT_EMAIL = "info@maranafa.org"
+export const CONTACT_EMAIL = "welcome@maranafa.camp"
 export const EFFECTIVE_DATE_ISO = "2026-06-29"
 
 export type LegalSection = { heading: string; body: string[] }
