@@ -51,8 +51,8 @@ export default function AboutPage() {
                   <dd>40008359764</dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-900">{t("Юридический адрес")}</dt>
-                  <dd>Ropažu nov., Garkalnes pag., Bukulti, Vētras iela 14</dd>
+                  <dt className="font-medium text-gray-900">{t("Адрес")}</dt>
+                  <dd>Kurzemes prospekts 15, Rīga</dd>
                 </div>
               </dl>
             </div>
@@ -273,50 +273,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Partners Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">{t("Наши партнёры и организации, которые нас поддерживают")}</h2>
-            <div className="mt-2 h-1 w-20 bg-[#FFD700] mx-auto"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {partners.map((partner, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6 shadow-sm flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-[#B22234] rounded-full flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-white">{partner.initial}</span>
-                </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-2">{t(partner.name)}</h4>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
-
-const partners = [
-  {
-    name: "Seventh Day Adventist Church",
-    initial: "S",
-  },
-  {
-    name: "7dayCosmetics",
-    initial: "7",
-  },
-  {
-    name: "Lanos Logic Ltd",
-    initial: "L",
-  },
-  {
-    name: "ХМЛ - Христианские Международные Лагеря",
-    initial: "Х",
-  },
-  {
-    name: "Христианский центр Норкалны",
-    initial: "Н",
-  },
-]
