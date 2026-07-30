@@ -113,7 +113,7 @@ export default function Footer() {
               <TranslatedText text="КОНТАКТЫ" />
             </h3>
             <ul className="mt-4 space-y-2">
-              <li className="text-sm">info@maranafa.org</li>
+              <li className="text-sm">welcome@maranafa.camp</li>
               <li className="text-sm">+371 26 123 456</li>
             </ul>
             <div className="mt-4 pt-4 border-t border-white/20 space-y-1.5">
