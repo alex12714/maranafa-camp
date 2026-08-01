@@ -1,15 +1,18 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "motion/react"
 import {
-  ArrowLeft, ArrowRight, CheckCircle2, FileSignature,
-  Calendar, Heart, Users, Phone, Mail, HelpingHand,
-  Handshake, Shield, Sparkles
+  ArrowLeft, ArrowRight, CheckCircle2, Check, Phone, Mail,
+  Car, HeartPulse, Stethoscope, Scale, MessageCircle, Truck,
+  Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
+  Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
+import { useLanguage } from "@/contexts/language-context"
 
 /* ── animation presets ─────────────────────────────────────────────── */
 const ease = [0.22, 1, 0.36, 1] as const
@@ -22,48 +25,324 @@ const slideR = { hidden: { opacity: 0, x: 36 }, visible: { opacity: 1, x: 0, tra
 const barX = { hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.85, ease, delay: 0.3 } } }
 
 /* ── data ──────────────────────────────────────────────────────────── */
+
+/** Life without a community desk — the problem the membership removes. */
+const painPoints = [
+  "Кто хороший юрист? Спрошу в чате и буду надеяться на лучшее.",
+  "Машина встала в 22:00 на трассе — кому звонить в первую очередь?",
+  "Маме нужен уход днём, а я на работе до шести.",
+  "Ребёнку нужен логопед — где найти проверенного, а не первого попавшегося?",
+]
+
+const relief = [
+  "Один номер и один координатор — на любой из этих вопросов.",
+  "Специалиста уже нашли, проверили и договорились о цене до вас.",
+  "Волонтёры приезжают, когда нужны руки, а не советы.",
+  "Вам не приходится объяснять свою ситуацию заново каждый раз.",
+]
+
+const services = [
+  {
+    icon: Car,
+    titleKey: "Доступ к автопарку",
+    descKey: "Общий автопарк участников: машина, когда она нужна, без покупки второго автомобиля в семью.",
+  },
+  {
+    icon: HeartPulse,
+    titleKey: "Медицинская страховка",
+    descKey: "Групповая медицинская страховка на условиях, недоступных при индивидуальном обращении.",
+  },
+  {
+    icon: Stethoscope,
+    titleKey: "Проверенные врачи",
+    descKey: "Пул врачей, которых мы знаем лично и за которых ручаемся. Запись через координатора.",
+  },
+  {
+    icon: Scale,
+    titleKey: "Юридическая помощь",
+    descKey: "Юрист для договоров, документов, споров и вопросов, в которых страшно ошибиться.",
+  },
+  {
+    icon: MessageCircle,
+    titleKey: "Логопед и детские специалисты",
+    descKey: "Проверенные логопеды и специалисты по развитию детей — по договорным ставкам для участников.",
+  },
+  {
+    icon: Truck,
+    titleKey: "Эвакуатор",
+    descKey: "Эвакуатор по звонку в любое время суток, без поиска и торга на обочине.",
+  },
+  {
+    icon: Wrench,
+    titleKey: "Помощь на дороге",
+    descKey: "Разрядился аккумулятор, пробито колесо, закрылась машина — помощь приедет.",
+  },
+  {
+    icon: PhoneCall,
+    titleKey: "Тариф Rosetto Call",
+    descKey: "Собственный тарифный план связи для участников — по ставкам лучше рыночных.",
+  },
+  {
+    icon: Ticket,
+    titleKey: "Скидки на события Маранафы",
+    descKey: "Льготные цены на лагерь, конференции и все остальные события Маранафы.",
+  },
+  {
+    icon: Home,
+    titleKey: "Медсестра и помощь на дому",
+    descKey: "Для старшего поколения: визиты медсестры на дом и помощник по дому — по результатам оценки потребностей.",
+  },
+]
+
+const plans = [
+  {
+    value: "Solo",
+    nameKey: "Rosetto Solo",
+    forKey: "Молодым и тем, кто живёт один",
+    priceKey: "от €20",
+    perKey: "в месяц",
+    featured: false,
+    featuresKey: [
+      "Единая точка контакта — один номер на все вопросы",
+      "Доступ к волонтёрской сети",
+      "Доступ к автопарку участников",
+      "Эвакуатор и помощь на дороге",
+      "Тариф связи Rosetto Call",
+      "Базовая медицинская страховка",
+      "Проверенные врачи и юрист",
+      "Скидки на все события Маранафы",
+    ],
+  },
+  {
+    value: "Family",
+    nameKey: "Rosetto Family",
+    forKey: "Для семьи с детьми",
+    priceKey: "Цена уточняется",
+    perKey: "",
+    featured: true,
+    featuresKey: [
+      "Всё из плана Solo — на всю семью",
+      "Семейная медицинская страховка",
+      "Логопед и детские специалисты",
+      "Семейный тариф связи",
+      "Скидки на лагерь и события для всех членов семьи",
+      "Персональный координатор семьи",
+      "Помощь при рождении ребёнка и в первые месяцы",
+    ],
+  },
+  {
+    value: "Family+",
+    nameKey: "Rosetto Family+",
+    forKey: "Семье со старшим поколением",
+    priceKey: "Цена уточняется",
+    perKey: "",
+    featured: false,
+    featuresKey: [
+      "Всё из плана Family",
+      "Визиты медсестры на дом",
+      "Помощник по дому — по результатам оценки потребностей",
+      "Сопровождение к врачу и на процедуры",
+      "Приоритетная линия поддержки",
+      "Регулярные проверки благополучия старших",
+    ],
+  },
+]
+
 const steps = [
   {
     n: "01",
-    icon: CheckCircle2,
-    titleKey: "Зарегистрируйтесь",
-    descKey: "Заполните форму регистрации. Мы свяжемся с вами, расскажем о проекте и ответим на вопросы.",
+    icon: CalendarCheck,
+    titleKey: "Оставьте заявку",
+    descKey: "Предварительная регистрация ни к чему не обязывает. Мы свяжемся, расскажем детали и уточним, что вам нужно.",
   },
   {
     n: "02",
-    icon: FileSignature,
-    titleKey: "Подпишите договор",
-    descKey: "Каждый участник подписывает договор взаимной поддержки — обязательство заботиться о других членах проекта.",
+    icon: Handshake,
+    titleKey: "Выберите план",
+    descKey: "Вместе подбираем подходящий план — по составу семьи и реальным потребностям, а не по прайсу.",
   },
   {
     n: "03",
-    icon: Calendar,
-    titleKey: "Участвуйте в расписании",
-    descKey: "Когда кто-то из участников нуждается в помощи, вы получаете запрос и подтверждаете участие по возможности.",
+    icon: Headphones,
+    titleKey: "Получите свой контакт",
+    descKey: "У вас появляется координатор, к которому можно обратиться с любым вопросом из списка — и волонтёрская сеть за ним.",
   },
 ]
 
-const benefits = [
-  { icon: Shield, titleKey: "Защита в трудный момент", descKey: "Вы и ваша семья знаете: в сложной ситуации вы не одни. Участники проекта готовы прийти на помощь." },
-  { icon: Heart, titleKey: "Настоящая поддержка", descKey: "Не виртуальные слова участия, а реальная, практическая помощь — как и жили жители Розето." },
-  { icon: Users, titleKey: "Живая община", descKey: "Вы становитесь частью сети людей, которые знают и заботятся друг о друге." },
-  { icon: Handshake, titleKey: "Взаимность", descKey: "Вы помогаете другим — и получаете поддержку сами. Проект работает в обоих направлениях." },
-]
+/* ── pre-registration form ─────────────────────────────────────────── */
+function PreRegistrationForm({
+  plan,
+  setPlan,
+}: {
+  plan: string
+  setPlan: (v: string) => void
+}) {
+  const { language, translations = {} } = useLanguage()
+  const t = (s: string) => translations[s] || s
 
-const howItWorks = [
-  { emoji: "✍️", textKey: "Подпишите договор участия и заботы" },
-  { emoji: "📩", textKey: "Получите сообщение о помощи от другого участника" },
-  { emoji: "✅", textKey: "По возможности подтвердите участие в запросе о помощи" },
-  { emoji: "🙋", textKey: "Если поддержка нужна вам — вы или ваши друзья создаёте запрос, и другие участники откликаются" },
-]
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [comment, setComment] = useState("")
+  const [website, setWebsite] = useState("") // honeypot
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState("")
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch("/api/rosetto-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, email, comment, plan, language, website }),
+      })
+      if (!res.ok) throw new Error("error")
+      setSuccess(true)
+    } catch {
+      setError(t("Произошла ошибка. Попробуйте ещё раз."))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-10 text-center">
+        <CheckCircle2 className="h-14 w-14 text-green-500" />
+        <h3 className="text-xl font-bold text-gray-900">
+          <TranslatedText text="Заявка получена!" />
+        </h3>
+        <p className="text-gray-600 max-w-sm">
+          <TranslatedText text="Мы свяжемся с вами, как только планы будут готовы к запуску — расскажем условия и ответим на вопросы." />
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Honeypot — hidden from users; bots that fill it are silently dropped */}
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Website
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </label>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <TranslatedText text="Имя и фамилия" /> <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
+          placeholder="Иван Иванов"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <TranslatedText text="Телефон" /> <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="tel"
+          required
+          inputMode="tel"
+          pattern="\+[1-9][0-9 ()\-.]{6,}"
+          title="Один номер, начиная с + и кода страны, например +37120172714"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
+          placeholder="+371 12345678"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <TranslatedText text="Электронная почта" /> <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
+          placeholder="ivan@example.com"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <TranslatedText text="Интересующий план" />
+        </label>
+        <select
+          value={plan}
+          onChange={(e) => setPlan(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
+        >
+          <option value="Solo">{`Rosetto Solo — ${t("Молодым и тем, кто живёт один")}`}</option>
+          <option value="Family">{`Rosetto Family — ${t("Для семьи с детьми")}`}</option>
+          <option value="Family+">{`Rosetto Family+ — ${t("Семье со старшим поколением")}`}</option>
+          <option value="Не определился">{t("Пока не определился")}</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <TranslatedText text="Что для вас важнее всего?" />
+        </label>
+        <textarea
+          rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent resize-none"
+          placeholder={t("Например: уход за родителями, помощь с машиной, логопед для ребёнка")}
+        />
+      </div>
+
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white py-3 rounded-lg text-base font-semibold"
+      >
+        {loading ? <TranslatedText text="Отправка..." /> : <TranslatedText text="Записаться в лист ожидания" />}
+      </Button>
+
+      <p className="text-xs text-gray-500 text-center leading-relaxed">
+        <TranslatedText text="Это предварительная регистрация интереса. Она бесплатна и ни к чему не обязывает." />
+      </p>
+    </form>
+  )
+}
 
 /* ── page ──────────────────────────────────────────────────────────── */
 export default function RosettoProgrammePage() {
+  const [plan, setPlan] = useState("Не определился")
+
+  const choosePlan = (value: string) => {
+    setPlan(value)
+    document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
   return (
     <div className="min-h-screen bg-white">
 
       {/* ══════ HERO ══════ */}
-      <section className="relative min-h-[70vh] flex flex-col justify-end overflow-hidden bg-[#6B0000]">
+      <section className="relative min-h-[80vh] flex flex-col justify-end overflow-hidden bg-[#6B0000]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#4a0000] via-[#8B0000] to-[#B22234]" />
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -72,7 +351,6 @@ export default function RosettoProgrammePage() {
         <div className="absolute -top-20 -right-20 w-[480px] h-[480px] rounded-full bg-[#FFD700]/6 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -left-20 w-[320px] h-[320px] rounded-full bg-white/3 blur-2xl pointer-events-none" />
 
-        {/* nav */}
         <Link
           href="/rosetto"
           className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 text-white/80 hover:text-white bg-black/20 rounded-full px-4 py-2 backdrop-blur-sm text-sm transition-colors"
@@ -85,41 +363,265 @@ export default function RosettoProgrammePage() {
           className="relative z-10 container mx-auto max-w-5xl px-4 pb-20 pt-40"
           initial="hidden" animate="visible" variants={stagger}
         >
-          <motion.p variants={fadeUp} className="text-[#FFD700] uppercase tracking-[0.3em] text-sm font-bold mb-4">
-            <TranslatedText text="Программа" />
-          </motion.p>
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#FFD700]/15 border border-[#FFD700]/40 rounded-full px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#FFD700] animate-pulse" />
+            <span className="text-[#FFD700] text-xs font-bold uppercase tracking-[0.2em]">
+              <TranslatedText text="Скоро — предварительная регистрация открыта" />
+            </span>
+          </motion.div>
+
           <motion.h1 variants={fadeUp} className="text-5xl md:text-6xl font-black text-white leading-[1.05] mb-4">
             Maranafa Rosetto
           </motion.h1>
           <motion.div variants={barX} className="h-[3px] w-28 bg-gradient-to-r from-[#FFD700] to-[#FFC200] origin-left mb-7" />
-          <motion.p variants={fadeUp} className="text-xl md:text-2xl text-white/75 max-w-2xl leading-relaxed mb-10">
-            <TranslatedText text="Проект взаимной поддержки" />
+          <motion.p variants={fadeUp} className="text-xl md:text-2xl text-white/80 max-w-2xl leading-relaxed mb-6">
+            <TranslatedText text="Единая точка контакта на все жизненные вопросы — и община, которая рядом." />
           </motion.p>
-          <motion.p variants={fadeUp} className="text-base text-white/65 max-w-xl leading-relaxed mb-10">
-            <TranslatedText text="Участие в проекте даёт уверенность: в трудную минуту каждому участнику и его семье придут на помощь такие же участники. Каждый по мере возможности участвует в расписании поддержки." />
+          <motion.p variants={fadeUp} className="text-base text-white/65 max-w-2xl leading-relaxed mb-9">
+            <TranslatedText text="Одно членство — вместо десятка отдельных поисков, договоров и телефонных номеров. Машина, здоровье, документы, дети, забота о старших: вы обращаетесь к одному человеку, а за ним стоит сеть проверенных специалистов и волонтёров." />
           </motion.p>
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
+
+          <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4">
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <a href="https://rosetto.maranafa.camp" target="_blank" rel="noopener noreferrer">
+              <a href="#register">
                 <Button className="bg-[#FFD700] text-[#6B0000] hover:bg-[#FFC200] font-black px-9 py-5 rounded-xl text-base shadow-lg">
-                  <TranslatedText text="Хочу присоединиться" />
+                  <TranslatedText text="Записаться в лист ожидания" />
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </a>
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <a href="https://rosetto.maranafa.camp" target="_blank" rel="noopener noreferrer">
+              <a href="#plans">
                 <Button variant="outline" className="border-white/40 text-white hover:bg-white/10 bg-transparent px-9 py-5 rounded-xl text-base">
-                  <TranslatedText text="Создать запрос о помощи" />
+                  <TranslatedText text="Смотреть планы" />
                 </Button>
               </a>
             </motion.div>
+            <div className="text-white/70 text-sm">
+              <TranslatedText text="Планы — от €20 в месяц" />
+            </div>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* ══════ 3 STEPS ══════ */}
+      {/* ══════ SINGLE POINT OF CONTACT ══════ */}
       <section className="py-24 bg-white">
+        <div className="container mx-auto max-w-5xl px-4">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
+            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Главное" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              <TranslatedText text="Один контакт вместо десяти" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Большинство проблем в жизни решаемы — сложно другое: понять, к кому обратиться, и успеть сделать это вовремя. Rosetto убирает именно этот шаг." />
+            </motion.p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* before */}
+            <motion.div
+              initial="hidden" whileInView="visible" viewport={vp} variants={slideL}
+              className="bg-gray-50 rounded-2xl p-8 border border-gray-200"
+            >
+              <p className="text-gray-500 uppercase tracking-[0.2em] text-xs font-bold mb-5">
+                <TranslatedText text="Как обычно" />
+              </p>
+              <ul className="space-y-4">
+                {painPoints.map((p, i) => (
+                  <li key={i} className="flex gap-3 text-gray-600 text-sm leading-relaxed">
+                    <span className="text-gray-300 font-black flex-shrink-0">—</span>
+                    <span className="italic"><TranslatedText text={p} /></span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* after */}
+            <motion.div
+              initial="hidden" whileInView="visible" viewport={vp} variants={slideR}
+              className="bg-gradient-to-br from-[#6B0000] to-[#B22234] rounded-2xl p-8 text-white relative overflow-hidden"
+            >
+              <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#FFD700]/8 blur-2xl pointer-events-none" />
+              <p className="text-[#FFD700] uppercase tracking-[0.2em] text-xs font-bold mb-5 relative z-10">
+                <TranslatedText text="С Rosetto" />
+              </p>
+              <ul className="space-y-4 relative z-10">
+                {relief.map((r, i) => (
+                  <li key={i} className="flex gap-3 text-white/85 text-sm leading-relaxed">
+                    <Check className="h-4 w-4 text-[#FFD700] flex-shrink-0 mt-0.5" />
+                    <span><TranslatedText text={r} /></span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* volunteer network callout */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeIn}
+            className="mt-8 flex flex-col sm:flex-row items-center gap-6 bg-[#FFD700]/8 border border-[#FFD700]/40 rounded-2xl p-7"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
+              <HelpingHand className="h-7 w-7 text-[#B22234]" />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="font-bold text-gray-900 mb-1">
+                <TranslatedText text="За координатором стоит волонтёрская сеть" />
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                <TranslatedText text="Не всё решается деньгами и специалистами. Иногда нужно, чтобы кто-то отвёз в больницу, посидел с детьми или просто пришёл. Участники Rosetto помогают друг другу — и вы получаете эту помощь так же, как оказываете её сами." />
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════ WHAT'S INCLUDED ══════ */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto max-w-6xl px-4">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
+            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Что входит" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              <TranslatedText text="Доступ ко всему сразу" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Состав услуг различается по планам — но принцип один: всё это уже собрано, проверено и доступно через вашего координатора." />
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
+            {services.map((s, i) => {
+              const Icon = s.icon
+              return (
+                <motion.div
+                  key={i} variants={fadeIn}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#B22234]/20 hover:shadow-md transition-all"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[#B22234]/10 flex items-center justify-center mb-4">
+                    <Icon className="h-6 w-6 text-[#B22234]" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    <TranslatedText text={s.titleKey} />
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    <TranslatedText text={s.descKey} />
+                  </p>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════ PLANS ══════ */}
+      <section id="plans" className="py-24 bg-white scroll-mt-20">
+        <div className="container mx-auto max-w-6xl px-4">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
+            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Планы участия" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              <TranslatedText text="Выберите свой формат" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Окончательные цены ещё формируются — участие начинается от €20 в месяц. Оставьте заявку сейчас: вы первыми узнаете условия и сохраните цену запуска." />
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"
+          >
+            {plans.map((p, i) => {
+              const Icon = i === 0 ? User : i === 1 ? Users : UsersRound
+              return (
+                <motion.div
+                  key={p.value} variants={fadeIn}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  className={`relative rounded-2xl p-8 border-2 flex flex-col h-full ${
+                    p.featured
+                      ? "bg-gradient-to-br from-[#6B0000] to-[#B22234] border-[#FFD700]/50 text-white shadow-xl lg:-mt-4 lg:pb-12"
+                      : "bg-white border-gray-200 hover:border-[#B22234]/30 hover:shadow-lg"
+                  }`}
+                >
+                  {p.featured && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FFD700] text-[#6B0000] text-xs font-black uppercase tracking-wider px-4 py-1 rounded-full whitespace-nowrap">
+                      <TranslatedText text="Чаще всего выбирают" />
+                    </div>
+                  )}
+
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${p.featured ? "bg-[#FFD700]/20" : "bg-[#B22234]/10"}`}>
+                    <Icon className={`h-6 w-6 ${p.featured ? "text-[#FFD700]" : "text-[#B22234]"}`} />
+                  </div>
+
+                  <h3 className={`text-2xl font-black mb-1 ${p.featured ? "text-white" : "text-gray-900"}`}>
+                    {p.nameKey}
+                  </h3>
+                  <p className={`text-sm mb-6 ${p.featured ? "text-white/65" : "text-gray-500"}`}>
+                    <TranslatedText text={p.forKey} />
+                  </p>
+
+                  <div className="mb-6">
+                    {/* A placeholder price shouldn't shout as loudly as a real number. */}
+                    <div className={`${p.perKey ? "text-3xl" : "text-xl"} font-black leading-none ${p.featured ? "text-[#FFD700]" : "text-[#B22234]"}`}>
+                      <TranslatedText text={p.priceKey} />
+                    </div>
+                    {p.perKey && (
+                      <div className={`text-sm mt-1 ${p.featured ? "text-white/60" : "text-gray-500"}`}>
+                        <TranslatedText text={p.perKey} />
+                      </div>
+                    )}
+                  </div>
+
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {p.featuresKey.map((f, j) => (
+                      <li key={j} className="flex gap-3 text-sm leading-relaxed">
+                        <Check className={`h-4 w-4 flex-shrink-0 mt-0.5 ${p.featured ? "text-[#FFD700]" : "text-[#B22234]"}`} />
+                        <span className={p.featured ? "text-white/85" : "text-gray-600"}>
+                          <TranslatedText text={f} />
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    onClick={() => choosePlan(p.value)}
+                    className={`w-full py-5 rounded-xl font-bold text-base ${
+                      p.featured
+                        ? "bg-[#FFD700] text-[#6B0000] hover:bg-[#FFC200]"
+                        : "bg-[#B22234] text-white hover:bg-[#8e1c29]"
+                    }`}
+                  >
+                    <TranslatedText text="Оставить заявку" />
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+
+          <motion.p
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="text-center text-gray-500 text-sm mt-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            <TranslatedText text="Услуги для старшего поколения — визиты медсестры и помощник по дому — предоставляются по результатам индивидуальной оценки потребностей." />
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ══════ THREE STEPS ══════ */}
+      <section className="py-24 bg-gray-50">
         <div className="container mx-auto max-w-5xl px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-16">
             <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
@@ -140,9 +642,8 @@ export default function RosettoProgrammePage() {
                 <motion.div
                   key={i} variants={fadeIn}
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="relative bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-[#B22234]/20 hover:shadow-md transition-all group"
+                  className="relative bg-white rounded-2xl p-8 border border-gray-100 hover:border-[#B22234]/20 hover:shadow-md transition-all group"
                 >
-                  {/* large number watermark */}
                   <div className="absolute top-5 right-6 text-7xl font-black text-gray-100 leading-none select-none group-hover:text-[#B22234]/8 transition-colors">
                     {s.n}
                   </div>
@@ -162,44 +663,43 @@ export default function RosettoProgrammePage() {
         </div>
       </section>
 
-      {/* ══════ HOW IT WORKS (detail) ══════ */}
-      <section className="py-24 bg-gray-50">
+      {/* ══════ RECIPROCITY ══════ */}
+      <section className="py-24 bg-white">
         <div className="container mx-auto max-w-5xl px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger}>
             <div className="grid md:grid-cols-2 gap-14 items-center">
               <motion.div variants={slideL}>
                 <p className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
-                  <TranslatedText text="Механика" />
+                  <TranslatedText text="Принцип" />
                 </p>
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 leading-tight">
-                  <TranslatedText text="Как это работает" />
+                  <TranslatedText text="Это не страховка. Это община." />
                 </h2>
                 <div className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mb-6" />
-                <p className="text-gray-600 leading-relaxed mb-8">
-                  <TranslatedText text="Взаимопомощь работает в двух направлениях — для вас и от вас. Вы участвуете в расписании поддержки других, и другие участвуют в вашем." />
-                </p>
-                <div className="space-y-4">
-                  {howItWorks.map((item, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1, duration: 0.5, ease }}
-                      className="flex items-start gap-4 bg-white rounded-xl p-4 border border-gray-100 shadow-sm"
-                    >
-                      <span className="text-2xl flex-shrink-0 mt-0.5">{item.emoji}</span>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        <TranslatedText text={item.textKey} />
-                      </p>
-                    </motion.div>
-                  ))}
+                <div className="space-y-5 text-gray-600 leading-relaxed">
+                  <p>
+                    <TranslatedText text="Взнос покрывает услуги и работу координатора. Но главное в Rosetto не покупается: участники подписывают договор взаимной поддержки и по мере возможности откликаются на просьбы других." />
+                  </p>
+                  <p>
+                    <TranslatedText text="Вы помогаете другим участникам — и получаете поддержку сами, когда она нужна вам или вашей семье. Не пожертвование, а взаимность." />
+                  </p>
+                  <p>
+                    <TranslatedText text="Именно это делали жители Розето — и именно поэтому они жили дольше и болели реже своих соседей." />
+                  </p>
+                </div>
+                <div className="mt-8">
+                  <Link href="/rosetto">
+                    <Button variant="outline" className="border-[#B22234] text-[#B22234] hover:bg-[#B22234] hover:text-white rounded-xl">
+                      <TranslatedText text="Читать историю Розето" />
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </div>
               </motion.div>
 
               <motion.div variants={slideR} className="space-y-5">
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
-                  <Image src="/images/features/program.webp" alt="Rosetto Programme" fill className="object-cover" />
+                  <Image src="/images/features/program.webp" alt="Rosetto" fill className="object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#6B0000]/50 to-transparent" />
                   <div className="absolute bottom-5 left-5 right-5">
                     <p className="text-white font-semibold text-sm">
@@ -207,15 +707,18 @@ export default function RosettoProgrammePage() {
                     </p>
                   </div>
                 </div>
-                {/* bidirectional callout */}
                 <div className="bg-gradient-to-br from-[#6B0000] to-[#B22234] rounded-2xl p-6 text-white">
                   <div className="flex items-center gap-3 mb-3">
-                    <HelpingHand className="h-6 w-6 text-[#FFD700] flex-shrink-0" />
+                    <Handshake className="h-6 w-6 text-[#FFD700] flex-shrink-0" />
                     <h3 className="font-bold text-lg"><TranslatedText text="Двустороннее участие" /></h3>
                   </div>
                   <p className="text-white/80 text-sm leading-relaxed">
-                    <TranslatedText text="Вы помогаете другим участникам — и получаете поддержку сами, когда она нужна вам или вашей семье. Не пожертвование, а взаимность." />
+                    <TranslatedText text="Уже участвуете в проекте взаимопомощи? Запросы о помощи по-прежнему создаются в приложении Rosetto — планы участия его дополняют, а не заменяют." />
                   </p>
+                  <a href="https://rosetto.maranafa.camp" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[#FFD700] hover:text-[#FFC200] text-sm font-semibold mt-4 transition-colors">
+                    <TranslatedText text="Открыть приложение Rosetto" />
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
                 </div>
               </motion.div>
             </div>
@@ -223,158 +726,65 @@ export default function RosettoProgrammePage() {
         </div>
       </section>
 
-      {/* ══════ BENEFITS ══════ */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto max-w-5xl px-4">
-          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
-            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
-              <TranslatedText text="Преимущества" />
-            </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              <TranslatedText text="Что даёт участие" />
-            </motion.h2>
-            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left" />
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-          >
-            {benefits.map((b, i) => {
-              const Icon = b.icon
-              return (
-                <motion.div
-                  key={i} variants={fadeIn}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className="flex gap-5 bg-gray-50 rounded-2xl p-7 border border-gray-100 hover:border-[#B22234]/20 hover:shadow-sm transition-all"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-6 w-6 text-[#B22234]" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 mb-2"><TranslatedText text={b.titleKey} /></h3>
-                    <p className="text-gray-600 text-sm leading-relaxed"><TranslatedText text={b.descKey} /></p>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════ ROSETO LINK ══════ */}
-      <section className="py-16 bg-gray-50 border-y border-gray-100">
-        <div className="container mx-auto max-w-3xl px-4">
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
-            className="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-2xl p-7 shadow-sm border border-gray-100"
-          >
-            <div className="w-14 h-14 rounded-2xl bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="h-7 w-7 text-[#B22234]" />
-            </div>
-            <motion.div variants={slideL} className="flex-1 text-center sm:text-left">
-              <p className="font-bold text-gray-900 mb-1">
-                <TranslatedText text="Откуда название Rosetto?" />
-              </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                <TranslatedText text="Проект назван в честь Розето, Пенсильвания — городка, где сила общины заменяла лекарства." />
-              </p>
-            </motion.div>
-            <motion.div variants={fadeIn} className="flex-shrink-0">
-              <Link href="/rosetto">
-                <Button variant="outline" className="border-[#B22234] text-[#B22234] hover:bg-[#B22234] hover:text-white rounded-xl text-sm">
-                  <TranslatedText text="Читать историю" />
-                  <ArrowRight className="ml-1.5 h-4 w-4" />
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════ CTA + CONTACT ══════ */}
-      <section className="py-24 bg-gradient-to-br from-[#6B0000] via-[#B22234] to-[#8B0000] relative overflow-hidden">
+      {/* ══════ PRE-REGISTRATION ══════ */}
+      <section id="register" className="py-24 bg-gradient-to-br from-[#6B0000] via-[#B22234] to-[#8B0000] relative overflow-hidden scroll-mt-16">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,.5) 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#FFD700]/6 blur-3xl pointer-events-none" />
 
-        <div className="container mx-auto max-w-4xl px-4 relative z-10">
-          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-white mb-4">
-              <TranslatedText text="Стать участником Rosetto" />
-            </motion.h2>
-            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
-            <motion.p variants={fadeUp} className="text-white/70 max-w-xl mx-auto leading-relaxed">
-              <TranslatedText text="Зарегистрируйтесь и мы расскажем подробности. Проект основан на доверии — поэтому первый шаг это личный контакт." />
-            </motion.p>
-          </motion.div>
+        <div className="container mx-auto max-w-5xl px-4 relative z-10">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger}>
+              <motion.p variants={fadeUp} className="text-[#FFD700] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+                <TranslatedText text="Предварительная регистрация" />
+              </motion.p>
+              <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
+                <TranslatedText text="Займите место в первом наборе" />
+              </motion.h2>
+              <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] origin-left mb-6" />
+              <motion.p variants={fadeUp} className="text-white/75 leading-relaxed mb-8">
+                <TranslatedText text="Мы запускаем планы участия ограниченным набором — чтобы каждому участнику досталось настоящее внимание координатора, а не место в очереди. Оставьте заявку, и мы свяжемся с вами первыми." />
+              </motion.p>
 
-          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
-            className="grid md:grid-cols-2 gap-6 mb-12"
-          >
-            {/* join CTA */}
-            <motion.div variants={fadeIn}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-[#FFD700]/20 hover:border-[#FFD700]/40 text-center"
-            >
-              <Users className="h-10 w-10 text-[#FFD700] mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-3">
-                <TranslatedText text="Хочу присоединиться" />
-              </h3>
-              <p className="text-white/65 text-sm mb-6 leading-relaxed">
-                <TranslatedText text="Заполните форму, мы свяжемся и расскажем о проекте." />
-              </p>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <a href="https://rosetto.maranafa.camp" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-[#FFD700] text-[#6B0000] hover:bg-[#FFC200] font-black py-5 rounded-xl text-base">
-                    <TranslatedText text="Присоединиться" />
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </a>
+              <motion.ul variants={stagger} className="space-y-3 mb-8">
+                {[
+                  "Заявка бесплатна и ни к чему не обязывает",
+                  "Вы первыми узнаете окончательные цены",
+                  "Цена запуска закрепляется за участниками первого набора",
+                ].map((item, i) => (
+                  <motion.li key={i} variants={fadeUp} className="flex gap-3 text-white/80 text-sm">
+                    <Sparkles className="h-4 w-4 text-[#FFD700] flex-shrink-0 mt-0.5" />
+                    <span><TranslatedText text={item} /></span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+
+              <motion.div variants={stagger} className="flex flex-col sm:flex-row gap-4">
+                <motion.a
+                  variants={fadeIn}
+                  href="tel:+37120172714"
+                  className="flex items-center gap-3 bg-white/8 rounded-xl px-5 py-3 border border-white/15 hover:border-[#FFD700]/40 text-white/80 hover:text-white transition-colors"
+                >
+                  <Phone className="h-4 w-4 text-[#FFD700]" />
+                  <span className="font-medium text-sm">+371 2017-2714</span>
+                </motion.a>
+                <motion.a
+                  variants={fadeIn}
+                  href="mailto:rosetto@maranafa.camp"
+                  className="flex items-center gap-3 bg-white/8 rounded-xl px-5 py-3 border border-white/15 hover:border-[#FFD700]/40 text-white/80 hover:text-white transition-colors"
+                >
+                  <Mail className="h-4 w-4 text-[#FFD700]" />
+                  <span className="font-medium text-sm">rosetto@maranafa.camp</span>
+                </motion.a>
               </motion.div>
             </motion.div>
 
-            {/* help request CTA */}
-            <motion.div variants={fadeIn}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/15 hover:border-[#FFD700]/40 text-center"
+            <motion.div
+              initial="hidden" whileInView="visible" viewport={vp} variants={fadeIn}
+              className="bg-white rounded-2xl p-8 shadow-2xl"
             >
-              <HelpingHand className="h-10 w-10 text-[#FFD700] mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-3">
-                <TranslatedText text="Нужна помощь" />
-              </h3>
-              <p className="text-white/65 text-sm mb-6 leading-relaxed">
-                <TranslatedText text="Вы или ваши близкие в сложной ситуации? Создайте запрос — участники откликнутся." />
-              </p>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <a href="https://rosetto.maranafa.camp" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full border-white/40 text-white hover:bg-white/15 bg-transparent py-5 rounded-xl text-base">
-                    <TranslatedText text="Создать запрос о помощи" />
-                  </Button>
-                </a>
-              </motion.div>
+              <PreRegistrationForm plan={plan} setPlan={setPlan} />
             </motion.div>
-          </motion.div>
-
-          {/* contact */}
-          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-          >
-            <motion.a
-              variants={fadeIn}
-              href="tel:+37120172714"
-              className="flex items-center gap-3 bg-white/8 rounded-xl px-6 py-4 border border-white/15 hover:border-[#FFD700]/40 text-white/80 hover:text-white transition-colors"
-            >
-              <Phone className="h-5 w-5 text-[#FFD700]" />
-              <span className="font-medium">+371 2017-2714</span>
-            </motion.a>
-            <motion.a
-              variants={fadeIn}
-              href="mailto:rosetto@maranafa.camp"
-              className="flex items-center gap-3 bg-white/8 rounded-xl px-6 py-4 border border-white/15 hover:border-[#FFD700]/40 text-white/80 hover:text-white transition-colors"
-            >
-              <Mail className="h-5 w-5 text-[#FFD700]" />
-              <span className="font-medium">rosetto@maranafa.camp</span>
-            </motion.a>
-          </motion.div>
+          </div>
         </div>
       </section>
 

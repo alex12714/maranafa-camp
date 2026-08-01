@@ -126,7 +126,7 @@ export default function RosettoPage() {
             </a>
             <Link href="/rosetto/programme">
               <Button variant="outline" className="border-white/40 text-white hover:bg-white/10 px-8 py-5 rounded-xl text-base bg-transparent">
-                <TranslatedText text="Программа Rosetto" />
+                <TranslatedText text="Планы участия" />
               </Button>
             </Link>
           </motion.div>
@@ -386,13 +386,13 @@ export default function RosettoPage() {
             </motion.h2>
             <motion.div variants={scaleX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
             <motion.p variants={fadeUp} className="text-gray-600 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              <TranslatedText text="Программа Rosetto — это то, как мы сознательно строим эти связи в лагере Маранафа." />
+              <TranslatedText text="Программа Rosetto — это то, как мы сознательно строим эти связи: единая точка контакта, проверенные специалисты и волонтёрская сеть. Планы участия — от €20 в месяц." />
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Link href="/rosetto/programme">
                   <Button className="bg-[#B22234] hover:bg-[#8e1c29] text-white font-bold px-10 py-6 text-base rounded-xl shadow-md">
-                    <TranslatedText text="Узнать о программе Rosetto" />
+                    <TranslatedText text="Смотреть планы участия" />
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
