@@ -60,6 +60,57 @@ const spending = [
   },
 ]
 
+/* Two-series comparison. Colours validated with the dataviz palette checker:
+   #2F6FB8 / #B22234 pass lightness, chroma, CVD separation, normal-vision and
+   contrast against a white surface. Figures are an illustrative example — the
+   section says so, and the real ones land when pricing is fixed. */
+const NOW_COLOR = "#2F6FB8"
+const ROSETTO_COLOR = "#B22234"
+
+const comparison = [
+  {
+    labelKey: "Деньги",
+    subKey: "Страховка, помощь на дороге, связь и разовые визиты к специалистам — если покупать всё это по отдельности",
+    now: 78, nowLabelKey: "€78 в месяц",
+    ros: 20, rosLabelKey: "от €20 в месяц",
+  },
+  {
+    labelKey: "Время",
+    subKey: "Поиск, звонки, сравнение цен и ожидание ответа — в среднем за месяц",
+    now: 6, nowLabelKey: "около 6 часов",
+    ros: 0.5, rosLabelKey: "около 30 минут",
+  },
+  {
+    labelKey: "Сколько держать в голове",
+    subKey: "Отдельные договоры, счета и телефоны, которые нужно найти, помнить и не потерять",
+    now: 6, nowLabelKey: "6 договоров",
+    ros: 1, rosLabelKey: "1 договор",
+  },
+]
+
+const scenarios = [
+  {
+    situationKey: "Ночью упал пожилой родитель",
+    nowKey: "Узнаёте утром — если вообще позвонят.",
+    communityKey: "Кнопка сама поднимает тревогу: служба мониторинга вызывает 112, вам приходит уведомление.",
+  },
+  {
+    situationKey: "Машина встала на трассе",
+    nowKey: "Обзваниваете эвакуаторы и торгуетесь на обочине.",
+    communityKey: "Вызов из приложения по тарифу, согласованному заранее.",
+  },
+  {
+    situationKey: "Ребёнку нужен логопед",
+    nowKey: "Очередь на месяцы или частник наугад.",
+    communityKey: "Бронируете проверенного специалиста в приложении по ставке для участников.",
+  },
+  {
+    situationKey: "Нужно подвезти, встретить или передать вещи",
+    nowKey: "Думаете, кого попросить, и неудобно просить.",
+    communityKey: "Запрос с геолокацией в приложении — откликается тот, кому по пути.",
+  },
+]
+
 const onboarding = [
   {
     n: "01",
@@ -272,6 +323,121 @@ export default function RosettoFaqPage() {
                 </motion.div>
               )
             })}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════ COMPARISON ══════ */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto max-w-4xl px-4">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-12">
+            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Сравнение" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              <TranslatedText text="Сейчас и в общине" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Считать стоит не только деньги. Время и количество вещей, которые приходится держать в голове, обычно стоят дороже." />
+            </motion.p>
+          </motion.div>
+
+          {/* legend — identity never rests on colour alone */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="flex flex-wrap items-center justify-center gap-6 mb-10"
+          >
+            <span className="inline-flex items-center gap-2 text-sm text-gray-600">
+              <span className="w-3 h-3 rounded-sm" style={{ background: NOW_COLOR }} aria-hidden="true" />
+              <TranslatedText text="Сейчас, по отдельности" />
+            </span>
+            <span className="inline-flex items-center gap-2 text-sm text-gray-600">
+              <span className="w-3 h-3 rounded-sm" style={{ background: ROSETTO_COLOR }} aria-hidden="true" />
+              <TranslatedText text="Через Rosetto" />
+            </span>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="space-y-5">
+            {comparison.map((c, i) => {
+              const max = Math.max(c.now, c.ros)
+              const pct = (v: number) => `${Math.max((v / max) * 100, 7)}%`
+              return (
+                <motion.div
+                  key={i} variants={fadeUp}
+                  className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm"
+                >
+                  <h3 className="font-bold text-gray-900 mb-1"><TranslatedText text={c.labelKey} /></h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-5"><TranslatedText text={c.subKey} /></p>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1 min-w-0">
+                        {/* 20px bar, 4px rounded data-end, square at the baseline */}
+                        <div
+                          className="h-5 rounded-r"
+                          style={{ background: NOW_COLOR, width: pct(c.now) }}
+                        />
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900 whitespace-nowrap w-36 text-right">
+                        <TranslatedText text={c.nowLabelKey} />
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div
+                          className="h-5 rounded-r"
+                          style={{ background: ROSETTO_COLOR, width: pct(c.ros) }}
+                        />
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900 whitespace-nowrap w-36 text-right">
+                        <TranslatedText text={c.rosLabelKey} />
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+
+          <motion.p
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="text-center text-gray-500 text-xs leading-relaxed mt-6 max-w-xl mx-auto"
+          >
+            <TranslatedText text="Пример расчёта для одного человека, чтобы показать порядок величин. Окончательные цены мы объявим до запуска — и посчитаем вместе с вами на созвоне под ваш состав семьи." />
+          </motion.p>
+
+          {/* situation → now → community */}
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="mt-14">
+            <motion.h3 variants={fadeUp} className="text-xl font-black text-gray-900 mb-6 text-center">
+              <TranslatedText text="Одна и та же ситуация" />
+            </motion.h3>
+            <div className="space-y-4">
+              {scenarios.map((s, i) => (
+                <motion.div
+                  key={i} variants={fadeUp}
+                  className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
+                >
+                  <p className="font-bold text-gray-900 px-6 pt-5 pb-4">
+                    <TranslatedText text={s.situationKey} />
+                  </p>
+                  <div className="grid sm:grid-cols-2 border-t border-gray-100">
+                    <div className="p-6 sm:border-r border-gray-100">
+                      <p className="uppercase tracking-[0.18em] text-[11px] font-bold mb-2" style={{ color: NOW_COLOR }}>
+                        <TranslatedText text="Сейчас" />
+                      </p>
+                      <p className="text-gray-600 text-sm leading-relaxed"><TranslatedText text={s.nowKey} /></p>
+                    </div>
+                    <div className="p-6 border-t sm:border-t-0 border-gray-100 bg-[#B22234]/[0.03]">
+                      <p className="uppercase tracking-[0.18em] text-[11px] font-bold mb-2" style={{ color: ROSETTO_COLOR }}>
+                        <TranslatedText text="В общине" />
+                      </p>
+                      <p className="text-gray-700 text-sm leading-relaxed"><TranslatedText text={s.communityKey} /></p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>

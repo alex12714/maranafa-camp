@@ -10,6 +10,7 @@ import {
   Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
   Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck, BellRing,
   Smartphone, ClipboardList, ShieldCheck, ShoppingCart, Star, RefreshCw, Gauge,
+  Scissors, Smile, Package, MapPin,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
@@ -50,6 +51,7 @@ const appFeatures = [
   { icon: CalendarCheck, textKey: "Записаться к врачу, юристу или логопеду" },
   { icon: ClipboardList, textKey: "Видеть статус заявки и всю историю обращений" },
   { icon: Users, textKey: "Управлять услугами всей семьи из одного аккаунта" },
+  { icon: MapPin, textKey: "Попросить о помощи с геолокацией — откликнется тот, кому по пути" },
   { icon: Headphones, textKey: "Позвать координатора, когда нужен человек, а не форма" },
 ]
 
@@ -126,6 +128,21 @@ const services = [
     icon: Home,
     titleKey: "Медсестра и помощь на дому",
     descKey: "Для старшего поколения: визиты лицензированных медсестёр и помощник по дому от зарегистрированных поставщиков. Мы принимаем обращение, определяем срочность и связываем вас со специалистом.",
+  },
+  {
+    icon: Scissors,
+    titleKey: "Красота и уход",
+    descKey: "Парикмахер, маникюр и массаж у мастеров, с которыми мы договорились о ставках для участников. Запись — в приложении, без обзвона и поиска свободного окна.",
+  },
+  {
+    icon: Smile,
+    titleKey: "Стоматология",
+    descKey: "Зубная клиника-партнёр: плановый осмотр и лечение по ставкам для участников, срочный приём — через координатора.",
+  },
+  {
+    icon: Package,
+    titleKey: "Пакомат и передача вещей",
+    descKey: "Забрать посылку, отправить или передать вещи другому участнику — через пакомат или через того, кому по пути.",
   },
   {
     icon: BellRing,
@@ -513,7 +530,7 @@ export default function RosettoProgrammePage() {
                 <TranslatedText text="За приложением стоят живые люди" />
               </p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                <TranslatedText text="Приложение закрывает всё, что можно заказать. Но не всё решается заказом: иногда нужно, чтобы кто-то отвёз в больницу, посидел с детьми или просто пришёл. Для этого есть координатор и волонтёрская сеть — участники Rosetto помогают друг другу, и вы получаете эту помощь так же, как оказываете её сами." />
+                <TranslatedText text="Приложение закрывает всё, что можно заказать. Но не всё решается заказом: подвезти, забрать, встретить, передать вещи, посидеть с детьми. Для этого в приложении есть запрос о помощи: вы описываете, что нужно, и делитесь геолокацией — запрос видят участники рядом, и откликается тот, кому по пути. Никто никому не обязан: помогает тот, у кого есть возможность." />
               </p>
             </div>
           </motion.div>
@@ -696,6 +713,39 @@ export default function RosettoProgrammePage() {
                 </motion.div>
               )
             })}
+          </motion.div>
+
+          {/* The review loop — the mechanism, not a promise */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeIn}
+            className="mt-10 bg-gradient-to-br from-[#6B0000] to-[#B22234] rounded-2xl p-8 md:p-10 text-white relative overflow-hidden"
+          >
+            <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[#FFD700]/8 blur-3xl pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <Star className="h-7 w-7 text-[#FFD700] flex-shrink-0" />
+                <h3 className="text-2xl md:text-3xl font-black">
+                  <TranslatedText text="Поставщиков выбирает община" />
+                </h3>
+              </div>
+              <p className="text-white/80 leading-relaxed max-w-2xl mb-8">
+                <TranslatedText text="Это не формальность и не «мы учитываем ваше мнение». Оценки участников — это то, по чему мы решаем, продлевать договор с поставщиком или искать другого. Решает не отдел закупок, а те, кто пользовался услугой." />
+              </p>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                {[
+                  { n: "01", t: "Вы оцениваете услугу", d: "Сразу после визита или вызова — одна оценка и, если хотите, пара слов." },
+                  { n: "02", t: "Рейтинг виден всем участникам", d: "Каждый видит, как община оценивает каждого поставщика, а не только мы." },
+                  { n: "03", t: "Низкий рейтинг — разговор или замена", d: "Сначала разговор с поставщиком и срок на исправление. Не исправился — меняем." },
+                ].map((s, i) => (
+                  <div key={i} className="bg-white/10 rounded-xl p-5 border border-[#FFD700]/20">
+                    <div className="text-[#FFD700] font-black text-lg mb-2">{s.n}</div>
+                    <p className="font-bold text-sm mb-2"><TranslatedText text={s.t} /></p>
+                    <p className="text-white/70 text-sm leading-relaxed"><TranslatedText text={s.d} /></p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           <motion.p
