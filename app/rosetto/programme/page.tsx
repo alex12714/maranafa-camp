@@ -9,7 +9,7 @@ import {
   Car, HeartPulse, Stethoscope, Scale, MessageCircle, Truck,
   Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
   Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck, BellRing,
-  Smartphone, ClipboardList, ShieldCheck,
+  Smartphone, ClipboardList, ShieldCheck, ShoppingCart, Star, RefreshCw, Gauge,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
@@ -53,6 +53,29 @@ const appFeatures = [
   { icon: Headphones, textKey: "Позвать координатора, когда нужен человек, а не форма" },
 ]
 
+const leverage = [
+  {
+    icon: ShoppingCart,
+    titleKey: "Оптовая закупка вместо разовой покупки",
+    descKey: "Мы приходим к поставщику не с одним клиентом, а с сотнями. Это другая цена и, что важнее, другое отношение.",
+  },
+  {
+    icon: Gauge,
+    titleKey: "Требования к качеству — в договоре",
+    descKey: "С каждым поставщиком мы фиксируем требования к качеству и срокам. Их несоблюдение — основание для пересмотра условий.",
+  },
+  {
+    icon: Star,
+    titleKey: "Решают отзывы участников",
+    descKey: "После каждой услуги вы оцениваете её в приложении. Мы смотрим на реальные оценки участников, а не на обещания поставщика.",
+  },
+  {
+    icon: RefreshCw,
+    titleKey: "Не справляется — меняем",
+    descKey: "Поставщика, который стабильно не дотягивает до требований, мы заменяем. Искать замену самому не нужно — это наша работа.",
+  },
+]
+
 const services = [
   {
     icon: Car,
@@ -87,7 +110,7 @@ const services = [
   {
     icon: Wrench,
     titleKey: "Помощь на дороге",
-    descKey: "Разрядился аккумулятор, пробито колесо, закрылась машина — вызов лицензированной службы из приложения по тарифу для участников.",
+    descKey: "Разрядился аккумулятор, пробито колесо, закрылась машина — вызов лицензированной службы, услуги которой мы закупаем оптом, по тарифу для участников.",
   },
   {
     icon: PhoneCall,
@@ -628,10 +651,59 @@ export default function RosettoProgrammePage() {
                 <TranslatedText text="Все услуги оказывают лицензированные партнёры" />
               </p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                <TranslatedText text="Мы не являемся страховщиком, оператором связи, медицинским учреждением или охранной службой. Страхование предоставляет лицензированный страховщик, связь — оператор, медицинскую помощь — лицензированные специалисты, эвакуацию и помощь на дороге — лицензированная служба, приём сигнала тревожной кнопки — действующая служба мониторинга. Наша роль — организовать доступ, закупить услуги для участников и координировать. Тревожная кнопка не заменяет скорую помощь." />
+                <TranslatedText text="Мы не являемся страховщиком, оператором связи, медицинским учреждением или охранной службой. Страхование предоставляет лицензированный страховщик, связь — оператор, медицинскую помощь — лицензированные специалисты, эвакуацию и помощь на дороге — лицензированная служба, приём сигнала тревожной кнопки — действующая служба мониторинга. Наша роль — закупать услуги у лицензированных поставщиков оптом, открывать к ним доступ участникам и координировать. Тревожная кнопка не заменяет скорую помощь." />
               </p>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ══════ NEGOTIATING POWER ══════ */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto max-w-5xl px-4">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
+            <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Почему это работает" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              <TranslatedText text="Переговорная сила общины" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Один человек не может диктовать поставщику условия — он просто клиент, которого легко потерять. Сотни людей вместе могут. Мы закупаем услуги оптом, и это меняет сам разговор: не мы просим об одолжении, а нас слушают." />
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+            {leverage.map((l, i) => {
+              const Icon = l.icon
+              return (
+                <motion.div
+                  key={i} variants={fadeIn}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="flex gap-5 bg-gray-50 rounded-2xl p-7 border border-gray-100 hover:border-[#B22234]/20 hover:shadow-sm transition-all"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[#B22234]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-6 w-6 text-[#B22234]" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-2"><TranslatedText text={l.titleKey} /></h3>
+                    <p className="text-gray-600 text-sm leading-relaxed"><TranslatedText text={l.descKey} /></p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+
+          <motion.p
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="text-center text-gray-600 leading-relaxed max-w-2xl mx-auto mt-10"
+          >
+            <TranslatedText text="Поэтому качество здесь — не обещание на сайте, а следствие того, что поставщику есть что терять." />
+          </motion.p>
         </div>
       </section>
 
