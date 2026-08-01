@@ -711,6 +711,16 @@ export default function RosettoProgrammePage() {
           >
             <TranslatedText text="Состав планов предварительный: мы закрепляем договорённости с партнёрами и подтвердим окончательные условия до запуска. Услуги для старшего поколения — визиты медсестры и помощник по дому — предоставляются по результатам индивидуальной оценки потребностей." />
           </motion.p>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="text-center mt-6"
+          >
+            <Link href="/rosetto/faq" className="inline-flex items-center gap-2 text-[#B22234] hover:text-[#8e1c29] font-semibold transition-colors">
+              <TranslatedText text="Куда идут деньги и как проходит подключение" />
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
