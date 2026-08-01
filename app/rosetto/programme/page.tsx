@@ -9,6 +9,7 @@ import {
   Car, HeartPulse, Stethoscope, Scale, MessageCircle, Truck,
   Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
   Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck, BellRing,
+  Smartphone, ClipboardList,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
@@ -28,17 +29,28 @@ const barX = { hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { durati
 
 /** Life without a community desk — the problem the membership removes. */
 const painPoints = [
-  "Кто хороший юрист? Спрошу в чате и буду надеяться на лучшее.",
-  "Машина встала в 22:00 на трассе — кому звонить в первую очередь?",
-  "Маме нужен уход днём, а я на работе до шести.",
-  "Ребёнку нужен логопед — где найти проверенного, а не первого попавшегося?",
+  "Отец упал ночью. Скорая приехала не сразу, а я узнал об этом только утром.",
+  "Машина встала на трассе поздно вечером: первый эвакуатор не берёт трубку, второй называет цену, которую не с чем сравнить.",
+  "Маме нужен уход днём. Сиделку ищу по объявлениям — и не знаю, кому можно доверить ключи от квартиры.",
+  "Ребёнку нужен логопед. В очереди месяцы, а про частного никто не скажет, хороший он или нет.",
+  "Нужен юрист на один документ — но непонятно, к кому идти и во сколько это выльется.",
 ]
 
 const relief = [
-  "Один номер и один координатор — на любой из этих вопросов.",
-  "Специалиста уже нашли, проверили и договорились о цене до вас.",
-  "Волонтёры приезжают, когда нужны руки, а не советы.",
-  "Вам не приходится объяснять свою ситуацию заново каждый раз.",
+  "Тревожная кнопка вызывает помощь сама, а близкие получают уведомление сразу.",
+  "Эвакуатор — из приложения, по цене, согласованной заранее.",
+  "Сиделку и медсестру подбираем из проверенного пула, по результатам оценки потребностей.",
+  "Врача, логопеда и юриста бронируете в приложении — по ставке для участников.",
+  "Нужен живой человек — координатор на связи, а за ним волонтёрская сеть.",
+]
+
+const appFeatures = [
+  { icon: Smartphone, textKey: "Заказать услугу или вызвать помощь в пару касаний" },
+  { icon: Car, textKey: "Забронировать машину из автопарка на нужные даты" },
+  { icon: CalendarCheck, textKey: "Записаться к врачу, юристу или логопеду" },
+  { icon: ClipboardList, textKey: "Видеть статус заявки и всю историю обращений" },
+  { icon: Users, textKey: "Управлять услугами всей семьи из одного аккаунта" },
+  { icon: Headphones, textKey: "Позвать координатора, когда нужен человек, а не форма" },
 ]
 
 const services = [
@@ -55,7 +67,7 @@ const services = [
   {
     icon: Stethoscope,
     titleKey: "Проверенные врачи",
-    descKey: "Пул врачей, которых мы знаем лично и за которых ручаемся. Запись через координатора.",
+    descKey: "Пул врачей, которых мы знаем лично и за которых ручаемся. Запись — прямо в приложении.",
   },
   {
     icon: Scale,
@@ -108,7 +120,7 @@ const plans = [
     perKey: "в месяц",
     featured: false,
     featuresKey: [
-      "Единая точка контакта — один номер на все вопросы",
+      "Приложение Rosetto: все услуги в одном месте",
       "Доступ к волонтёрской сети",
       "Доступ к автопарку участников",
       "Эвакуатор и помощь на дороге",
@@ -169,9 +181,9 @@ const steps = [
   },
   {
     n: "03",
-    icon: Headphones,
-    titleKey: "Получите свой контакт",
-    descKey: "У вас появляется координатор, к которому можно обратиться с любым вопросом из списка — и волонтёрская сеть за ним.",
+    icon: Smartphone,
+    titleKey: "Получите доступ в приложение",
+    descKey: "Вы получаете приложение Rosetto, где собраны все услуги, и координатора — на случай, когда нужен живой человек.",
   },
 ]
 
@@ -329,7 +341,7 @@ function PreRegistrationForm({
       </Button>
 
       <p className="text-xs text-gray-500 text-center leading-relaxed">
-        <TranslatedText text="Это предварительная регистрация интереса. Она бесплатна и ни к чему не обязывает." />
+        <TranslatedText text="Это ранняя регистрация интереса: состав услуг и цены ещё уточняются. Заявка бесплатна и ни к чему не обязывает." />
       </p>
     </form>
   )
@@ -372,7 +384,7 @@ export default function RosettoProgrammePage() {
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#FFD700]/15 border border-[#FFD700]/40 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#FFD700] animate-pulse" />
             <span className="text-[#FFD700] text-xs font-bold uppercase tracking-[0.2em]">
-              <TranslatedText text="Скоро — предварительная регистрация открыта" />
+              <TranslatedText text="Ранняя регистрация интереса — запуск готовится" />
             </span>
           </motion.div>
 
@@ -381,10 +393,10 @@ export default function RosettoProgrammePage() {
           </motion.h1>
           <motion.div variants={barX} className="h-[3px] w-28 bg-gradient-to-r from-[#FFD700] to-[#FFC200] origin-left mb-7" />
           <motion.p variants={fadeUp} className="text-xl md:text-2xl text-white/80 max-w-2xl leading-relaxed mb-6">
-            <TranslatedText text="Единая точка контакта на все жизненные вопросы — и община, которая рядом." />
+            <TranslatedText text="Все услуги — в одном приложении. И община, которая рядом, когда нужен человек." />
           </motion.p>
           <motion.p variants={fadeUp} className="text-base text-white/65 max-w-2xl leading-relaxed mb-9">
-            <TranslatedText text="Одно членство — вместо десятка отдельных поисков, договоров и телефонных номеров. Машина, здоровье, документы, дети, забота о старших: вы обращаетесь к одному человеку, а за ним стоит сеть проверенных специалистов и волонтёров." />
+            <TranslatedText text="Одно членство — вместо десятка отдельных поисков, договоров и телефонных номеров. Машина, здоровье, документы, дети, забота о старших: вы заказываете и бронируете всё в приложении Rosetto, а координатор и волонтёрская сеть остаются на случай, когда нужен человек. Сейчас мы закрепляем договорённости с партнёрами и открываем раннюю регистрацию интереса." />
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4">
@@ -415,14 +427,14 @@ export default function RosettoProgrammePage() {
         <div className="container mx-auto max-w-5xl px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
             <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
-              <TranslatedText text="Главное" />
+              <TranslatedText text="Зачем это нужно" />
             </motion.p>
             <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              <TranslatedText text="Один контакт вместо десяти" />
+              <TranslatedText text="Одно приложение вместо десяти телефонных номеров" />
             </motion.h2>
             <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
             <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              <TranslatedText text="Большинство проблем в жизни решаемы — сложно другое: понять, к кому обратиться, и успеть сделать это вовремя. Rosetto убирает именно этот шаг." />
+              <TranslatedText text="Почти всё из этого решаемо. Сложно другое — в нужный момент знать, к кому идти, сколько это стоит и можно ли этому человеку доверять. Обычно это выясняется в самый плохой день." />
             </motion.p>
           </motion.div>
 
@@ -475,12 +487,70 @@ export default function RosettoProgrammePage() {
             </div>
             <div className="flex-1 text-center sm:text-left">
               <p className="font-bold text-gray-900 mb-1">
-                <TranslatedText text="За координатором стоит волонтёрская сеть" />
+                <TranslatedText text="За приложением стоят живые люди" />
               </p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                <TranslatedText text="Не всё решается деньгами и специалистами. Иногда нужно, чтобы кто-то отвёз в больницу, посидел с детьми или просто пришёл. Участники Rosetto помогают друг другу — и вы получаете эту помощь так же, как оказываете её сами." />
+                <TranslatedText text="Приложение закрывает всё, что можно заказать. Но не всё решается заказом: иногда нужно, чтобы кто-то отвёз в больницу, посидел с детьми или просто пришёл. Для этого есть координатор и волонтёрская сеть — участники Rosetto помогают друг другу, и вы получаете эту помощь так же, как оказываете её сами." />
               </p>
             </div>
+          </motion.div>
+
+          {/* Quiet nudge — the list above should do the persuading, not us. */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
+            className="mt-10 text-center"
+          >
+            <p className="text-gray-600 leading-relaxed max-w-2xl mx-auto mb-5">
+              <TranslatedText text="Если хотя бы одно из этого вам знакомо — оставьте заявку. Мы напишем, когда всё будет готово, и вы решите тогда." />
+            </p>
+            <a href="#register" className="inline-flex items-center gap-2 text-[#B22234] hover:text-[#8e1c29] font-semibold transition-colors">
+              <TranslatedText text="Оставить заявку — это бесплатно" />
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════ THE APP ══════ */}
+      <section className="py-24 bg-gradient-to-br from-[#6B0000] via-[#B22234] to-[#8B0000] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,.5) 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
+        <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-[#FFD700]/6 blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto max-w-5xl px-4 relative z-10">
+          <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
+            <motion.p variants={fadeUp} className="text-[#FFD700] uppercase tracking-[0.25em] text-sm font-bold mb-3">
+              <TranslatedText text="Приложение Rosetto" />
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-white mb-4">
+              <TranslatedText text="Всё в одном месте" />
+            </motion.h2>
+            <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
+            <motion.p variants={fadeUp} className="text-white/75 max-w-2xl mx-auto leading-relaxed">
+              <TranslatedText text="Доступ ко всем услугам — через приложение: заказать, забронировать и отследить, не разыскивая ничьи телефоны. Координатор никуда не девается — но звонить ему нужно только тогда, когда действительно нужен человек." />
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={stagger}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+            {appFeatures.map((f, i) => {
+              const Icon = f.icon
+              return (
+                <motion.div
+                  key={i} variants={fadeIn}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-[#FFD700]/20 hover:border-[#FFD700]/45 transition-colors"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-[#FFD700]/15 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-[#FFD700]" />
+                  </div>
+                  <p className="text-white/85 text-sm leading-relaxed">
+                    <TranslatedText text={f.textKey} />
+                  </p>
+                </motion.div>
+              )
+            })}
           </motion.div>
         </div>
       </section>
@@ -490,14 +560,14 @@ export default function RosettoProgrammePage() {
         <div className="container mx-auto max-w-6xl px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={vp} variants={stagger} className="text-center mb-14">
             <motion.p variants={fadeUp} className="text-[#B22234] uppercase tracking-[0.25em] text-sm font-bold mb-3">
-              <TranslatedText text="Что входит" />
+              <TranslatedText text="Что войдёт" />
             </motion.p>
             <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
               <TranslatedText text="Доступ ко всему сразу" />
             </motion.h2>
             <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
             <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              <TranslatedText text="Состав услуг различается по планам — но принцип один: всё это уже собрано, проверено и доступно через вашего координатора." />
+              <TranslatedText text="Состав услуг различается по планам. Сейчас мы закрепляем договорённости с партнёрами и специалистами — окончательный список и условия подтвердим до запуска." />
             </motion.p>
           </motion.div>
 
@@ -526,6 +596,24 @@ export default function RosettoProgrammePage() {
               )
             })}
           </motion.div>
+
+          {/* Honest status of the offering — nothing here is contracted yet. */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={vp} variants={fadeIn}
+            className="mt-8 flex flex-col sm:flex-row items-center gap-6 bg-white border border-[#B22234]/25 rounded-2xl p-7"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-[#FFD700]/20 flex items-center justify-center flex-shrink-0">
+              <CalendarCheck className="h-7 w-7 text-[#B22234]" />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="font-bold text-gray-900 mb-1">
+                <TranslatedText text="Договорённости закрепляются сейчас" />
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                <TranslatedText text="Это состав, который мы формируем к запуску. По каждой услуге мы согласовываем партнёра, условия и цену — и подтвердим окончательный список до старта. Участники ранней регистрации узнают об этом первыми." />
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -541,7 +629,7 @@ export default function RosettoProgrammePage() {
             </motion.h2>
             <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
             <motion.p variants={fadeUp} className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              <TranslatedText text="Окончательные цены ещё формируются — участие начинается от €20 в месяц. Оставьте заявку сейчас: вы первыми узнаете условия и сохраните цену запуска." />
+              <TranslatedText text="Состав услуг и окончательные цены ещё формируются; ориентир по самому простому плану — от €20 в месяц. Это ранняя регистрация интереса: заявка помогает нам понять спрос и закрепить договорённости." />
             </motion.p>
           </motion.div>
 
@@ -621,7 +709,7 @@ export default function RosettoProgrammePage() {
             initial="hidden" whileInView="visible" viewport={vp} variants={fadeUp}
             className="text-center text-gray-500 text-sm mt-10 max-w-2xl mx-auto leading-relaxed"
           >
-            <TranslatedText text="Услуги для старшего поколения — визиты медсестры и помощник по дому — предоставляются по результатам индивидуальной оценки потребностей." />
+            <TranslatedText text="Состав планов предварительный: мы закрепляем договорённости с партнёрами и подтвердим окончательные условия до запуска. Услуги для старшего поколения — визиты медсестры и помощник по дому — предоставляются по результатам индивидуальной оценки потребностей." />
           </motion.p>
         </div>
       </section>
@@ -744,18 +832,18 @@ export default function RosettoProgrammePage() {
                 <TranslatedText text="Предварительная регистрация" />
               </motion.p>
               <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-                <TranslatedText text="Займите место в первом наборе" />
+                <TranslatedText text="Расскажите, что вам нужно" />
               </motion.h2>
               <motion.div variants={barX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] origin-left mb-6" />
               <motion.p variants={fadeUp} className="text-white/75 leading-relaxed mb-8">
-                <TranslatedText text="Мы запускаем планы участия ограниченным набором — чтобы каждому участнику досталось настоящее внимание координатора, а не место в очереди. Оставьте заявку, и мы свяжемся с вами первыми." />
+                <TranslatedText text="Сейчас мы закрепляем договорённости с партнёрами и формируем первый набор участников. Оставьте заявку — как только условия будут подтверждены, мы свяжемся с вами первыми." />
               </motion.p>
 
               <motion.ul variants={stagger} className="space-y-3 mb-8">
                 {[
                   "Заявка бесплатна и ни к чему не обязывает",
-                  "Вы первыми узнаете окончательные цены",
-                  "Цена запуска закрепляется за участниками первого набора",
+                  "Вы первыми узнаете окончательный состав услуг и цены",
+                  "Ваши ответы влияют на то, какие услуги мы подключим первыми",
                 ].map((item, i) => (
                   <motion.li key={i} variants={fadeUp} className="flex gap-3 text-white/80 text-sm">
                     <Sparkles className="h-4 w-4 text-[#FFD700] flex-shrink-0 mt-0.5" />

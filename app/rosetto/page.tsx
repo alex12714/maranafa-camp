@@ -386,7 +386,7 @@ export default function RosettoPage() {
             </motion.h2>
             <motion.div variants={scaleX} className="h-[3px] w-20 bg-gradient-to-r from-[#FFD700] to-[#FFC200] mx-auto origin-left mb-6" />
             <motion.p variants={fadeUp} className="text-gray-600 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              <TranslatedText text="Программа Rosetto — это то, как мы сознательно строим эти связи: единая точка контакта, проверенные специалисты и волонтёрская сеть. Планы участия — от €20 в месяц." />
+              <TranslatedText text="Программа Rosetto — это то, как мы сознательно строим эти связи: единая точка контакта, специалисты и волонтёрская сеть. Планы участия готовятся — открыта ранняя регистрация интереса." />
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
