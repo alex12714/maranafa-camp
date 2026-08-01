@@ -8,7 +8,7 @@ import {
   ArrowLeft, ArrowRight, CheckCircle2, Check, Phone, Mail,
   Car, HeartPulse, Stethoscope, Scale, MessageCircle, Truck,
   Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
-  Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck,
+  Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck, BellRing,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
@@ -92,6 +92,11 @@ const services = [
     titleKey: "Медсестра и помощь на дому",
     descKey: "Для старшего поколения: визиты медсестры на дом и помощник по дому — по результатам оценки потребностей.",
   },
+  {
+    icon: BellRing,
+    titleKey: "Тревожная кнопка и датчик падения",
+    descKey: "Носимое устройство с кнопкой помощи и автоматическим датчиком падения: сигнал уходит на круглосуточный пульт, дежурная команда реагирует и выезжает.",
+  },
 ]
 
 const plans = [
@@ -139,6 +144,7 @@ const plans = [
     featured: false,
     featuresKey: [
       "Всё из плана Family",
+      "Тревожная кнопка и датчик падения с выездом дежурной команды",
       "Визиты медсестры на дом",
       "Помощник по дому — по результатам оценки потребностей",
       "Сопровождение к врачу и на процедуры",
