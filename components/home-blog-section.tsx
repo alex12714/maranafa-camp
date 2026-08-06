@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Send, BookOpen, ExternalLink, Clock, ArrowRight, Calendar, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useLanguage } from "@/contexts/language-context"
+import TelegramSlideshow from "@/components/telegram-slideshow"
 import type { TelegramPost } from "@/app/api/blog/route"
 import type { Article } from "@/app/api/articles/route"
 
@@ -170,20 +171,23 @@ export default function HomeBlogSection() {
             {/* Telegram section */}
             <div>
               {/* Channel banner */}
-              <div className="flex items-center justify-between gap-4 mb-5">
+              <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
                 <div className="flex items-center gap-2">
                   <Send className="w-5 h-5 text-[#0088cc]" />
                   <h3 className="text-lg font-semibold text-gray-800">{t("Наш Telegram канал")}</h3>
                 </div>
-                <a
-                  href="https://t.me/maranafacamp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-[#0088cc] text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-[#006da3] transition-colors"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  {t("Подписаться")}
-                </a>
+                <div className="flex items-center gap-2">
+                  <TelegramSlideshow />
+                  <a
+                    href="https://t.me/maranafacamp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 bg-[#0088cc] text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-[#006da3] transition-colors"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    {t("Подписаться")}
+                  </a>
+                </div>
               </div>
 
               {posts.length > 0 ? (
