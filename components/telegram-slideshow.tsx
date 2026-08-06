@@ -11,6 +11,7 @@ import {
   ImageIcon,
   Pause,
   Play,
+  Repeat,
   RotateCcw,
   Volume2,
   VolumeX,
@@ -21,6 +22,8 @@ import type { MediaDay, MediaItem } from "@/lib/telegram"
 
 const PHOTO_MS = 5000
 const CONTROLS_IDLE_MS = 3000
+/** Breath between the end of a run and the loop starting over. */
+const RESTART_SECONDS = 5
 
 function localeOf(lang: string): string {
   return lang === "ru" ? "ru-RU" : lang === "lv" ? "lv-LV" : lang === "uk" ? "uk-UA" : "en-GB"
@@ -288,6 +291,9 @@ function Player({
   const [finished, setFinished] = useState(false)
   const [progress, setProgress] = useState(0)
   const [controlsVisible, setControlsVisible] = useState(true)
+  const [loop, setLoop] = useState(true)
+  /** Seconds left on the between-runs pause, or null when not counting down. */
+  const [restartIn, setRestartIn] = useState<number | null>(null)
 
   const current = items[index]
   // The API only ever returns videos it has a playable mp4 for.
@@ -341,27 +347,41 @@ function Player({
         return
       }
       if (next >= items.length) {
-        setFinished(true)
+        // On loop the day simply plays again after a short breath.
+        if (loop) setRestartIn(RESTART_SECONDS)
+        else setFinished(true)
         return
       }
       setIndex(next)
     },
-    [items.length]
+    [items.length, loop]
   )
 
   const next = useCallback(() => goTo(index + 1), [goTo, index])
   const prev = useCallback(() => goTo(index - 1), [goTo, index])
 
-  const restart = () => {
+  const restart = useCallback(() => {
     setFinished(false)
+    setRestartIn(null)
     setIndex(0)
     setProgress(0)
     setPaused(false)
-  }
+  }, [])
+
+  // ── Between runs: count down, then start the day over ────────────────────────
+  useEffect(() => {
+    if (restartIn === null || paused) return
+    if (restartIn <= 0) {
+      restart()
+      return
+    }
+    const id = setTimeout(() => setRestartIn((s) => (s === null ? null : s - 1)), 1000)
+    return () => clearTimeout(id)
+  }, [restartIn, paused, restart])
 
   // ── Advance timing: photos on a timer, videos on `ended` ─────────────────────
   useEffect(() => {
-    if (!current || finished || paused) return
+    if (!current || finished || paused || restartIn !== null) return
     if (isPlayableVideo) {
       // Progress tracked from the video element's own clock.
       let raf = 0
@@ -386,14 +406,14 @@ function Player({
     return () => cancelAnimationFrame(raf)
     // `progress` is intentionally read once at effect start to resume from a pause.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, paused, finished, isPlayableVideo, next])
+  }, [index, paused, finished, restartIn, isPlayableVideo, next])
 
   // ── Video element lifecycle: autoplay, falling back to muted when blocked ────
   useEffect(() => {
     const v = videoRef.current
     if (!v || !isPlayableVideo) return
     v.muted = muted
-    if (paused) {
+    if (paused || restartIn !== null) {
       v.pause()
       return
     }
@@ -403,7 +423,7 @@ function Player({
       setMuted(true)
       v.play().catch(() => next())
     })
-  }, [index, paused, muted, isPlayableVideo, next])
+  }, [index, paused, restartIn, muted, isPlayableVideo, next])
 
   // ── Preload the next still so transitions do not flash ───────────────────────
   useEffect(() => {
@@ -431,6 +451,8 @@ function Player({
         setPaused((p) => !p)
       } else if (e.key.toLowerCase() === "m") {
         setMuted((m) => !m)
+      } else if (e.key.toLowerCase() === "l") {
+        setLoop((l) => !l)
       }
     }
     window.addEventListener("keydown", onKey)
@@ -439,10 +461,10 @@ function Player({
 
   // ── Auto-hide controls ──────────────────────────────────────────────────────
   useEffect(() => {
-    if (!controlsVisible || paused || finished) return
+    if (!controlsVisible || paused || finished || restartIn !== null) return
     const id = setTimeout(() => setControlsVisible(false), CONTROLS_IDLE_MS)
     return () => clearTimeout(id)
-  }, [controlsVisible, paused, finished, index])
+  }, [controlsVisible, paused, finished, restartIn, index])
 
   const wake = () => setControlsVisible(true)
 
@@ -462,7 +484,7 @@ function Player({
     }
   }
 
-  const showControls = controlsVisible || paused || finished
+  const showControls = controlsVisible || paused || finished || restartIn !== null
 
   return (
     <div
@@ -504,13 +526,48 @@ function Player({
             </p>
           )}
         </div>
-        <button
-          onClick={onClose}
-          aria-label={t("Закрыть")}
-          className="text-white/90 hover:text-white p-1 -m-1"
-        >
-          <X className="w-6 h-6" />
-        </button>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          {items.length > 0 && !failed && (
+            <>
+              <button
+                onClick={() => {
+                  wake()
+                  setPaused((p) => !p)
+                }}
+                aria-label={paused ? t("Играть") : t("Пауза")}
+                title={paused ? t("Играть") : t("Пауза")}
+                className="p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors"
+              >
+                {paused ? <Play className="w-5 h-5 ml-0.5" /> : <Pause className="w-5 h-5" />}
+              </button>
+              <button
+                onClick={() => {
+                  wake()
+                  const enabling = !loop
+                  setLoop(enabling)
+                  // Turning the loop on while sitting on the end card should
+                  // just start the day again.
+                  if (enabling && finished) restart()
+                }}
+                aria-label={t("Повтор")}
+                title={t("Повтор")}
+                aria-pressed={loop}
+                className={`p-2 rounded-full transition-colors ${
+                  loop ? "bg-white text-black hover:bg-white/90" : "bg-white/15 text-white hover:bg-white/25"
+                }`}
+              >
+                <Repeat className="w-5 h-5" />
+              </button>
+            </>
+          )}
+          <button
+            onClick={onClose}
+            aria-label={t("Закрыть")}
+            className="text-white/90 hover:text-white p-2"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
       </div>
 
       {/* Stage */}
@@ -600,11 +657,29 @@ function Player({
               className="absolute inset-y-0 right-0 w-1/4 cursor-e-resize focus:outline-none"
             />
 
-            {paused && (
+            {paused && restartIn === null && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center">
                   <Play className="w-8 h-8 text-white ml-1" />
                 </div>
+              </div>
+            )}
+
+            {/* Between runs of the loop */}
+            {restartIn !== null && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/70 pointer-events-none">
+                <div className="w-20 h-20 rounded-full border-2 border-white/40 flex items-center justify-center">
+                  <span className="text-white text-3xl font-semibold tabular-nums">
+                    {Math.max(0, restartIn)}
+                  </span>
+                </div>
+                <p className="text-white/80 text-sm">{t("Начинаем заново…")}</p>
+                <button
+                  onClick={restart}
+                  className="pointer-events-auto inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white text-black text-sm font-semibold"
+                >
+                  <RotateCcw className="w-4 h-4" /> {t("Начать заново")}
+                </button>
               </div>
             )}
           </>
@@ -630,13 +705,6 @@ function Player({
               className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setPaused((p) => !p)}
-              aria-label={paused ? t("Играть") : t("Пауза")}
-              className="p-3 rounded-full bg-white text-black hover:bg-white/90 transition-colors"
-            >
-              {paused ? <Play className="w-5 h-5 ml-0.5" /> : <Pause className="w-5 h-5" />}
             </button>
             <button
               onClick={next}

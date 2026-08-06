@@ -1374,6 +1374,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Думаете, кого попросить, и неудобно просить.": "You wonder who to ask, and feel awkward asking.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "A request with your location in the app — whoever is heading that way responds.",
     // --- Telegram slideshow (home blog section) ---
+    "Повтор": "Repeat",
+    "Начинаем заново…": "Starting over…",
     "Смотреть слайдшоу": "Watch slideshow",
     "Смотреть": "Watch",
     "Выберите дату": "Choose a date",
@@ -2634,6 +2636,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Думаете, кого попросить, и неудобно просить.": "Думаете, кого попросить, и неудобно просить.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Запрос с геолокацией в приложении — откликается тот, кому по пути.",
     // --- Telegram slideshow (home blog section) ---
+    "Повтор": "Повтор",
+    "Начинаем заново…": "Начинаем заново…",
     "Смотреть слайдшоу": "Смотреть слайдшоу",
     "Смотреть": "Смотреть",
     "Выберите дату": "Выберите дату",
@@ -3991,6 +3995,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Думаете, кого попросить, и неудобно просить.": "Domājat, ko palūgt, un ir neērti lūgt.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Pieprasījums ar atrašanās vietu lietotnē — atsaucas tas, kuram pa ceļam.",
     // --- Telegram slideshow (home blog section) ---
+    "Повтор": "Atkārtot",
+    "Начинаем заново…": "Sākam no jauna…",
     "Смотреть слайдшоу": "Skatīties slaidrādi",
     "Смотреть": "Skatīties",
     "Выберите дату": "Izvēlieties datumu",
@@ -5347,6 +5353,8 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Думаете, кого попросить, и неудобно просить.": "Думаєте, кого попросити, і незручно просити.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Запит із геолокацією в застосунку — відгукується той, кому по дорозі.",
     // --- Telegram slideshow (home blog section) ---
+    "Повтор": "Повтор",
+    "Начинаем заново…": "Починаємо спочатку…",
     "Смотреть слайдшоу": "Дивитися слайдшоу",
     "Смотреть": "Дивитися",
     "Выберите дату": "Оберіть дату",
