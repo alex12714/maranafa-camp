@@ -1390,7 +1390,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Вперёд": "Next",
     "Звук": "Sound on",
     "Без звука": "Mute",
-    "Видео слишком большое — смотреть в Telegram": "Video is too large — watch it in Telegram",
   },
   ru: {
     "Адрес": "Адрес",
@@ -2651,7 +2650,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Вперёд": "Вперёд",
     "Звук": "Звук",
     "Без звука": "Без звука",
-    "Видео слишком большое — смотреть в Telegram": "Видео слишком большое — смотреть в Telegram",
   },
   lv: {
     "Адрес": "Adrese",
@@ -4009,7 +4007,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Вперёд": "Uz priekšu",
     "Звук": "Ieslēgt skaņu",
     "Без звука": "Izslēgt skaņu",
-    "Видео слишком большое — смотреть в Telegram": "Video ir pārāk liels — skatieties Telegram",
   },
   uk: {
     "Адрес": "Адреса",
@@ -5366,7 +5363,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Вперёд": "Вперед",
     "Звук": "Увімкнути звук",
     "Без звука": "Вимкнути звук",
-    "Видео слишком большое — смотреть в Telegram": "Відео завелике — дивіться в Telegram",
   },
 }
 

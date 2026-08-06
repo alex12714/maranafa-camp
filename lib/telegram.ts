@@ -28,13 +28,11 @@ const PROBE_GRID = 64
 export interface MediaItem {
   id: string
   type: "photo" | "video"
-  /** Playable/displayable URL. Empty only when a video is `unsupported`. */
+  /** Playable/displayable URL — always present. */
   url: string
   thumbUrl?: string
   /** Human-readable duration as Telegram renders it, e.g. "0:46". */
   duration?: string
-  /** Telegram refused to transcode ("Media is too big") — show the thumb instead. */
-  unsupported?: boolean
   link: string
   pubDate: string
   text?: string
@@ -129,7 +127,6 @@ function parseMediaFromBlock(block: string, postId: number, pubDate: string, tex
   let match: RegExpExecArray | null
   while ((match = MEDIA_ANCHOR_RE.exec(block)) !== null) {
     const kind = match[1]
-    const classRest = match[2]
     const attrs = match[3]
 
     const href = attrs.match(/href="([^"]+)"/)?.[1]
@@ -157,17 +154,19 @@ function parseMediaFromBlock(block: string, postId: number, pubDate: string, tex
       segment.match(/<video\s+src="([^"]+)"[^>]*class="tgme_widget_message_video js-message_video"/)?.[1] ??
       segment.match(/<video[^>]+class="tgme_widget_message_video js-message_video"[^>]*src="([^"]+)"/)?.[1]
     const duration = segment.match(/message_video_duration[^>]*>([^<]+)</)?.[1]
-    const unsupported = classRest.includes("not_supported") || !src
 
-    if (!src && !thumbUrl) continue
+    // Telegram will not transcode oversized videos ("Media is too big", the
+    // `not_supported` anchor class) and exposes no mp4 for them anywhere — not
+    // in the embed, not on the post page. They cannot play, so they are left
+    // out of the slideshow entirely rather than stalling it on a still frame.
+    if (!src) continue
 
     items.push({
       id: itemId,
       type: "video",
-      url: src ?? "",
+      url: src,
       thumbUrl,
       duration,
-      unsupported: unsupported || undefined,
       link,
       pubDate,
       text: text || undefined,

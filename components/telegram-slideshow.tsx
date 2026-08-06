@@ -290,9 +290,8 @@ function Player({
   const [controlsVisible, setControlsVisible] = useState(true)
 
   const current = items[index]
-  // Telegram refuses to transcode oversized videos ("Media is too big"). Those
-  // arrive without an mp4, so they play as a still frame on the photo timer.
-  const isPlayableVideo = current?.type === "video" && !current.unsupported && Boolean(current.url)
+  // The API only ever returns videos it has a playable mp4 for.
+  const isPlayableVideo = current?.type === "video" && Boolean(current.url)
 
   // ── Load the day's media ────────────────────────────────────────────────────
   useEffect(() => {
@@ -571,28 +570,14 @@ function Player({
                 onError={next}
               />
             ) : (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  key={current.id}
-                  src={current.url || current.thumbUrl}
-                  alt=""
-                  className="max-w-full max-h-full object-contain"
-                  onError={next}
-                />
-                {current.type === "video" && (
-                  <a
-                    href={current.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute z-10 bottom-24 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 text-white text-xs font-medium backdrop-blur-sm"
-                  >
-                    <Film className="w-4 h-4" />
-                    {t("Видео слишком большое — смотреть в Telegram")}
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </>
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={current.id}
+                src={current.url}
+                alt=""
+                className="w-full h-full object-cover"
+                onError={next}
+              />
             )}
 
             {/* Tap zones: sides step, centre toggles pause */}
