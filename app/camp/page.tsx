@@ -105,6 +105,25 @@ export default function CampPage() {
 
       {/* Content */}
       <div className="container mx-auto max-w-5xl px-4 py-12">
+
+        {/* Camp report */}
+        <div className="bg-gradient-to-r from-[#B22234] to-[#7a0e1e] text-white rounded-xl shadow-md p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-lg font-bold mb-1">
+              <TranslatedText text="🎈 Академия пилотов, воздушный шар и мастерские" />
+            </p>
+            <p className="text-white/85 text-sm">
+              <TranslatedText text="Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня." />
+            </p>
+          </div>
+          <Link
+            href="/blog/lager-nebo-zovet-2026"
+            className="flex-shrink-0 bg-white text-[#B22234] font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-colors text-sm"
+          >
+            <TranslatedText text="Читать репортаж →" />
+          </Link>
+        </div>
+
         {/* Logistics */}
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-12">
           <h2 className="text-xl font-bold text-gray-900 mb-4">

@@ -1373,6 +1373,9 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Нужно подвезти, встретить или передать вещи": "Someone needs a lift, a pickup, or something passed on",
     "Думаете, кого попросить, и неудобно просить.": "You wonder who to ask, and feel awkward asking.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "A request with your location in the app — whoever is heading that way responds.",
+    // --- Camp 2026 report banner (/camp) ---
+    "🎈 Академия пилотов, воздушный шар и мастерские": "🎈 A pilot academy, a hot air balloon and workshops",
+    "Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня.": "Read how the 2026 “The Sky is Calling” camp went, and see the photos and videos from every day.",
     // --- Telegram slideshow (home blog section) ---
     "Повтор": "Repeat",
     "Начинаем заново…": "Starting over…",
@@ -2635,6 +2638,9 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Нужно подвезти, встретить или передать вещи": "Нужно подвезти, встретить или передать вещи",
     "Думаете, кого попросить, и неудобно просить.": "Думаете, кого попросить, и неудобно просить.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Запрос с геолокацией в приложении — откликается тот, кому по пути.",
+    // --- Camp 2026 report banner (/camp) ---
+    "🎈 Академия пилотов, воздушный шар и мастерские": "🎈 Академия пилотов, воздушный шар и мастерские",
+    "Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня.": "Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня.",
     // --- Telegram slideshow (home blog section) ---
     "Повтор": "Повтор",
     "Начинаем заново…": "Начинаем заново…",
@@ -3994,6 +4000,9 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Нужно подвезти, встретить или передать вещи": "Vajag aizvest, sagaidīt vai nodot lietas",
     "Думаете, кого попросить, и неудобно просить.": "Domājat, ko palūgt, un ir neērti lūgt.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Pieprasījums ar atrašanās vietu lietotnē — atsaucas tas, kuram pa ceļam.",
+    // --- Camp 2026 report banner (/camp) ---
+    "🎈 Академия пилотов, воздушный шар и мастерские": "🎈 Pilotu akadēmija, gaisa balons un darbnīcas",
+    "Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня.": "Izlasiet, kā norisinājās 2026. gada nometne «Debesis sauc», un apskatiet katras dienas foto un video.",
     // --- Telegram slideshow (home blog section) ---
     "Повтор": "Atkārtot",
     "Начинаем заново…": "Sākam no jauna…",
@@ -5352,6 +5361,9 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Нужно подвезти, встретить или передать вещи": "Потрібно підвезти, зустріти або передати речі",
     "Думаете, кого попросить, и неудобно просить.": "Думаєте, кого попросити, і незручно просити.",
     "Запрос с геолокацией в приложении — откликается тот, кому по пути.": "Запит із геолокацією в застосунку — відгукується той, кому по дорозі.",
+    // --- Camp 2026 report banner (/camp) ---
+    "🎈 Академия пилотов, воздушный шар и мастерские": "🎈 Академія пілотів, повітряна куля та майстерні",
+    "Читайте, как прошёл лагерь «Небо зовёт» 2026, и смотрите фото и видео каждого дня.": "Читайте, як пройшов табір «Небо кличе» 2026, і дивіться фото та відео кожного дня.",
     // --- Telegram slideshow (home blog section) ---
     "Повтор": "Повтор",
     "Начинаем заново…": "Починаємо спочатку…",
