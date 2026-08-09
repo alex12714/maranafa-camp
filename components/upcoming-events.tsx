@@ -95,7 +95,21 @@ const events: EventItem[] = [
     details: "Суббота, 16:00 – 21:00 · Мера 36, 2 этаж",
     image: "/images/events/maranafa-point.png",
     alt: "Маранафа Point — встреча друзей",
+    registrationUrl: "/maranafa-point-sep-2026#register",
     detailsPage: "/maranafa-point-sep-2026",
+  },
+  {
+    id: "friends-nov",
+    title: "Маранафа Friends – Осенняя встреча",
+    subtitle: "Маранафа Friends",
+    date: "6 – 8 ноября 2026",
+    eventDate: "2026-11-06",
+    endDate: "2026-11-08",
+    details: "Три дня вместе · место уточняется",
+    image: "/images/events/friends-nov-2026.svg",
+    alt: "Маранафа Friends — осенняя встреча",
+    registrationUrl: "/maranafa-friends-nov-2026#register",
+    detailsPage: "/maranafa-friends-nov-2026",
   },
   {
     id: "maranafa-point-dec",
@@ -107,6 +121,7 @@ const events: EventItem[] = [
     details: "Суббота, 16:00 – 21:00 · Мера 36, 2 этаж",
     image: "/images/events/maranafa-point.png",
     alt: "Маранафа Point — встреча друзей",
+    registrationUrl: "/maranafa-point-dec-2026#register",
     detailsPage: "/maranafa-point-dec-2026",
   },
   {
@@ -269,6 +284,13 @@ function EventLineCard({ event }: { event: EventItem }) {
               <TranslatedText text={event.date} />
             </span>
           </div>
+          {/* The whole row is already a link to the details page, where the form
+              lives — a badge rather than a nested link keeps the markup valid. */}
+          {event.registrationUrl && (
+            <span className="inline-block mt-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#B22234] bg-[#B22234]/10 rounded-full px-2 py-0.5">
+              <TranslatedText text="Регистрация открыта" />
+            </span>
+          )}
         </div>
         {event.detailsPage && (
           <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />

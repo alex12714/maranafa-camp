@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sparkles } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
+import EventRegistrationForm from "@/components/event-registration-form"
 
 const EVENT_DATE = "12 декабря 2026"
 const EVENT_WEEKDAY = "Суббота"
@@ -182,6 +183,22 @@ export default function MaranafaPointDecPage() {
               <span><TranslatedText text="Приходишь один — всего 5 евро" /></span>
             </li>
           </ul>
+        </div>
+
+        {/* Registration */}
+        <div id="register" className="scroll-mt-24 bg-white rounded-xl shadow-sm border p-6 md:p-8 mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <TranslatedText text="📝 Регистрация" />
+          </h2>
+          <p className="text-gray-600 mb-6">
+            <TranslatedText text="Дайте знать, что придёте — так мы приготовим достаточно места и угощений." />
+          </p>
+          <div className="max-w-xl">
+            <EventRegistrationForm
+              event="point-dec-2026"
+              successMessage="Ждём вас 12 декабря на Мера 36. До встречи на Маранафа Point!"
+            />
+          </div>
         </div>
 
         {/* Gallery */}

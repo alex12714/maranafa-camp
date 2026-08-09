@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350" role="img" aria-label="Maranafa Friends — 6–8 ноября 2026">
+  <defs>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.06"/></feComponentTransfer>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <clipPath id="torn">
+      <path d="M62 176 L214 152 L370 178 L536 148 L702 180 L868 150 L1020 178
+               L1004 430 L1022 686 L1002 940 L1018 1128
+               L860 1104 L700 1132 L534 1102 L368 1134 L206 1106 L58 1130
+               L74 880 L56 640 L76 400 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1080" height="1350" fill="#f2efe9"/>
+
+  <g clip-path="url(#torn)">
+    <rect x="40" y="140" width="1000" height="1010" fill="#b8232f"/>
+    <rect x="40" y="140" width="1000" height="1010" fill="#8e1c29" opacity="0.35"
+          style="mix-blend-mode:multiply"/>
+  </g>
+  <g clip-path="url(#torn)" filter="url(#grain)">
+    <rect x="40" y="140" width="1000" height="1010" fill="none"/>
+  </g>
+
+  <!-- date tag -->
+  <g transform="rotate(-7 262 118)">
+    <rect x="132" y="52" width="260" height="132" fill="#111111"/>
+    <text x="262" y="106" font-family="Georgia, 'Times New Roman', serif" font-size="46"
+          fill="#ffd700" text-anchor="middle" font-style="italic">6–8</text>
+    <text x="262" y="158" font-family="Georgia, 'Times New Roman', serif" font-size="42"
+          fill="#ffd700" text-anchor="middle" font-style="italic">ноября</text>
+  </g>
+
+  <!-- title -->
+  <text x="540" y="470" font-family="Georgia, 'Times New Roman', serif" font-size="96"
+        font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="14">MARANAFA</text>
+  <text x="540" y="690" font-family="Georgia, 'Times New Roman', serif" font-size="168"
+        font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="4">FRIENDS</text>
+
+  <line x1="300" y1="770" x2="780" y2="770" stroke="#ffd700" stroke-width="8"/>
+
+  <text x="540" y="870" font-family="Georgia, 'Times New Roman', serif" font-size="58"
+        fill="#ffd700" text-anchor="middle" font-style="italic">Осенняя встреча</text>
+  <text x="540" y="960" font-family="Georgia, 'Times New Roman', serif" font-size="46"
+        fill="#ffffff" text-anchor="middle" opacity="0.92">три дня вместе · 2026</text>
+
+  <text x="540" y="1245" font-family="Georgia, 'Times New Roman', serif" font-size="52"
+        fill="#111111" text-anchor="middle">Maranafa Friends</text>
+</svg>

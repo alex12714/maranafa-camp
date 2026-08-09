@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils, Phone } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Sun, Moon, Coffee, Utensils, Phone, Backpack, CheckCircle2 } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { ConferenceRegistrationForm } from "@/components/conference-registration-form"
 import { useLanguage } from "@/contexts/language-context"
@@ -61,6 +61,27 @@ const dayHeaders = [
   { date: "12.08", dayKey: "Среда" },
   { date: "13.08", dayKey: "Четверг" },
   { date: "14.08", dayKey: "Пятница" },
+]
+
+const packingList = [
+  "Постельное бельё (комплект можно арендовать на месте за 5 евро, сообщите заранее, если есть такая необходимость)",
+  "Экстра одеяло (или тёплое одеяло) — некоторые ночи могут быть прохладными",
+  "Одежда на тёплое и холодное время",
+  "Бутылка для воды с именем ребёнка",
+  "Комплект одежды, который не жалко испачкать (для кружков)",
+  "Резиновые сапоги на случай дождливой погоды",
+  "Спортивные кроссовки",
+  "Резиновые сланцы",
+  "Сменное нижнее бельё на неделю",
+  "Полотенце",
+  "Головной убор от солнца",
+  "Зубная щётка / паста",
+  "Шампунь / гель для душа",
+  "Средства личной гигиены для девочек",
+  "Средство от укусов насекомых",
+  "Крем от солнца",
+  "Плавки / купальник",
+  "Фен для девочек сушить волосы",
 ]
 
 function T({ text }: { text: string }) {
@@ -217,6 +238,28 @@ export default function ConferencePage() {
               )
             })}
           </div>
+        </div>
+
+        {/* What to bring */}
+        <div className="mb-12 scroll-mt-24" id="what-to-bring">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center flex items-center justify-center gap-2">
+            <Backpack className="h-6 w-6 text-[#B22234]" />
+            <T text="Что брать" />
+          </h2>
+          <Card>
+            <CardContent className="pt-6">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+                {packingList.map((item) => (
+                  <li key={item} className="flex items-start">
+                    <CheckCircle2 className="h-5 w-5 text-[#B22234] mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 leading-snug">
+                      <T text={item} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Registration Form */}
