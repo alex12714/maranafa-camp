@@ -17,6 +17,10 @@ const EVENTS: Record<string, string> = {
   "point-sep-2026": "Маранафа Point — 12 сентября 2026",
   "point-dec-2026": "Маранафа Point — 12 декабря 2026",
   "friends-nov-2026": "Маранафа Friends — ноябрь 2026",
+  // Pre-registration only. The full camp application (/camp/register) is bound
+  // to a specific camp record in "Люди в лагере" and stays 2026 until the 2027
+  // camp exists there — sending early interest here keeps the two apart.
+  "narnia-2027": "Лагерь «Возвращение Нарнии» — 28 июня – 4 июля 2027",
 }
 
 const MAX_PEOPLE = 20

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350" role="img" aria-label="Возвращение Нарнии — детский лагерь, 28 июня – 4 июля 2027">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1e3a"/>
+      <stop offset="45%" stop-color="#123a63"/>
+      <stop offset="100%" stop-color="#2c6a87"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="62%" r="46%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cfe3ef"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1350" fill="url(#sky)"/>
+
+  <!-- stars -->
+  <g fill="#ffffff" opacity="0.85">
+    <circle cx="120" cy="120" r="3"/><circle cx="300" cy="70" r="2"/><circle cx="470" cy="140" r="2.5"/>
+    <circle cx="640" cy="80" r="2"/><circle cx="820" cy="130" r="3"/><circle cx="960" cy="60" r="2"/>
+    <circle cx="200" cy="240" r="2"/><circle cx="880" cy="250" r="2.5"/><circle cx="540" cy="215" r="2"/>
+    <circle cx="60" cy="330" r="2"/><circle cx="1010" cy="340" r="2"/>
+  </g>
+
+  <rect width="1080" height="1350" fill="url(#glow)"/>
+
+  <!-- lamppost, the Narnia signpost -->
+  <g stroke="#ffd700" stroke-width="7" fill="none" opacity="0.9">
+    <line x1="182" y1="1090" x2="182" y2="742"/>
+    <path d="M152 742 h60 l-12 -44 h-36 z"/>
+    <line x1="160" y1="700" x2="204" y2="700"/>
+  </g>
+  <circle cx="182" cy="722" r="34" fill="#ffd700" opacity="0.28"/>
+
+  <!-- wardrobe doorway, opened -->
+  <g opacity="0.95">
+    <rect x="742" y="700" width="196" height="392" rx="10" fill="#5a3a22"/>
+    <rect x="762" y="722" width="72" height="348" rx="6" fill="#3d2716"/>
+    <rect x="846" y="722" width="72" height="348" rx="6" fill="#e8f3fa" opacity="0.75"/>
+    <circle cx="840" cy="900" r="6" fill="#ffd700"/>
+  </g>
+
+  <!-- snow ground -->
+  <path d="M0 1090 C 180 1052, 360 1112, 540 1082 C 720 1052, 900 1108, 1080 1074 L1080 1350 L0 1350 Z"
+        fill="url(#snow)"/>
+
+  <!-- fir trees -->
+  <g fill="#0f3b33">
+    <path d="M360 1082 l44 -132 l44 132 z"/>
+    <path d="M372 1006 l32 -96 l32 96 z"/>
+    <path d="M600 1074 l36 -108 l36 108 z"/>
+    <path d="M610 1012 l26 -78 l26 78 z"/>
+  </g>
+
+  <!-- crown -->
+  <g transform="translate(540 300)">
+    <path d="M-96 44 L-96 -14 L-52 22 L0 -44 L52 22 L96 -14 L96 44 Z" fill="#ffd700"/>
+    <rect x="-96" y="48" width="192" height="22" rx="6" fill="#ffd700"/>
+    <circle cx="0" cy="-56" r="10" fill="#e8f3fa"/>
+    <circle cx="-96" cy="-24" r="8" fill="#e8f3fa"/>
+    <circle cx="96" cy="-24" r="8" fill="#e8f3fa"/>
+  </g>
+
+  <text x="540" y="520" font-family="Georgia, 'Times New Roman', serif" font-size="62"
+        fill="#ffd700" text-anchor="middle" letter-spacing="10">ВОЗВРАЩЕНИЕ</text>
+  <text x="540" y="642" font-family="Georgia, 'Times New Roman', serif" font-size="132"
+        font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="4">НАРНИИ</text>
+
+  <line x1="330" y1="700" x2="750" y2="700" stroke="#ffd700" stroke-width="5" opacity="0.8"/>
+
+  <text x="540" y="1200" font-family="Georgia, 'Times New Roman', serif" font-size="52"
+        fill="#123a63" text-anchor="middle" font-weight="bold">28 июня – 4 июля 2027</text>
+  <text x="540" y="1268" font-family="Georgia, 'Times New Roman', serif" font-size="38"
+        fill="#2c6a87" text-anchor="middle">Детский лагерь «Маранафа»</text>
+</svg>
