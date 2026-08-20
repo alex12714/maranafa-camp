@@ -8,7 +8,7 @@ import EventRegistrationForm from "@/components/event-registration-form"
 
 // TODO(copy): dates, venue and price are placeholders until the Friends team
 // confirms them. Update here and in components/upcoming-events.tsx together.
-const EVENT_DATE = "6 – 8 ноября 2026"
+const EVENT_DATE = "13 – 15 ноября 2026"
 const EVENT_WEEKDAY = "Пятница – воскресенье"
 const EVENT_PLACE = "Уточняется"
 

@@ -14,8 +14,6 @@ const ENDPOINT = "event-register"
  * Adding an event means one line here plus the matching Airtable choice.
  */
 const EVENTS: Record<string, string> = {
-  "point-sep-2026": "Маранафа Point — 12 сентября 2026",
-  "point-dec-2026": "Маранафа Point — 12 декабря 2026",
   "friends-nov-2026": "Маранафа Friends — ноябрь 2026",
   // Pre-registration only. The full camp application (/camp/register) is bound
   // to a specific camp record in "Люди в лагере" and stays 2026 until the 2027
