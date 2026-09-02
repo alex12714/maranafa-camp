@@ -265,3 +265,182 @@ a path for a role; an assigned person can resume it on another device; a wrong
 answer cannot be retried before its linked material is acknowledged; all four
 answer forms work without a mouse; and repeated final submissions never issue
 more than one certificate.
+
+---
+
+# Decisions of record (2026-09-02)
+
+Settled before the migration was written, under bead `rolelearn-D2`
+(`maranafa-app-uygu`). **Where these contradict the design above, these win** —
+the sections above are left as written so the reasoning that was revised stays
+visible.
+
+## The five that gated the migration
+
+**1. Idempotency key is scoped, not global.**
+`UNIQUE(attempt_item_id, idempotency_key)`, key `NOT NULL`, server rejects
+anything under ~16 characters. Absorb the violation with `session.begin_nested()`
+per `app/routers/questions.py:400-412`, then re-read and return the original
+response row.
+
+There is no idempotency-key precedent in maranafa-api — the two house patterns
+are a row lock plus a state check (`app/services/orders.py:78-80`) and a scoped
+unique constraint (`app/models/awards.py:141`). Decisive point: **nothing
+generates a key client-side today**, so a global unique would make server
+correctness depend on a client property the server cannot verify — a client can
+send `"1"`. Scoping to the authenticated attempt's item makes cross-learner
+leakage structurally impossible. The scoping column is free; it is already in
+the route path.
+
+Note what the key is actually for: rule 3 ("refuse a response when the item is
+not the current eligible item") already kills a double-tap on a *correct*
+answer. The key earns its place on a *wrong* answer, where the item stays
+current and a double-tap would log two wrong responses, inflating
+`remediation_count` and depressing first-pass score. It deduplicates the
+response log, not certificate issuance.
+
+**2. `interaction_config` is dropped entirely.**
+Not moved to `learning_questions` — omitted. `learning_question_options.sort`
+already carries the swipe mapping deterministically (`sort 0 = left`,
+`sort 1 = right`), and publish validation requires exactly two options for
+`swipe_binary`, so the column has no content left to hold. Direction -> option
+is *scored* data, not display data; on a translation row it would have made
+correctness language-dependent, which this document forbids twice elsewhere. A
+JSONB with one undocumented-shape use is a column that accumulates whatever the
+next author needs, unvalidated. If it is ever genuinely required, it goes on
+`learning_questions`, nullable, shape-validated per `question_type` at publish.
+
+**3. Publishing hard-blocks on `ru` only — and a version is never mixed.**
+Russian is the authoring language: the `ru` block in
+`contexts/language-context.tsx:1433` is an identity map, `t = (key) =>
+translations[key] || key` at 17+ call sites renders the Russian source rather
+than a blank, and the API's `resolve_translated_text` falls back to primary and
+refuses to chain through English. Missing en/lv/uk are checklist warnings, which
+is already the house UX for incomplete translation.
+
+**But that evidence is about display content, and this is graded content.** A
+missing event title costs a reader a wrong label; a missing Latvian *question*
+means a learner reads Russian, answers wrong, and has a wrong answer permanently
+recorded plus a remediation loop. So: **a language is either complete across
+every required question, option and linked material of a version, or entirely
+absent from it.** Compute the complete set at publish time and store
+`available_languages` on the immutable `role_learning_versions` row; the learner
+UI offers only those and everything else falls back to `ru`.
+
+The required set lives in `app/models/app_settings.py` as
+`learning_required_languages`, defaulting to `["ru"]` when the singleton row is
+absent. **Known limitation:** `app_settings` is app-wide, so the "per camp"
+requirement is not reachable today. The only per-camp table, `camp_settings`, is
+an AirTable mirror and a value written there is flipped back by the next sync —
+which is precisely why `app_settings` exists. App-wide is the achievable answer.
+
+**4. A revoked certificate can be reissued.**
+`UNIQUE(person_id, version_id) WHERE revoked_at IS NULL`. Partial unique indexes
+are house practice — `app/etl/loader.py:499-507` builds two. The closest domain
+analogue argues the same way: `mentor_agreements` is an immutable attestation
+with *no* unique constraint at all, because "a mentor who needs to sign again
+signs a NEW row".
+
+Revocations split into "this person should not hold it" and "this certificate is
+wrong" — a misspelled `recipient_name_snapshot`, a wrong role. The second is far
+likelier at a camp, and making revocation final would mean the only fix for a
+typo is that the person can never hold a valid certificate for that version.
+
+Add `revoked_by_person_id` and `revocation_reason`, matching
+`person_awards.awarded_by_person_id`.
+
+**CI TRAP, and it will bite:** tests run on SQLite
+(`tests/conftest.py:115`, schema built by `SQLModel.metadata.create_all`). A
+`postgresql_where=`-only index compiles to a **full** unique index there, so the
+reissue-after-revocation test would pass in Postgres and fail in CI. Pass
+**both** `postgresql_where=` and `sqlite_where=`.
+
+**5. Resume: the retired attempt wins while grace is open — and the constraint
+must be able to say so.**
+Order: an in-progress attempt on a retired version whose grace is still open;
+else an in-progress attempt on the current published version; else a new attempt
+on the current published version. Grace expiry closes an attempt as `expired` —
+not passed, not failed, because neither is true and either would put a lie in
+somebody's training record.
+
+**The plan's `UNIQUE(person_id, version_id)` cannot enforce this.** It *permits*
+one person holding two active attempts on two versions of the same program —
+exactly the state the rule adjudicates — and nothing bounds it to two. Service
+code would be arbitrating something the schema should have made impossible. So:
+
+- add `program_id` to `learning_attempts` (a partial unique index cannot span a
+  join);
+- the constraint becomes
+  `UNIQUE(person_id, program_id) WHERE status IN ('in_progress','awaiting_remediation')`;
+- prevent drift in the database rather than by convention:
+  `UNIQUE(id, program_id)` on `role_learning_versions`, then composite FK
+  `learning_attempts(version_id, program_id) -> role_learning_versions(id, program_id)`.
+
+Evaluate grace expiry **lazily on read** — at the resume POST and at
+`GET /me/learning/attempts/{id}` — never as the authority of a scheduled job.
+`app/etl/loader.py:33-37` records why: a broken job left the participant sync
+dead for two days with nobody noticing. A response POST after the deadline 409s,
+naming the expired version.
+
+No window exists between mastery and certification: the certificate is issued in
+the same transaction as the final correct response, so grace expiry blocks new
+responses and never retroactively invalidates mastery already achieved.
+
+## Further corrections to "Database design"
+
+**A. Cross-version content leak — the most serious defect found.**
+`learning_question_materials(question_id, material_id)` has plain FKs to two
+tables that each hang off `module_id -> version_id`. **Nothing prevents a
+question in version 1 linking to a remediation material in version 2**, and
+because the authoring lifecycle is clone-a-version, this will happen. The
+symptom is a learner remediated with content from a different version of the
+path — which destroys exactly the "explainable later" property the immutability
+design exists to provide.
+
+Fix with the same composite-FK shape as decision 5: carry `version_id` on
+`learning_questions` and `learning_materials`, `UNIQUE(id, version_id)` on each,
+composite FK on the junction. `learning_response_selections` has the same hole
+and this document defers it to "service validation", which is weaker than the
+rest of the schema.
+
+**B. A certificate must not be cascade-deleted with its attempt.** The FK
+section says cascade for "attempt children"; a certificate is not a child in the
+disposable sense. Use `RESTRICT`, or `SET NULL` and let the snapshot columns
+carry it — which is what they are for. Precedent: `mentor_agreements.group_id`
+is SET NULL "because deleting a group in AirTable must not delete the evidence
+that somebody took responsibility for those children".
+
+**C. `learning_material_progress` is not a pure junction.** It carries
+`opened_at` and `acknowledged_at`, so it takes `UUIDAuditBase` plus
+`UNIQUE(attempt_item_id, material_id)` — not `TableBase` with a composite PK.
+`app/models/base.py` draws that line explicitly.
+
+**D. `role_learning_programs` states "one active program per role" and does not
+enforce it.** Add `UNIQUE(role_id) WHERE active`.
+
+**E. `role_id` is `ON DELETE RESTRICT`, not CASCADE.** Both existing FKs into
+`roles` cascade, which is right for junction edges and wrong for permanent
+content. A role deleted from AirTable keeps its row, its id and its FKs — only
+its assignments are stripped — so a program whose role nobody can hold is
+handled by soft retirement (`active` flag) following `app/models/awards.py:120-123`,
+where an inactive row "stays attached to every medal already given but drops out
+of the picker".
+
+**F. `code` is an app-owned slug.** `roles` has no `code` column and no unique
+constraint on `name` (`name` is a nullable varchar), so neither is a candidate
+key. `role_learning_programs.code` is `UNIQUE NOT NULL`, seeded to match the
+role page slug where one exists — 14 of the 16 pages under
+`maranafa-camp/app/roles/` match a DB role name exactly — but owned by the app,
+not by a Next.js directory name and not by the ETL.
+
+**G. Column is `lang`, not `language`**, per `event_translations`
+(`UNIQUE(event_id, lang)`). Publish validation reuses the existing `Language`
+enum, `unknown_languages()`, and the derivation idiom
+`tuple(lang.value for lang in Language)` rather than retyping the list — "a
+second copy is a copy that drifts: the half that lags either refuses a language
+the app already offers, or accepts one no build can render."
+
+**H. `airtable_id` on 18 app-owned tables** is 18 unique indexes on
+permanently-NULL columns. This is accepted house practice, not an oversight —
+`event_translations` took the same cost knowingly — and is recorded here so the
+next reader does not think it was missed.
