@@ -11,9 +11,12 @@
  */
 
 import { useCallback, useEffect, useState } from "react"
+import Link from "next/link"
 import {
   CheckCircle2,
+  ChevronRight,
   Clock,
+  GraduationCap,
   HandHeart,
   Home,
   Loader2,
@@ -394,6 +397,27 @@ export default function PortalMePage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Training for those roles. Always shown, and never conditional on
+            `profile.roles`: a role whose training is not published yet, and a
+            role recorded in the other membership table, both belong on the
+            training page — which labels them honestly — rather than being
+            silently unreachable from here. */}
+        <Link
+          href="/portal/learning"
+          className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-4 transition-colors hover:bg-gray-50"
+        >
+          <GraduationCap className="h-5 w-5 shrink-0 text-gray-400" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-gray-900">
+              <TranslatedText text="Обучение" />
+            </p>
+            <p className="mt-0.5 text-xs text-gray-500">
+              <TranslatedText text="Подготовка к вашему служению на конференции" />
+            </p>
+          </div>
+          <ChevronRight className="h-5 w-5 shrink-0 text-gray-300" />
+        </Link>
       </main>
     </div>
   )
