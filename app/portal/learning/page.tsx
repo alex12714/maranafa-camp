@@ -32,6 +32,7 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { AuthoringLink } from "@/components/learning/admin/authoring-link"
 import { LearningProgressBar } from "@/components/learning/learning-progress"
 import { TranslatedText } from "@/components/translated-text"
 import { useLanguage } from "@/contexts/language-context"
@@ -157,6 +158,8 @@ export default function PortalLearningPage() {
             ))}
           </ul>
         )}
+
+        <AuthoringLink />
       </div>
     </div>
   )
