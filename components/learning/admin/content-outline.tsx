@@ -1,77 +1,50 @@
 "use client"
 
 /**
- * Where the module outline, material editor and question editor go.
+ * The content section of the version screen: the outline, the editors and the
+ * preview.
  *
- * THEY ARE NOT BUILT, AND THIS SAYS SO RATHER THAN PRETENDING. The authoring
- * API (app/routers/learning_admin.py) exposes programs, versions and the
- * lifecycle — and nothing else. There is no route that creates, reads, reorders
- * or deletes a module; none that writes a material, its translations or its
- * asset link; none that writes a question, an option, `is_correct`, or any
- * per-language text. There is not even an admin-side READ of a version's
- * content, so this cannot honestly render a read-only outline either: the only
- * content read in the whole API is the learner's attempt endpoint, which
- * requires an open attempt against a PUBLISHED version and deliberately strips
- * correctness, so it can never show a director their own draft.
+ * A THIN WRAPPER ON PURPOSE. It owns the heading and the one sentence that
+ * frames what follows; `ContentEditor` owns the tree. Keeping the framing here
+ * means the version page never has to know how deep the content goes.
  *
- * A PLACEHOLDER IS THE GRACEFUL FAILURE HERE; an editor wired to endpoints that
- * do not exist would render its chrome, accept typing, and lose the work on
- * save — which is worse than the absence, because it is indistinguishable from
- * a bug until somebody has already written a question into it.
- *
- * THE SEAM IS SHAPED FOR THE DROP-IN. This takes `versionId` already, even
- * though nothing here reads it yet, so the arrival of
- * `GET /learning/admin/versions/{id}/content` — the aggregate read of the whole
- * subtree, and the one place in this feature where `is_correct` is legitimately
- * exposed, because an author has to see which option is right — changes this
- * component's body and nothing at its boundary.
- *
- * The author is not left without a route forward: the publish checklist below
- * is computed server-side over exactly these tables, so it still names every
- * missing prompt, untranslated option and unlinked remediation material by
- * code. Until the content routes land, the checklist IS the view of the
- * content — which is why this panel points at it rather than apologising.
+ * THE WARNING ABOUT `is_correct` APPLIES FROM HERE DOWN. Everything this
+ * renders is built from `GET /learning/admin/versions/{id}/content`, the one
+ * response in this feature that carries correctness, and it is safe only
+ * because every route behind it is `require_director`. Nothing in this subtree
+ * — no component, no type derived from that response — may be reused on a
+ * learner surface. The preview is the one place the two worlds meet, and it
+ * maps down field by field rather than passing anything through.
  */
 
-import { Layers } from "lucide-react"
-
 import { useLanguage } from "@/contexts/language-context"
+import { ContentEditor } from "@/components/learning/admin/content/content-editor"
 
 export function ContentOutline({
   versionId,
   editable,
 }: {
-  /** Unused until the content routes land; see the note above. */
   versionId: string
   editable: boolean
 }) {
-  void versionId
   const { translations } = useLanguage()
   const t = (text: string) => translations[text] || text
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-bold text-gray-900">{t("Содержание")}</h2>
-      <div className="space-y-2 rounded-lg border border-dashed border-gray-300 bg-gray-50/60 p-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-          <Layers className="h-4 w-4 text-gray-400" aria-hidden />
-          {t("Редактор модулей и вопросов пока недоступен")}
-        </p>
-        <p className="text-xs leading-relaxed text-gray-600">
-          {t(
-            "Модули, материалы и вопросы этой версии заполняются через сид-скрипт: в API ещё нет маршрутов для их редактирования.",
-          )}
-        </p>
-        <p className="text-xs leading-relaxed text-gray-600">
+      <div>
+        <h2 className="text-sm font-bold text-gray-900">{t("Содержание")}</h2>
+        <p className="mt-0.5 text-xs leading-relaxed text-gray-500">
           {editable
             ? t(
-                "Проверка ниже выполняется на сервере по этим же данным и назовёт каждый пропущенный вопрос, перевод и материал по его коду.",
+                "Модули, материалы и вопросы. Изменения сохраняются сразу, когда вы уходите из поля.",
               )
             : t(
-                "Проверка ниже показывает состояние содержания этой версии на момент публикации.",
+                "Содержание этой версии в том виде, в котором она была опубликована.",
               )}
         </p>
       </div>
+      <ContentEditor versionId={versionId} editable={editable} />
     </section>
   )
 }
