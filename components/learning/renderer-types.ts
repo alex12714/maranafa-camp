@@ -6,9 +6,10 @@
  * owns exactly one thing: turning a question into controls and reporting which
  * options are selected. A renderer never fetches, never scores, never advances.
  *
- * `single_choice` is the only one built so far; `yes_no`, `multi_select` and
- * `swipe_binary` are a later bead and drop in beside it by adding one entry to
- * the registry in `question-renderer.tsx`.
+ * All four are built — `single_choice`, `yes_no`, `multi_select` and
+ * `swipe_binary` — each one entry in the registry in `question-renderer.tsx`.
+ * A fifth type would be the same: a component honouring this contract, one line
+ * in the registry, and nothing at all in the runner.
  *
  * SELECTION IS ALWAYS A LIST, even for the three renderers that record exactly
  * one id, because the API takes one answer shape (`selected_option_ids`) for

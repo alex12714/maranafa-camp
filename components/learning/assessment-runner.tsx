@@ -405,7 +405,12 @@ export function AssessmentRunner({ attemptId }: { attemptId: string }) {
             onSelect={setSelected}
             disabled={pending}
           />
-          {submitError && <SubmitErrorNotice kind={submitError} />}
+          {submitError && (
+            <SubmitErrorNotice
+              kind={submitError}
+              questionType={item.question.question_type}
+            />
+          )}
           <Button
             type="button"
             className="h-12 w-full text-base font-semibold"
@@ -637,12 +642,22 @@ function GraceNotice({ deadline }: { deadline: string }) {
   )
 }
 
-function SubmitErrorNotice({ kind }: { kind: SubmitError }) {
+function SubmitErrorNotice({
+  kind,
+  questionType,
+}: {
+  kind: SubmitError
+  questionType: string
+}) {
   const text =
     kind === "network"
       ? "Ответ не отправлен. Проверьте связь и попробуйте ещё раз."
       : kind === "invalid"
-        ? "Выберите один вариант ответа."
+        ? // "One option" is wrong advice on a question that wants a set, and a
+          // learner acting on it would answer wrongly on purpose.
+          questionType === "multi_select"
+          ? "Проверьте выбранные варианты ответа."
+          : "Выберите один вариант ответа."
         : "Обучение обновилось. Посмотрите, что изменилось."
   return (
     <p role="alert" className="text-sm font-medium text-red-600">
