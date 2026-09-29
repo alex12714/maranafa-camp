@@ -1,29 +1,31 @@
-import Hero from "@/components/hero"
-import UpcomingEvents from "@/components/upcoming-events"
-import DirectorQuote from "@/components/director-quote"
-import ParentReviews from "@/components/parent-reviews"
-import AboutSection from "@/components/about-section"
-import StaffSection from "@/components/staff-section"
-import BenefitsSection from "@/components/benefits-section"
-import TestimonialsSection from "@/components/testimonials-section"
-import LimitedOfferSection from "@/components/limited-offer-section"
-import StaffInterviewSection from "@/components/staff-interview-section"
-import HomeBlogSection from "@/components/home-blog-section"
+import HeroCinematic from "@/components/home/hero/hero-cinematic"
+import SmoothScroll from "@/components/home/smooth-scroll"
+import Manifesto from "@/components/home/sections/manifesto"
+import EventsGallery from "@/components/home/sections/events-gallery"
+import Story from "@/components/home/sections/story"
+import CampLife from "@/components/home/sections/camp-life"
+import Staff from "@/components/home/sections/staff"
+import Voices from "@/components/home/sections/voices"
+import Journal from "@/components/home/sections/journal"
+import FinalCta from "@/components/home/sections/final-cta"
+
+// Films (components/home/sections/films.tsx) is ready but not mounted: both
+// YouTube videos it used (KO7VG_UkHUA, 4GvEYKvkRTw) are no longer available.
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
-      <Hero />
-      <UpcomingEvents />
-      <StaffInterviewSection />
-      <DirectorQuote />
-      <ParentReviews />
-      <AboutSection />
-      <StaffSection />
-      <BenefitsSection />
-      <TestimonialsSection />
-      <HomeBlogSection />
-      <LimitedOfferSection />
-    </div>
+    <SmoothScroll>
+      <div className="flex flex-col bg-paper">
+        <HeroCinematic />
+        <Manifesto />
+        <EventsGallery />
+        <Story />
+        <CampLife />
+        <Staff />
+        <Voices />
+        <Journal />
+        <FinalCta />
+      </div>
+    </SmoothScroll>
   )
 }

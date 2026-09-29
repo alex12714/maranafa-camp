@@ -1,11 +1,24 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Menu, X, Globe, ChevronDown, ShoppingBag, Film, Package, Tent, HeartHandshake } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useLanguage, type Language, languageNames } from "@/contexts/language-context"
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import {
+  Globe,
+  ChevronDown,
+  ShoppingBag,
+  Film,
+  Package,
+  Tent,
+  HeartHandshake,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  useLanguage,
+  type Language,
+  languageNames,
+} from "@/contexts/language-context";
 
 const mainNavItems = [
   { name: "Блог", href: "/blog" },
@@ -14,7 +27,7 @@ const mainNavItems = [
   { name: "Родителям", href: "/parents" },
   { name: "Расписание", href: "/schedule" },
   { name: "Гимн лагеря", href: "/camp-anthem" },
-]
+];
 
 const moreItems = [
   { name: "Rosetto", href: "/rosetto", icon: HeartHandshake },
@@ -22,223 +35,371 @@ const moreItems = [
   { name: "Аренда", href: "/rental", icon: Package },
   { name: "Видео архив", href: "/video-archive", icon: Film },
   { name: "Мерч", href: "/merch", icon: ShoppingBag },
-]
+];
 
-export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [moreOpen, setMoreOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const moreRef = useRef<HTMLDivElement>(null)
-  const { language, setLanguage, translations = {}, setShowLanguageModal } = useLanguage()
+const EASE = "[transition-timing-function:cubic-bezier(0.32,0.72,0,1)]";
+
+/**
+ * True while the homepage hero (#top) is still under the bar, so the nav can
+ * sit transparent with light text over the dark film.
+ */
+function useOverHero(enabled: boolean) {
+  const [over, setOver] = useState(enabled);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    if (!enabled) {
+      setOver(false);
+      return;
+    }
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const hero = document.getElementById("top");
+      const limit = hero
+        ? hero.offsetTop + hero.offsetHeight - 72
+        : window.innerHeight * 0.8;
+      setOver(window.scrollY < limit);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [enabled]);
+
+  return over;
+}
+
+export default function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+  const { translations = {} } = useLanguage();
+  const overHero = useOverHero(isHome);
+  // Light (transparent) style only over the hero and while the menu is closed.
+  const light = isHome && overHero && !mobileMenuOpen;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setMoreOpen(false)
+        setMoreOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const t = (key: string) => translations[key] || key
+  // Before mount, render the Russian source strings so SSR and hydration agree.
+  const t = (key: string) => (mounted ? translations[key] || key : key);
 
-  const navLinkClass =
-    "flex items-center text-base font-medium text-gray-700 hover:text-[#B22234] transition-colors"
-
-  if (!mounted) {
-    return (
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center">
-            <Image src="/images/maranafa-logo.webp" alt="Маранафа" width={200} height={50} className="h-20 w-auto" />
-          </Link>
-          <div className="hidden md:flex md:space-x-8">
-            {mainNavItems.map((item) => (
-              <Link key={item.name} href={item.href} className={navLinkClass}>{item.name}</Link>
-            ))}
-          </div>
-          <div className="flex md:hidden">
-            <button type="button" className="inline-flex items-center justify-center rounded-md p-2 text-gray-700">
-              <Menu className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-      </header>
-    )
-  }
+  const linkClass = cn(
+    "relative text-[14px] font-medium tracking-[-0.005em] transition-colors duration-300",
+    light ? "text-white/80 hover:text-white" : "text-ink/70 hover:text-ink",
+  );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center">
-          <Image src="/images/maranafa-logo.webp" alt="Маранафа" width={200} height={50} className="h-20 w-auto" />
-        </Link>
+    <>
+      <header
+        className={cn(
+          "top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-500",
+          EASE,
+          isHome ? "fixed" : "sticky",
+          light
+            ? "border-b border-transparent bg-transparent"
+            : "border-b border-ink/[0.07] bg-paper/75 backdrop-blur-xl backdrop-saturate-150",
+        )}
+      >
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            className="relative z-10 flex items-center"
+            aria-label="Маранафа"
+          >
+            <Image
+              src={
+                light
+                  ? "/images/maranafa-logo-white.webp"
+                  : "/images/maranafa-logo.webp"
+              }
+              alt="Маранафа"
+              width={200}
+              height={50}
+              priority
+              className="h-12 w-auto md:h-14"
+            />
+          </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex md:items-center md:space-x-8">
-          {mainNavItems.map((item) => (
-            <Link key={item.name} href={item.href} className={navLinkClass}>
-              {t(item.name)}
-            </Link>
-          ))}
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-7 lg:flex">
+            {mainNavItems.map((item) => (
+              <Link key={item.name} href={item.href} className={linkClass}>
+                {t(item.name)}
+              </Link>
+            ))}
 
-          {/* "Ещё" dropdown */}
-          <div className="relative" ref={moreRef}>
-            <button
-              onClick={() => setMoreOpen((v) => !v)}
-              className={cn(navLinkClass, "gap-1")}
-            >
-              Ещё
-              <ChevronDown className={cn("h-4 w-4 transition-transform", moreOpen && "rotate-180")} />
-            </button>
-            {moreOpen && (
-              <div className="absolute right-0 mt-2 w-44 rounded-xl shadow-lg bg-white ring-1 ring-black/5 z-50 overflow-hidden">
+            <div className="relative" ref={moreRef}>
+              <button
+                onClick={() => setMoreOpen((v) => !v)}
+                className={cn(linkClass, "flex items-center gap-1")}
+                aria-expanded={moreOpen}
+              >
+                {t("Ещё")}
+                <ChevronDown
+                  className={cn(
+                    "h-3.5 w-3.5 transition-transform duration-300",
+                    moreOpen && "rotate-180",
+                  )}
+                />
+              </button>
+              <div
+                className={cn(
+                  "absolute right-0 mt-3 w-52 origin-top-right overflow-hidden rounded-2xl bg-paper/95 p-1.5 ring-1 ring-ink/[0.08] backdrop-blur-xl transition-[opacity,transform] duration-300",
+                  EASE,
+                  moreOpen
+                    ? "scale-100 opacity-100"
+                    : "pointer-events-none scale-95 opacity-0",
+                )}
+              >
                 {moreItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={() => setMoreOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B22234] transition-colors"
+                    className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm text-ink/75 transition-colors hover:bg-ink/[0.05] hover:text-ink"
                   >
-                    <item.icon className="h-4 w-4 text-gray-400" />
+                    <item.icon
+                      className="h-4 w-4 text-ink/40"
+                      strokeWidth={1.5}
+                    />
                     {t(item.name)}
                   </Link>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
 
-          <LanguageSelector />
-        </nav>
+            <LanguageSelector light={light} />
+          </nav>
 
-        {/* Mobile burger */}
-        <div className="flex md:hidden">
+          {/* Mobile burger: two lines that morph into an X */}
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-gray-700"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className={cn(
+              "relative z-10 flex h-10 w-10 items-center justify-center rounded-full lg:hidden",
+              light ? "text-white" : "text-ink",
+            )}
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            aria-expanded={mobileMenuOpen}
           >
             <span className="sr-only">Открыть меню</span>
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <span
+              className={cn(
+                "absolute h-[1.5px] w-5 bg-current transition-transform duration-500",
+                EASE,
+                mobileMenuOpen ? "rotate-45" : "-translate-y-[4px]",
+              )}
+            />
+            <span
+              className={cn(
+                "absolute h-[1.5px] w-5 bg-current transition-transform duration-500",
+                EASE,
+                mobileMenuOpen ? "-rotate-45" : "translate-y-[4px]",
+              )}
+            />
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile menu */}
-      <div className={cn("md:hidden", mobileMenuOpen ? "block" : "hidden")}>
-        <div className="space-y-1 px-4 pb-3 pt-2">
-          {mainNavItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex items-center py-2 text-base font-medium text-gray-700 hover:text-[#B22234]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t(item.name)}
-            </Link>
-          ))}
+      {/* Mobile menu: full-screen glass sheet with staggered links. A sibling of
+          the header, because the header's backdrop-filter would otherwise become
+          the containing block for this fixed layer. */}
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper/95 backdrop-blur-2xl transition-opacity duration-500 lg:hidden",
+          EASE,
+          mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+        aria-hidden={!mobileMenuOpen}
+      >
+        <div className="px-6 pb-16 pt-6">
+          <nav className="flex flex-col">
+            {mainNavItems.map((item, i) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                tabIndex={mobileMenuOpen ? 0 : -1}
+                style={{
+                  transitionDelay: mobileMenuOpen ? `${80 + i * 45}ms` : "0ms",
+                }}
+                className={cn(
+                  "border-b border-ink/[0.07] py-4 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink transition-[opacity,transform] duration-700",
+                  EASE,
+                  mobileMenuOpen
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-6 opacity-0",
+                )}
+              >
+                {t(item.name)}
+              </Link>
+            ))}
+          </nav>
 
-          {/* More section in mobile */}
-          <div className="border-t border-gray-100 pt-2 mt-2">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-0 py-1">Ещё</p>
+          <p className="mt-10 font-serif text-lg italic text-crimson">
+            {t("Ещё")}
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-x-4">
             {moreItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-2 py-2 text-base font-medium text-gray-700 hover:text-[#B22234]"
                 onClick={() => setMobileMenuOpen(false)}
+                tabIndex={mobileMenuOpen ? 0 : -1}
+                className="flex items-center gap-2 py-2.5 text-base font-medium text-ink/75 hover:text-ink"
               >
-                <item.icon className="h-4 w-4 text-gray-400" />
+                <item.icon className="h-4 w-4 text-ink/40" strokeWidth={1.5} />
                 {t(item.name)}
               </Link>
             ))}
           </div>
 
-          <div className="border-t border-gray-100 pt-2 mt-2">
-            <p className="text-base font-medium text-gray-700 mb-2">Language</p>
-            <div className="grid grid-cols-2 gap-2">
-              {(Object.keys(languageNames) as Language[]).map((lang) => (
-                <LanguageButton
-                  key={lang}
-                  lang={lang}
-                  onClick={() => { setLanguage(lang); setMobileMenuOpen(false) }}
-                />
-              ))}
-            </div>
+          <p className="mt-10 font-serif text-lg italic text-crimson">
+            Language
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {(Object.keys(languageNames) as Language[]).map((lang) => (
+              <LanguageButton
+                key={lang}
+                lang={lang}
+                onDone={() => setMobileMenuOpen(false)}
+              />
+            ))}
           </div>
         </div>
       </div>
-    </header>
-  )
+    </>
+  );
 }
 
-function LanguageSelector() {
-  const { language, setLanguage, setShowLanguageModal } = useLanguage()
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+function LanguageSelector({ light }: { light: boolean }) {
+  const { language, setLanguage, setShowLanguageModal } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className="flex items-center text-base font-medium text-gray-700 hover:text-[#B22234] transition-colors"
+        className={cn(
+          "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium ring-1 ring-inset transition-colors duration-300",
+          light
+            ? "text-white/85 ring-white/25 hover:ring-white/50"
+            : "text-ink/75 ring-ink/15 hover:ring-ink/35",
+        )}
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
       >
-        <Globe className="mr-1 h-4 w-4" />
+        <Globe className="h-3.5 w-3.5" strokeWidth={1.5} />
         {languageNames[language]}
       </button>
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-          <div className="py-1">
-            {(Object.keys(languageNames) as Language[]).map((lang) => (
-              <button
-                key={lang}
-                className={`block px-4 py-2 text-sm w-full text-left ${
-                  language === lang ? "bg-gray-100 text-[#B22234] font-medium" : "text-gray-700 hover:bg-gray-50"
-                }`}
-                onClick={() => { setLanguage(lang); setIsOpen(false) }}
-              >
-                {languageNames[lang]}
-              </button>
-            ))}
-            <div className="border-t border-gray-100 my-1" />
-            <button
-              className="block px-4 py-2 text-sm w-full text-left text-gray-700 hover:bg-gray-50"
-              onClick={() => { setShowLanguageModal(true); setIsOpen(false) }}
-            >
-              Change Language
-            </button>
-          </div>
-        </div>
-      )}
+      <div
+        className={cn(
+          "absolute right-0 mt-3 w-48 origin-top-right overflow-hidden rounded-2xl bg-paper/95 p-1.5 ring-1 ring-ink/[0.08] backdrop-blur-xl transition-[opacity,transform] duration-300",
+          EASE,
+          isOpen
+            ? "scale-100 opacity-100"
+            : "pointer-events-none scale-95 opacity-0",
+        )}
+      >
+        {(Object.keys(languageNames) as Language[]).map((lang) => (
+          <button
+            key={lang}
+            className={cn(
+              "block w-full rounded-xl px-3.5 py-2 text-left text-sm transition-colors",
+              language === lang
+                ? "bg-ink/[0.06] font-medium text-crimson"
+                : "text-ink/75 hover:bg-ink/[0.04]",
+            )}
+            onClick={() => {
+              setLanguage(lang);
+              setIsOpen(false);
+            }}
+          >
+            {languageNames[lang]}
+          </button>
+        ))}
+        <div className="my-1 h-px bg-ink/[0.07]" />
+        <button
+          className="block w-full rounded-xl px-3.5 py-2 text-left text-sm text-ink/75 hover:bg-ink/[0.04]"
+          onClick={() => {
+            setShowLanguageModal(true);
+            setIsOpen(false);
+          }}
+        >
+          Change Language
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-function LanguageButton({ lang, onClick }: { lang: Language; onClick: () => void }) {
-  const { language } = useLanguage()
+function LanguageButton({
+  lang,
+  onDone,
+}: {
+  lang: Language;
+  onDone: () => void;
+}) {
+  const { language, setLanguage } = useLanguage();
   return (
     <button
-      className={`px-3 py-2 text-sm rounded-md ${
-        language === lang ? "bg-[#B22234] text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      }`}
-      onClick={onClick}
+      className={cn(
+        "rounded-full px-4 py-2.5 text-sm font-medium transition-colors",
+        language === lang
+          ? "bg-ink text-paper"
+          : "bg-ink/[0.05] text-ink/75 hover:bg-ink/[0.09]",
+      )}
+      onClick={() => {
+        setLanguage(lang);
+        onDone();
+      }}
     >
       {languageNames[lang]}
     </button>
-  )
+  );
 }

@@ -37,6 +37,11 @@ const LanguageContext = createContext<LanguageContextType>(defaultContext)
 // Translations for each language
 export const translationData: Record<Language, Record<string, string>> = {
   en: {
+    "Ближайшие события": "Upcoming events",
+    "Листайте": "Scroll",
+    "Подробнее": "Learn more",
+    "Директор": "Director",
+    "Ещё": "More",
     "Адрес": "Address",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "The Return of Narnia",
@@ -1662,6 +1667,11 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Без звука": "Mute",
   },
   ru: {
+    "Ближайшие события": "Ближайшие события",
+    "Листайте": "Листайте",
+    "Подробнее": "Подробнее",
+    "Директор": "Директор",
+    "Ещё": "Ещё",
     "Адрес": "Адрес",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Возвращение Нарнии",
@@ -3192,6 +3202,11 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Без звука": "Без звука",
   },
   lv: {
+    "Ближайшие события": "Tuvākie pasākumi",
+    "Листайте": "Ritiniet",
+    "Подробнее": "Uzzināt vairāk",
+    "Директор": "Direktors",
+    "Ещё": "Vairāk",
     "Адрес": "Adrese",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Nārnijas atgriešanās",
@@ -4819,6 +4834,11 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Без звука": "Izslēgt skaņu",
   },
   uk: {
+    "Ближайшие события": "Найближчі події",
+    "Листайте": "Гортайте",
+    "Подробнее": "Детальніше",
+    "Директор": "Директор",
+    "Ещё": "Ще",
     "Адрес": "Адреса",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Повернення Нарнії",
