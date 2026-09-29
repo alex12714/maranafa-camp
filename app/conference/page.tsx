@@ -13,7 +13,6 @@ const speakers = [
   { nameKey: "Олег Боков", daysKey: "11–12 августа", image: "/images/events/bokov.jpg", descKey: "Молодёжный спикер, основатель проекта «Сильное поколение», Украина" },
   { nameKey: "David Neal", daysKey: "13–14 августа", image: "/images/events/david-neal.webp", descKey: "Пастор Трансъевропейского дивизиона, отдел коммуникаций" },
   { nameKey: "Виктор Алексеенко", daysKey: "", image: "/images/events/viktor-alekseenko.webp", descKey: "Руководитель Церкви адвентистов в Украине" },
-  { nameKey: "Алекс Подбрезский", daysKey: "", image: "/images/events/podbrezsky.jpg", descKey: "Директор лагеря «Маранафа»" },
   { nameKey: "Давис Трубецкойс", daysKey: "", image: "/images/events/trubeckojs.jpg", descKey: "Пастор Церкви адвентистов в Латвии" },
 ]
 

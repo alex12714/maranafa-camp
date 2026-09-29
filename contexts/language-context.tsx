@@ -473,7 +473,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Банданы": "Bandanas",
     "РЕСУРСЫ": "RESOURCES",
     "КОНТАКТЫ": "CONTACTS",
-    "Алекс одбрезский": "Alex Odbrezsky",
     "Информация о лагере 2025": "Camp 2025 Information",
     "Информация для сотрудников лагеря Маранафа": "Information for Maranatha camp staff",
     "Стать сотрудником лагеря": "Become a Camp Staff Member",
@@ -859,7 +858,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     // Conference schedule & speakers
     "Олег Боков": "Oleg Bokov",
     "Юрий Бондаренко": "Yuri Bondarenko",
-    "Алекс Подбрезский": "Alex Podbrezsky",
     "Давис Трубецкойс": "Davis Trubeckojs",
     "11–12 августа": "August 11–12",
     "13–14 августа": "August 13–14",
@@ -2008,7 +2006,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Банданы": "Банданы",
     "РЕСУРСЫ": "РЕСУРСЫ",
     "КОНТАКТЫ": "КОНТАКТЫ",
-    "Алекс одбрезский": "Алекс одбрезский",
     "Информация о лагере 2025": "Информация о лагере 2025",
     "Информация для сотрудников лагеря Маранафа": "Информация для сотрудников лагеря Маранафа",
     "Стать сотрудником лагеря": "Стать сотрудником лагеря",
@@ -2393,7 +2390,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     // Conference schedule & speakers
     "Олег Боков": "Олег Боков",
     "Юрий Бондаренко": "Юрий Бондаренко",
-    "Алекс Подбрезский": "Алекс Подбрезский",
     "Давис Трубецкойс": "Давис Трубецкойс",
     "11–12 августа": "11–12 августа",
     "13–14 августа": "13–14 августа",
@@ -3641,7 +3637,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Банданы": "Bandanas",
     "РЕСУРСЫ": "RESURSI",
     "КОНТАКТЫ": "KONTAKTI",
-    "Алекс одбрезский": "Aleks Odbrezskis",
     "Информация о лагере 2025": "Informācija par nometni 2025",
     "Информация для сотрудников лагеря Маранафа": "Informācija nometnes Maranafa darbiniekiem",
     "Стать сотрудником лагеря": "Kļūt par nometnes darbinieku",
@@ -4025,7 +4020,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     // Conference schedule & speakers
     "Олег Боков": "Oļegs Bokovs",
     "Юрий Бондаренко": "Jurijs Bondarenko",
-    "Алекс Подбрезский": "Alekss Podbrezskis",
     "Давис Трубецкойс": "Dāvis Trubeckojs",
     "11–12 августа": "11.–12. augusts",
     "13–14 августа": "13.–14. augusts",
@@ -5274,7 +5268,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Банданы": "Бандани",
     "РЕСУРСЫ": "РЕСУРСИ",
     "КОНТАКТЫ": "КОНТАКТИ",
-    "Алекс одбрезский": "Алекс Одбрезський",
     "Информация о лагере 2025": "Інформація про табір 2025",
     "Информация для сотрудников лагеря Маранафа": "Інформація для працівників табору Маранафа",
     "Стать сотрудником лагеря": "Стати працівником табору",
@@ -5657,7 +5650,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     // Conference schedule & speakers
     "Олег Боков": "Олег Боков",
     "Юрий Бондаренко": "Юрій Бондаренко",
-    "Алекс Подбрезский": "Алекс Подбрезський",
     "Давис Трубецкойс": "Давіс Трубецкойс",
     "11–12 августа": "11–12 серпня",
     "13–14 августа": "13–14 серпня",

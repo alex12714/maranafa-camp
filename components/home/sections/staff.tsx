@@ -8,12 +8,6 @@ import { Reveal } from "@/components/home/motion/reveal"
 import { DisplayHeading, Eyebrow } from "./ui"
 
 const staffMembers = [
-  {
-    name: "Alex Podbrezsky",
-    role: "Директор",
-    image:
-      "/images/staff/alex_director_avatar.webp",
-  },
   { name: "Abels Griņuks", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   { name: "Agita Grinyk", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   { name: "Aleksandr Gubko", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
@@ -216,9 +210,7 @@ const staffMembers = [
 
 // Only people with a real portrait; placeholders would read as gaps.
 const people = staffMembers.filter((p) => !p.image.startsWith("/placeholder"))
-const director = people.find((p) => p.role === "Директор")
-const team = people.filter((p) => p !== director)
-const rows = [team.filter((_, i) => i % 2 === 0), team.filter((_, i) => i % 2 === 1)]
+const rows = [people.filter((_, i) => i % 2 === 0), people.filter((_, i) => i % 2 === 1)]
 
 function Portrait({ name, image }: { name: string; image: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -256,7 +248,7 @@ function Portrait({ name, image }: { name: string; image: string }) {
   )
 }
 
-function MarqueeRow({ items, reverse }: { items: typeof team; reverse?: boolean }) {
+function MarqueeRow({ items, reverse }: { items: typeof people; reverse?: boolean }) {
   return (
     <div className="marquee-mask group/row flex overflow-hidden">
       {[0, 1].map((copy) => (
@@ -296,21 +288,6 @@ export default function Staff() {
             </DisplayHeading>
           </Reveal>
         </div>
-        {director && (
-          <Reveal delay={0.12} className="md:col-span-4">
-            <div className="flex items-center gap-4 md:justify-end">
-              <div className="relative h-16 w-16 overflow-hidden rounded-full ring-1 ring-ink/10">
-                <Image src={director.image} alt={director.name} fill sizes="64px" className="object-cover" />
-              </div>
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.01em]">{director.name}</p>
-                <p className="font-serif text-lg italic text-crimson">
-                  <TranslatedText text={director.role} />
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        )}
       </div>
 
       <div className="mt-16 space-y-5 md:space-y-6">

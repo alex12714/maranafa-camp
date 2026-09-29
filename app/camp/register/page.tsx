@@ -449,7 +449,6 @@ export default function CampRegisterPage() {
                   <TranslatedText text="Оставить на проходной по адресу Базницас 12а. На конверте укажите:" />
                 </p>
                 <ul className="mt-2 text-sm text-gray-700 space-y-1 pl-1">
-                  <li>• Aleksandrs Podbrezskis</li>
                   <li>
                     • <TranslatedText text="Лагерь Маранафа" />
                   </li>

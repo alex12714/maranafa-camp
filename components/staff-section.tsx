@@ -1,10 +1,4 @@
 const staffMembers = [
-  {
-    name: "Alex Podbrezsky",
-    role: "Директор",
-    image:
-      "/images/staff/alex_director_avatar.webp",
-  },
   { name: "Abels Griņuks", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   { name: "Agita Grinyk", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   { name: "Aleksandr Gubko", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },

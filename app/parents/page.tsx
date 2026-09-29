@@ -187,7 +187,6 @@ export default function ParentsPage() {
                     <p className="font-bold">
                       <TranslatedText text="Зам директора" />
                     </p>
-                    <p>Алекс Подбрезский</p>
                     <p className="text-gray-600">+371 20172714</p>
                   </div>
                 </div>
