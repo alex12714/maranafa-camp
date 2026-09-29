@@ -91,10 +91,10 @@ const staffMembers = [
   { name: "Julia Stangelini", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   { name: "Kamila Januskeviciuene", role: "Сотрудник", image: "/placeholder.svg?height=96&width=96" },
   {
-    name: "Kate Podbrezska",
+    name: "Kate",
     role: "Сотрудник",
     image:
-      "/images/staff/kate-podbrezska.jpeg",
+      "/images/staff/kate.jpeg",
   },
   {
     name: "Larisa Juganova",

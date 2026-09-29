@@ -199,7 +199,7 @@ export default function ParentsPage() {
                     <p className="font-bold">
                       <TranslatedText text="Координатор" />
                     </p>
-                    <p>Екатерина Подбрезская</p>
+                    <p>Екатерина</p>
                     <p className="text-gray-600">+371 24406207</p>
                   </div>
                 </div>
