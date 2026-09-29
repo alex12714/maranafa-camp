@@ -19,7 +19,17 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
+      },
       colors: {
+        // Homepage design tokens (warm, cinematic)
+        ink: "#0B0A09",
+        paper: "#F6F2EA",
+        ember: "#E8743B",
+        gold: { DEFAULT: "#E9B949", soft: "#F4D99A" },
+        crimson: { DEFAULT: "#B22234", deep: "#7A1422" },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Onest, Cormorant } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
@@ -8,7 +8,19 @@ import Footer from "@/components/footer"
 import { LanguageProvider } from "@/contexts/language-context"
 import LanguageSelectorModal from "@/components/language-selector-modal"
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] })
+// Onest: Cyrillic-first grotesk for UI and display. Cormorant: serif accent.
+// latin-ext is required for Latvian diacritics (ā, č, ē, ļ, ņ, š, ž).
+const sans = Onest({
+  subsets: ["latin", "latin-ext", "cyrillic", "cyrillic-ext"],
+  variable: "--font-sans",
+  display: "swap",
+})
+const serif = Cormorant({
+  subsets: ["latin", "latin-ext", "cyrillic", "cyrillic-ext"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "Маранафа — Христианские мероприятия для детей и молодёжи",
@@ -24,8 +36,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru">
-      <body className={inter.className}>
+    <html lang="ru" className={`${sans.variable} ${serif.variable}`}>
+      <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <LanguageProvider>
             <div className="flex min-h-screen flex-col">
