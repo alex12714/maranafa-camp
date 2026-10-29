@@ -6,6 +6,17 @@ import { CheckCircle } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { useLanguage } from "@/contexts/language-context"
 
+// Messages for the refusals /api/event-register passes through (OnFire codes).
+// Russian is the translation key, as everywhere on the site.
+const GENERIC_ERROR = "Произошла ошибка. Попробуйте ещё раз."
+const ERROR_MESSAGES: Record<string, string> = {
+  already_registered: "Вы уже зарегистрированы на это событие с этим e-mail.",
+  event_full: "К сожалению, все места уже заняты.",
+  event_ended: "Регистрация на это событие закрыта.",
+  form_invalid: "Проверьте, пожалуйста, заполненные поля и попробуйте ещё раз.",
+  rate_limited: "Слишком много попыток. Попробуйте чуть позже.",
+}
+
 /**
  * Registration form shared by the one-off events (Маранафа Point, Friends, …).
  * `event` is the key the /api/event-register route maps to an Airtable choice —
@@ -41,10 +52,14 @@ export default function EventRegistrationForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ event, name, phone, email, people, comment, website, language }),
       })
-      if (!res.ok) throw new Error("error")
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        setError(ERROR_MESSAGES[data?.code] || GENERIC_ERROR)
+        return
+      }
       setSuccess(true)
     } catch {
-      setError("Произошла ошибка. Попробуйте ещё раз.")
+      setError(GENERIC_ERROR)
     } finally {
       setLoading(false)
     }
@@ -150,7 +165,11 @@ export default function EventRegistrationForm({
           placeholder="Вопросы, пожелания, с кем придёте"
         />
       </div>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && (
+        <p className="text-red-600 text-sm" role="alert">
+          <TranslatedText text={error} />
+        </p>
+      )}
       <Button
         type="submit"
         disabled={loading}
