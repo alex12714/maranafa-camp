@@ -135,7 +135,9 @@ async function registerInOnFire(slug: string, r: Registrant): Promise<OnFireResu
     }
     const code = typeof json?.message === "string" ? json.message.trim() : ""
     if (ONFIRE_USER_ERRORS.has(code)) return { kind: "rejected", code }
-    if (code === "form_required") return { kind: "rejected", code: "form_invalid" }
+    // A required answer the site cannot supply is a form the person must fix;
+    // without form data (the event read failed) it is our gap, not theirs.
+    if (code === "form_required" && formData) return { kind: "rejected", code: "form_invalid" }
     // event_not_found (not public yet), missing RPC, 5xx: keep the lead via Airtable.
     return { kind: "unavailable", reason: `http-${res.status}:${code || json?.code || "no-json"}` }
   } catch (err) {
