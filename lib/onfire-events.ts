@@ -32,6 +32,8 @@ export type OnFireEvent = {
   end_date: string | null
   location_name: string | null
   location_address: string | null
+  price?: number | string | null
+  currency?: string | null
   attendee_count?: number | null
   attendee_limit?: number | null
   registration_form_id?: string | null
@@ -225,13 +227,29 @@ export type EventPageData = {
   place: string
   cover: string | null
   description: string | null
+  price: string | null
+}
+
+/** "50 €"; null for a free or unpriced event. */
+export function formatPrice(e: Pick<OnFireEvent, "price" | "currency">): string | null {
+  const amount = Number(e.price)
+  if (!Number.isFinite(amount) || amount <= 0) return null
+  try {
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: (e.currency || "EUR").toUpperCase(),
+      maximumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    }).format(amount)
+  } catch {
+    return `${amount} ${(e.currency || "").toUpperCase()}`.trim()
+  }
 }
 
 export function toPageData(
   e: OnFireEvent | null,
   fallback: { date: string; weekdays: string; place: string }
 ): EventPageData {
-  if (!e) return { ...fallback, title: null, times: null, cover: null, description: null }
+  if (!e) return { ...fallback, title: null, times: null, cover: null, description: null, price: null }
   return {
     title: e.title?.trim() || null,
     date: formatDateRange(e.start_date, e.end_date) || fallback.date,
@@ -240,5 +258,6 @@ export function toPageData(
     place: formatPlace(e) || fallback.place,
     cover: isHttps(e.cover_image) ? e.cover_image : null,
     description: (e.description || "").trim() || null,
+    price: formatPrice(e),
   }
 }

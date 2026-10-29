@@ -142,7 +142,9 @@ export default function MaranafaFriendsNovPage({ data }: { data: EventPageData }
               </div>
               <div>
                 <p className="font-medium text-gray-900"><TranslatedText text="Стоимость" /></p>
-                <p><TranslatedText text="Уточняется — сообщим зарегистрированным участникам" /></p>
+                <p>
+                  <TranslatedText text={data.price || "Уточняется — сообщим зарегистрированным участникам"} />
+                </p>
               </div>
             </div>
           </div>

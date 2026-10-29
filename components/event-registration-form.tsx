@@ -40,6 +40,7 @@ export default function EventRegistrationForm({
   const [website, setWebsite] = useState("") // honeypot
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [paymentNote, setPaymentNote] = useState("")
   const [error, setError] = useState("")
 
   async function handleSubmit(e: React.FormEvent) {
@@ -57,6 +58,8 @@ export default function EventRegistrationForm({
         setError(ERROR_MESSAGES[data?.code] || GENERIC_ERROR)
         return
       }
+      const data = await res.json().catch(() => null)
+      if (typeof data?.paymentNote === "string") setPaymentNote(data.paymentNote)
       setSuccess(true)
     } catch {
       setError(GENERIC_ERROR)
@@ -75,6 +78,11 @@ export default function EventRegistrationForm({
         <p className="text-gray-600 text-center">
           <TranslatedText text={successMessage} />
         </p>
+        {paymentNote && (
+          <p className="text-gray-700 text-center whitespace-pre-line bg-gray-50 border rounded-lg px-4 py-3 text-sm">
+            {paymentNote}
+          </p>
+        )}
       </div>
     )
   }

@@ -92,7 +92,7 @@ function mapFormData(form: OnFireForm, r: Registrant): Record<string, string> {
 }
 
 type OnFireResult =
-  | { kind: "saved"; registrationId?: string }
+  | { kind: "saved"; registrationId?: string; paymentNote?: string }
   | { kind: "rejected"; code: string }
   | { kind: "unavailable"; reason: string }
 
@@ -131,7 +131,12 @@ async function registerInOnFire(slug: string, r: Registrant): Promise<OnFireResu
     }
     if (res.ok && json) {
       const id = json.registration_id || json.id
-      return { kind: "saved", registrationId: typeof id === "string" ? id : undefined }
+      return {
+        kind: "saved",
+        registrationId: typeof id === "string" ? id : undefined,
+        // Offline-paid events: the organiser's note on how to pay.
+        paymentNote: typeof json.payment_note === "string" && json.payment_note.trim() ? json.payment_note.trim() : undefined,
+      }
     }
     const code = typeof json?.message === "string" ? json.message.trim() : ""
     if (ONFIRE_USER_ERRORS.has(code)) return { kind: "rejected", code }
@@ -245,6 +250,7 @@ export async function POST(req: NextRequest) {
 
     // 1. OnFire first (source of truth) for events that live there.
     let savedInOnFire = false
+    let paymentNote: string | undefined
     if (onfireSlug) {
       const result = await registerInOnFire(onfireSlug, r)
       if (result.kind === "rejected") {
@@ -260,6 +266,7 @@ export async function POST(req: NextRequest) {
       }
       if (result.kind === "saved") {
         savedInOnFire = true
+        paymentNote = result.paymentNote
         await logSubmission({
           endpoint: `${ENDPOINT}:onfire`,
           outcome: "saved",
@@ -291,7 +298,7 @@ export async function POST(req: NextRequest) {
     if (!airtable.ok && !savedInOnFire) {
       return NextResponse.json({ error: "Failed to save registration" }, { status: 500 })
     }
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, ...(paymentNote ? { paymentNote } : {}) })
   } catch (err) {
     console.error("Event registration error:", err)
     await logSubmission({ endpoint: ENDPOINT, outcome: "error", reason: String(err), ...meta, data: body })
