@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Sparkles } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
-import EventRegistrationForm from "@/components/event-registration-form"
+import OnFireForm from "@/components/onfire-form"
 import { useLanguage } from "@/contexts/language-context"
 import type { EventPageData } from "@/lib/onfire-events"
 
@@ -183,10 +183,7 @@ export default function MaranafaFriendsNovPage({ data }: { data: EventPageData }
             <TranslatedText text="Мест ограниченное количество — зарегистрируйтесь заранее, и мы пришлём все детали." />
           </p>
           <div className="max-w-xl">
-            <EventRegistrationForm
-              event="friends-nov-2026"
-              successMessage="Мы пришлём место, расписание и стоимость, как только всё будет готово. До встречи в ноябре!"
-            />
+            <OnFireForm form="friends-nov-2026" title="📝 Регистрация" />
           </div>
         </div>
 

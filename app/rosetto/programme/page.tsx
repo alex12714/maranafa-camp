@@ -1,11 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "motion/react"
 import {
-  ArrowLeft, ArrowRight, CheckCircle2, Check, Phone, Mail,
+  ArrowLeft, ArrowRight, Check, Phone, Mail,
   Car, HeartPulse, Stethoscope, Scale, MessageCircle, Truck,
   Wrench, PhoneCall, Ticket, Home, Users, User, UsersRound,
   Sparkles, HelpingHand, Handshake, Headphones, CalendarCheck, BellRing,
@@ -14,7 +13,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TranslatedText } from "@/components/translated-text"
-import { useLanguage } from "@/contexts/language-context"
+import OnFireForm from "@/components/onfire-form"
 
 /* ── animation presets ─────────────────────────────────────────────── */
 const ease = [0.22, 1, 0.36, 1] as const
@@ -227,172 +226,10 @@ const steps = [
   },
 ]
 
-/* ── pre-registration form ─────────────────────────────────────────── */
-function PreRegistrationForm({
-  plan,
-  setPlan,
-}: {
-  plan: string
-  setPlan: (v: string) => void
-}) {
-  const { language, translations = {} } = useLanguage()
-  const t = (s: string) => translations[s] || s
-
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
-  const [email, setEmail] = useState("")
-  const [comment, setComment] = useState("")
-  const [website, setWebsite] = useState("") // honeypot
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState("")
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-    try {
-      const res = await fetch("/api/rosetto-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, comment, plan, language, website }),
-      })
-      if (!res.ok) throw new Error("error")
-      setSuccess(true)
-    } catch {
-      setError(t("Произошла ошибка. Попробуйте ещё раз."))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (success) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-10 text-center">
-        <CheckCircle2 className="h-14 w-14 text-green-500" />
-        <h3 className="text-xl font-bold text-gray-900">
-          <TranslatedText text="Заявка получена!" />
-        </h3>
-        <p className="text-gray-600 max-w-sm">
-          <TranslatedText text="Мы свяжемся с вами, как только планы будут готовы к запуску — расскажем условия и ответим на вопросы." />
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Honeypot — hidden from users; bots that fill it are silently dropped */}
-      <div className="hidden" aria-hidden="true">
-        <label>
-          Website
-          <input
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-          />
-        </label>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          <TranslatedText text="Имя и фамилия" /> <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
-          placeholder="Иван Иванов"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          <TranslatedText text="Телефон" /> <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="tel"
-          required
-          inputMode="tel"
-          pattern="\+[1-9][0-9 ()\-.]{6,}"
-          title="Один номер, начиная с + и кода страны, например +37120172714"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
-          placeholder="+371 12345678"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          <TranslatedText text="Электронная почта" /> <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
-          placeholder="ivan@example.com"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          <TranslatedText text="Интересующий план" />
-        </label>
-        <select
-          value={plan}
-          onChange={(e) => setPlan(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent"
-        >
-          <option value="Solo">{`Rosetto Solo — ${t("Молодым и тем, кто живёт один")}`}</option>
-          <option value="Family">{`Rosetto Family — ${t("Для семьи с детьми")}`}</option>
-          <option value="Family+">{`Rosetto Family+ — ${t("Семье со старшим поколением")}`}</option>
-          <option value="Не определился">{t("Пока не определился")}</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          <TranslatedText text="Что для вас важнее всего?" />
-        </label>
-        <textarea
-          rows={3}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B22234] focus:border-transparent resize-none"
-          placeholder={t("Например: уход за родителями, помощь с машиной, логопед для ребёнка")}
-        />
-      </div>
-
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-
-      <Button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-[#B22234] hover:bg-[#8e1c29] text-white py-3 rounded-lg text-base font-semibold"
-      >
-        {loading ? <TranslatedText text="Отправка..." /> : <TranslatedText text="Записаться в лист ожидания" />}
-      </Button>
-
-      <p className="text-xs text-gray-500 text-center leading-relaxed">
-        <TranslatedText text="Это ранняя регистрация интереса: состав услуг и цены ещё уточняются. Заявка бесплатна и ни к чему не обязывает." />
-      </p>
-    </form>
-  )
-}
-
 /* ── page ──────────────────────────────────────────────────────────── */
 export default function RosettoProgrammePage() {
-  const [plan, setPlan] = useState("Не определился")
-
-  const choosePlan = (value: string) => {
-    setPlan(value)
+  // The OnFire form asks for the plan itself; the plan cards only scroll to it.
+  const goToRegister = () => {
     document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" })
   }
 
@@ -830,7 +667,7 @@ export default function RosettoProgrammePage() {
                   </ul>
 
                   <Button
-                    onClick={() => choosePlan(p.value)}
+                    onClick={goToRegister}
                     className={`w-full py-5 rounded-xl font-bold text-base ${
                       p.featured
                         ? "bg-[#FFD700] text-[#6B0000] hover:bg-[#FFC200]"
@@ -1024,9 +861,9 @@ export default function RosettoProgrammePage() {
 
             <motion.div
               initial="hidden" whileInView="visible" viewport={vp} variants={fadeIn}
-              className="bg-white rounded-2xl p-8 shadow-2xl"
+              className="bg-white rounded-2xl p-3 md:p-4 shadow-2xl"
             >
-              <PreRegistrationForm plan={plan} setPlan={setPlan} />
+              <OnFireForm form="rosetto" title="Предварительная регистрация" contactEmail="rosetto@maranafa.camp" />
             </motion.div>
           </div>
         </div>

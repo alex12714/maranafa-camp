@@ -37,12 +37,15 @@ const LanguageContext = createContext<LanguageContextType>(defaultContext)
 // Translations for each language
 export const translationData: Record<Language, Record<string, string>> = {
   en: {
+    // Embedded OnFire registration forms (components/onfire-form.tsx)
+    "Регистрация скоро откроется": "Registration opens soon",
+    "Форма регистрации появится здесь в ближайшее время. А пока вы можете написать нам:": "The registration form will appear here shortly. In the meantime, you can write to us:",
+    "Открыть форму в новом окне": "Open the form in a new window",
     "Ближайшие события": "Upcoming events",
     "Листайте": "Scroll",
     "Подробнее": "Learn more",
     "Директор": "Director",
     "Ещё": "More",
-    "Адрес": "Address",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "The Return of Narnia",
     "Шкаф снова открыт": "The wardrobe is open again",
@@ -250,7 +253,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Что будет в лагере?": "What will be in the camp?",
     "Очень вкусная еда": "Delicious Food",
     "Природа": "Nature",
-    "Программа": "Program",
     "УЗНАТЬ БОЛЬШЕ": "LEARN MORE",
     "Предстоящие события – регистрируйтесь сейчас!": "Upcoming Events - Register Now!",
     "Маранафа - летний лагерь": "Maranafa - Summer Camp",
@@ -797,7 +799,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Христианская молодёжная конференция": "Christian Youth Conference",
     "11 – 14 августа 2026": "August 11 – 14, 2026",
     "дней": "days",
-    "На главную": "Back to Home",
     "Грани Будущего": "Edges of the Future",
     "Молодёжь": "Youth",
     "Воплоти мечту. Найди свой путь. Измени мир.": "Make your dream real. Find your path. Change the world.",
@@ -1675,7 +1676,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Подробнее": "Подробнее",
     "Директор": "Директор",
     "Ещё": "Ещё",
-    "Адрес": "Адрес",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Возвращение Нарнии",
     "Шкаф снова открыт": "Шкаф снова открыт",
@@ -1784,7 +1784,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Что будет в лагере?": "Что будет в лагере?",
     "Очень вкусная еда": "Очень вкусная еда",
     "Природа": "Природа",
-    "Программа": "Программа",
     "УЗНАТЬ БОЛЬШЕ": "УЗНАТЬ БОЛЬШЕ",
     "Предстоящие события – регистрируйтесь сейчас!": "Предстоящие события – регистрируйтесь сейчас!",
     "Маранафа - летний лагерь": "Маранафа - летний лагерь",
@@ -2335,7 +2334,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Христианская молодёжная конференция": "Христианская молодёжная конференция",
     "11 – 14 августа 2026": "11 – 14 августа 2026",
     "дней": "дней",
-    "На главную": "На главную",
     "Грани Будущего": "Грани Будущего",
     "Молодёжь": "Молодёжь",
     "Воплоти мечту. Найди свой путь. Измени мир.": "Воплоти мечту. Найди свой путь. Измени мир.",
@@ -3208,12 +3206,15 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Без звука": "Без звука",
   },
   lv: {
+    // Embedded OnFire registration forms (components/onfire-form.tsx)
+    "Регистрация скоро откроется": "Reģistrācija drīzumā tiks atvērta",
+    "Форма регистрации появится здесь в ближайшее время. А пока вы можете написать нам:": "Reģistrācijas forma šeit parādīsies tuvākajā laikā. Pa to laiku varat mums rakstīt:",
+    "Открыть форму в новом окне": "Atvērt formu jaunā logā",
     "Ближайшие события": "Tuvākie pasākumi",
     "Листайте": "Ritiniet",
     "Подробнее": "Uzzināt vairāk",
     "Директор": "Direktors",
     "Ещё": "Vairāk",
-    "Адрес": "Adrese",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Nārnijas atgriešanās",
     "Шкаф снова открыт": "Skapis atkal ir atvērts",
@@ -3421,7 +3422,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Что будет в лагере?": "Kas notiks nometnē?",
     "Очень вкусная еда": "Ļoti garšīgs ēdiens",
     "Природа": "Daba",
-    "Программа": "Programma",
     "УЗНАТЬ БОЛЬШЕ": "UZZINĀT VAIRĀK",
     "Предстоящие события – регистрируйтесь сейчас!": "Gaidāmie notikumi — reģistrējieties tagad!",
     "Маранафа - летний лагерь": "Maranafa — vasaras nometne",
@@ -3970,7 +3970,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Христианская молодёжная конференция": "Kristīgā jauniešu konference",
     "11 – 14 августа 2026": "2026. gada 11. – 14. augusts",
     "дней": "dienas",
-    "На главную": "Uz sākumu",
     "Грани Будущего": "Nākotnes šķautnes",
     "Молодёжь": "Jaunieši",
     "Воплоти мечту. Найди свой путь. Измени мир.": "Īsteno sapni. Atrodi savu ceļu. Maini pasauli.",
@@ -4843,12 +4842,15 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Без звука": "Izslēgt skaņu",
   },
   uk: {
+    // Embedded OnFire registration forms (components/onfire-form.tsx)
+    "Регистрация скоро откроется": "Реєстрація незабаром відкриється",
+    "Форма регистрации появится здесь в ближайшее время. А пока вы можете написать нам:": "Форма реєстрації незабаром з'явиться тут. А поки що ви можете написати нам:",
+    "Открыть форму в новом окне": "Відкрити форму в новому вікні",
     "Ближайшие события": "Найближчі події",
     "Листайте": "Гортайте",
     "Подробнее": "Детальніше",
     "Директор": "Директор",
     "Ещё": "Ще",
-    "Адрес": "Адреса",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Повернення Нарнії",
     "Шкаф снова открыт": "Шафа знову відчинена",
@@ -5056,7 +5058,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Что будет в лагере?": "Що буде в таборі?",
     "Очень вкусная еда": "Дуже смачна їжа",
     "Природа": "Природа",
-    "Программа": "Програма",
     "УЗНАТЬ БОЛЬШЕ": "ДІЗНАТИСЯ БІЛЬШЕ",
     "Предстоящие события – регистрируйтесь сейчас!": "Найближчі події – реєструйтесь зараз!",
     "Маранафа - летний лагерь": "Маранафа - літній табір",
@@ -5604,7 +5605,6 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Христианская молодёжная конференція": "Християнська молодіжна конференція",
     "11 – 14 августа 2026": "11 – 14 серпня 2026",
     "дней": "днів",
-    "На главную": "На головну",
     "Грани Будущего": "Грані Майбутнього",
     "Молодёжь": "Молодь",
     "Воплоти мечту. Найди свой путь. Измени мир.": "Здійсни мрію. Знайди свій шлях. Зміни світ.",
