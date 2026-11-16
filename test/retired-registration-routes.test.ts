@@ -48,8 +48,57 @@ describe.each(ROUTES)("/api/%s", (name) => {
     expect(await res.json()).toMatchObject({ code: "gone" })
     expect(fetchSpy).not.toHaveBeenCalled()
     expect(logSubmission).toHaveBeenCalledWith(
-      expect.objectContaining({ endpoint: name, outcome: "rejected", reason: "gone:moved-to-onfire" })
+      expect.objectContaining({
+        endpoint: name,
+        outcome: "rejected",
+        reason: "gone:moved-to-onfire",
+        data: { name: "Stale Tab", phone: null, email: "stale@example.test", event: null },
+      })
     )
+  })
+
+  it("logs only recontact fields, never medical or free-text ones", async () => {
+    logSubmission.mockClear()
+    const { POST } = await load(name)
+    await POST(
+      new NextRequest(`http://localhost/api/${name}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          surname: "Child",
+          firstName: "Test",
+          parentName: "Parent Test",
+          phone: "+37100000000",
+          email: "parent@example.test",
+          allergies: "peanuts",
+          personalCode: "000000-00000",
+          characterTraits: "x".repeat(50_000),
+          comment: "free text",
+          event: "narnia-2027",
+        }),
+      })
+    )
+    const entry = (logSubmission.mock.calls[0] as unknown as [{ data: unknown }])[0]
+    expect(entry.data).toEqual({
+      name: "Parent Test",
+      phone: "+37100000000",
+      email: "parent@example.test",
+      event: "narnia-2027",
+    })
+    expect(JSON.stringify(entry)).not.toMatch(/peanuts|000000-00000|free text|xxxx/)
+  })
+
+  it("does not log a body without any contact field", async () => {
+    logSubmission.mockClear()
+    const { POST } = await load(name)
+    await POST(
+      new NextRequest(`http://localhost/api/${name}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ allergies: "peanuts" }),
+      })
+    )
+    expect(logSubmission).not.toHaveBeenCalled()
   })
 
   it("answers 410 for an empty body without logging", async () => {
