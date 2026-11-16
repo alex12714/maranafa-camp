@@ -41,14 +41,14 @@ export default function CampRegisterPage() {
         <Card>
           <CardHeader className="bg-[#B22234] text-white rounded-t-lg">
             <h1 className="text-2xl font-bold text-center">
-              <TranslatedText text="Регистрация в лагерь Небо Зовёт" />
+              <TranslatedText text="Регистрация в лагерь «Возвращение Нарнии»" />
             </h1>
             <p className="text-sm text-center text-white/90 mt-1">
-              <TranslatedText text="3 – 9 августа 2026" />
+              <TranslatedText text="28 июня – 4 июля 2027" /> · <TranslatedText text="Дети 9–15 лет" />
             </p>
           </CardHeader>
           <CardContent className="p-2 md:p-4">
-            <OnFireForm form="camp" title="Регистрация в лагерь Небо Зовёт" height={1400} />
+            <OnFireForm form="camp" title="Регистрация в лагерь «Возвращение Нарнии»" height={1400} />
           </CardContent>
         </Card>
       </div>

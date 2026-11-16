@@ -48,6 +48,7 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Ещё": "More",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "The Return of Narnia",
+    "Регистрация в лагерь «Возвращение Нарнии»": "Camp \"The Return of Narnia\" Registration",
     "Шкаф снова открыт": "The wardrobe is open again",
     "Церемония коронации": "The crowning ceremony",
     "📝 Предварительная запись": "📝 Pre-registration",
@@ -3217,6 +3218,7 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Ещё": "Vairāk",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Nārnijas atgriešanās",
+    "Регистрация в лагерь «Возвращение Нарнии»": "Reģistrācija nometnē „Nārnijas atgriešanās”",
     "Шкаф снова открыт": "Skapis atkal ir atvērts",
     "Церемония коронации": "Kronēšanas ceremonija",
     "📝 Предварительная запись": "📝 Iepriekšēja pieteikšanās",
@@ -4853,6 +4855,7 @@ export const translationData: Record<Language, Record<string, string>> = {
     "Ещё": "Ще",
     // Camp 2027 — Возвращение Нарнии
     "Возвращение Нарнии": "Повернення Нарнії",
+    "Регистрация в лагерь «Возвращение Нарнии»": "Реєстрація в табір «Повернення Нарнії»",
     "Шкаф снова открыт": "Шафа знову відчинена",
     "Церемония коронации": "Церемонія коронації",
     "📝 Предварительная запись": "📝 Попередній запис",

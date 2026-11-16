@@ -32,15 +32,19 @@ export type OnFireFormKey =
  */
 const CONFIGURED: Record<OnFireFormKey, string | undefined> = {
   // TODO(onfire-forms): camp application (replaces the camp-register route → AirTable "Люди в лагере").
+  // OnFire form id 111743c0-6e52-4254-a22b-0a5fb3aa1788 — set the public slug once published.
   camp: process.env.NEXT_PUBLIC_ONFIRE_FORM_CAMP || "",
   // TODO(onfire-forms): camp 2027 pre-registration (replaces the event-register route, key "narnia-2027").
+  // OnFire form id 71cde1c6-439a-4397-99a5-d151a12dbe45 — set the public slug once published.
   "narnia-2027": process.env.NEXT_PUBLIC_ONFIRE_FORM_NARNIA_2027 || "",
   // Past event (November 2026); its OnFire form already exists.
   "friends-nov-2026":
     process.env.NEXT_PUBLIC_ONFIRE_FORM_FRIENDS_NOV_2026 || "https://forms.onfire.so/maranafa-friends-acw",
   // TODO(onfire-forms): Rosetto pre-registration (replaces the rosetto-register route).
+  // OnFire form id ff6136f1-5ed5-4c5f-a96c-9c9332388d18 — set the public slug once published.
   rosetto: process.env.NEXT_PUBLIC_ONFIRE_FORM_ROSETTO || "",
-  // TODO(onfire-forms): Dawn Treader yacht trip (replaces the dawn-treader-register route).
+  // Dawn Treader yacht trip (replaced the dawn-treader-register route). The
+  // event is over, so no form: the page shows the "opens soon" fallback.
   "dawn-treader": process.env.NEXT_PUBLIC_ONFIRE_FORM_DAWN_TREADER || "",
   // TODO(onfire-forms): conference. The conference-register route had no caller; the
   // conference page registers through api.maranafa.camp (portal), not AirTable,
