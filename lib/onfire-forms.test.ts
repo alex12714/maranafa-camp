@@ -38,9 +38,12 @@ describe("getOnFireFormUrl", () => {
     expect(getOnFireFormUrl("rosetto", config)).toBe("https://forms.onfire.so/rosetto-pre")
   })
 
-  it("ships the known Friends form and leaves the not-yet-created forms empty", () => {
+  it("ships the live forms and leaves the unused ones empty", () => {
     expect(getOnFireFormUrl("friends-nov-2026")).toBe("https://forms.onfire.so/maranafa-friends-acw")
-    for (const key of ["camp", "narnia-2027", "rosetto", "dawn-treader", "conference"] as const) {
+    expect(getOnFireFormUrl("camp")).toBe("https://forms.onfire.so/2027-lis")
+    expect(getOnFireFormUrl("narnia-2027")).toBe("https://forms.onfire.so/2027-xhy")
+    expect(getOnFireFormUrl("rosetto")).toBe("https://forms.onfire.so/rosetto-cza")
+    for (const key of ["dawn-treader", "conference"] as const) {
       expect(getOnFireFormUrl(key)).toBeNull()
     }
   })

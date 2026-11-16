@@ -20,22 +20,28 @@ function renderNoFetch(ui: React.ReactElement) {
 }
 
 describe("registration pages embed OnFire forms", () => {
-  // Forms whose OnFire URL is not known yet render the "opens soon" fallback.
+  // Live forms embed their OnFire iframe; the site builds no form of its own.
   it.each([
-    ["camp register", CampRegisterPage],
-    ["narnia 2027", Narnia2027Page],
-    ["dawn treader", DawnTreaderPage],
-    ["rosetto programme", RosettoProgrammePage],
-  ])("%s shows the OnFire form slot and no site-built form", (_name, Page) => {
+    ["camp register", CampRegisterPage, "https://forms.onfire.so/2027-lis"],
+    ["narnia 2027", Narnia2027Page, "https://forms.onfire.so/2027-xhy"],
+    ["rosetto programme", RosettoProgrammePage, "https://forms.onfire.so/rosetto-cza"],
+  ])("%s embeds its OnFire form and no site-built form", (_name, Page, url) => {
     const { container } = renderNoFetch(<Page />)
-    expect(screen.getByTestId("onfire-form-fallback")).toBeTruthy()
+    const iframe = container.querySelector("iframe")
+    expect(iframe).not.toBeNull()
+    const src = new URL(iframe!.getAttribute("src")!)
+    expect(src.origin + src.pathname).toBe(url)
+    expect(src.searchParams.get("embed")).toBe("1")
+    expect(screen.queryByTestId("onfire-form-fallback")).toBeNull()
     expect(container.querySelector("form")).toBeNull()
   })
 
-  it("rosetto fallback points to the rosetto contact address", () => {
-    renderNoFetch(<RosettoProgrammePage />)
-    const fallback = screen.getByTestId("onfire-form-fallback")
-    expect(fallback.querySelector('a[href="mailto:rosetto@maranafa.camp"]')).not.toBeNull()
+  // The Dawn Treader trip is over: no form URL, so the "opens soon" fallback shows.
+  it("dawn treader shows the fallback and no site-built form", () => {
+    const { container } = renderNoFetch(<DawnTreaderPage />)
+    expect(screen.getByTestId("onfire-form-fallback")).toBeTruthy()
+    expect(container.querySelector("iframe")).toBeNull()
+    expect(container.querySelector("form")).toBeNull()
   })
 
   it("friends page embeds its existing OnFire form", () => {

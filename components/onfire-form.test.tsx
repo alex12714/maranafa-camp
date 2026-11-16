@@ -33,7 +33,7 @@ describe("<OnFireForm>", () => {
 
   it("shows 'registration opens soon' with a contact link when the form is not configured", () => {
     lang.current = "ru"
-    const { container } = render(<OnFireForm form="camp" title="Регистрация" />)
+    const { container } = render(<OnFireForm form="dawn-treader" title="Регистрация" />)
     expect(container.querySelector("iframe")).toBeNull()
     expect(screen.getByTestId("onfire-form-fallback")).toBeTruthy()
     expect(screen.getByText("Регистрация скоро откроется")).toBeTruthy()
@@ -44,7 +44,7 @@ describe("<OnFireForm>", () => {
 
   it("uses the given contact e-mail and translates the fallback", () => {
     lang.current = "en"
-    render(<OnFireForm form="rosetto" title="Регистрация" contactEmail="rosetto@maranafa.camp" />)
+    render(<OnFireForm form="conference" title="Регистрация" contactEmail="rosetto@maranafa.camp" />)
     expect(screen.getByText("Registration opens soon")).toBeTruthy()
     expect(screen.getByRole("link", { name: /rosetto@maranafa\.camp/ }).getAttribute("href")).toBe(
       "mailto:rosetto@maranafa.camp"
