@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Crown } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
-import EventRegistrationForm from "@/components/event-registration-form"
+import OnFireForm from "@/components/onfire-form"
 
 // TODO(copy): venue, price and the daily programme are placeholders until the
 // camp team confirms them. Dates and theme are final.
@@ -243,11 +243,7 @@ export default function Narnia2027Page() {
             <TranslatedText text="Полная регистрация откроется позже. Оставьте контакты сейчас — и вы первыми узнаете о старте записи, стоимости и месте проведения." />
           </p>
           <div className="max-w-xl">
-            <EventRegistrationForm
-              event="narnia-2027"
-              intro="Это предварительная запись, а не окончательная регистрация в лагерь"
-              successMessage="Спасибо! Мы напишем вам, как только откроется полная регистрация в лагерь «Возвращение Нарнии»."
-            />
+            <OnFireForm form="narnia-2027" title="📝 Предварительная запись" />
           </div>
         </div>
 

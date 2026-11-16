@@ -13,7 +13,7 @@ import {
 import { ArrowUpRight } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { Reveal } from "@/components/home/motion/reveal"
-import { events, type EventItem } from "./events-data"
+import { events as fallbackEvents, type EventItem } from "./events-data"
 import { DisplayHeading, Eyebrow, PillLink } from "./ui"
 
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect
@@ -174,7 +174,8 @@ function Intro({ count }: { count: number }) {
   )
 }
 
-export default function EventsGallery() {
+/** `events` comes from the server (OnFire merged over the hardcoded list). */
+export default function EventsGallery({ events = fallbackEvents }: { events?: EventItem[] } = {}) {
   const [now, setNow] = useState<number | null>(null)
   const [desktop, setDesktop] = useState(false)
   const reduce = useReducedMotion()

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
+import { hasValidQuantities } from "@/lib/checkout-validation"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -9,6 +10,9 @@ export async function POST(req: NextRequest) {
 
     if (!items?.length) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 })
+    }
+    if (!hasValidQuantities(items)) {
+      return NextResponse.json({ error: "Invalid quantity" }, { status: 400 })
     }
     if (!["collect", "post"].includes(shipping)) {
       return NextResponse.json({ error: "Invalid shipping option" }, { status: 400 })

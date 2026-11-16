@@ -9,8 +9,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # Build-time prerender reads events from OnFire; same pin as below.
+      # A failed read is non-fatal (lib/onfire-events.ts falls back).
+      extra_hosts:
+        - "api2.onfire.so:100.122.123.21"
     container_name: maranafa-camp
     restart: unless-stopped
+    # Cloudflare Bot Fight Mode challenges server-to-server calls to api2, so
+    # resolve it to the OnFire origin over Tailscale. TLS still verifies.
+    extra_hosts:
+      - "api2.onfire.so:100.122.123.21"
     env_file:
       - ../.env
     volumes:

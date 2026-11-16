@@ -1,18 +1,18 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, type Variants } from "motion/react"
 import { Heart, Users, TrendingDown, ArrowRight } from "lucide-react"
 import { TranslatedText } from "@/components/translated-text"
 import { Button } from "@/components/ui/button"
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: { staggerChildren: 0.15, delayChildren: 0.1 },
   },
 }
 
-const fadeUpVariants = {
+const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
@@ -21,7 +21,7 @@ const fadeUpVariants = {
   },
 }
 
-const fadeInVariants = {
+const fadeInVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
@@ -30,7 +30,7 @@ const fadeInVariants = {
   },
 }
 
-const lineVariants = {
+const lineVariants: Variants = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
