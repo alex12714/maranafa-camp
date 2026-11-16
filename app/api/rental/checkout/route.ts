@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/rental/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/rental`,
       metadata: {
+        type: "rental",
         days: String(days),
         items: JSON.stringify(items.map((i: any) => ({ id: i.id, name: i.name, qty: i.quantity }))),
       },
