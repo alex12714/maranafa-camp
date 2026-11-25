@@ -172,7 +172,7 @@ function EventLineCard({ event }: { event: EventItem }) {
   )
 }
 
-// Not mounted on the current homepage (events-gallery.tsx is). Kept in step:
+// Mounted on the homepage (app/page.tsx). Kept in step:
 // pass the server-merged list (lib/onfire-events.ts mergeEvents) as `events`.
 export default function UpcomingEvents({ events: list = events }: { events?: EventItem[] } = {}) {
   const [now, setNow] = useState<number | null>(null)

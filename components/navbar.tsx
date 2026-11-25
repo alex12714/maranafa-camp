@@ -78,7 +78,9 @@ function useOverHero(enabled: boolean) {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  // The transparent-over-hero style belongs to the cinematic homepage, which is
+  // not mounted; the classic homepage uses the same sticky bar as every page.
+  const isHome = false;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
